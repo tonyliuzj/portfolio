@@ -53,31 +53,6 @@ export default function Home() {
         return text;
     }
 
-    const organizations = [
-        {
-            name: 'Isawebapp',
-            description: 'Multiple web app and network tools online.',
-            link: 'https://github.com/isawebapp',
-        }
-    ];
-
-    const projects = [
-        {
-            title: 'Shrinx',
-            description: 'Shrinx is a modern, minimalistic URL shortener that transforms long links into concise, trackable URLs. Fast, secure, and easy to integrate with a RESTful API.',
-            link: 'https://github.com/isawebapp/Shrinx',
-        },
-        {
-            title: 'Arkiv',
-            description: 'A full-stack file library system for managing, storing, and accessing files with user authentication, file exploration, and search functionality. Secure, fast, and easy to use.',
-            link: 'https://github.com/isawebapp/Arkiv',
-        },
-        {
-            title: 'Librix',
-            description: 'A front-end NEXT.JS application for HTTP/WebDAV–style servers.',
-            link: 'https://github.com/isawebapp/Librix',
-        },
-    ];
 
     const phrases = [
         "React",
@@ -102,7 +77,6 @@ export default function Home() {
                     <h1 className="text-white font-bold text-2xl">Tony Liu's Portfolio</h1>
                     <nav className="space-x-8">
                         <a href="#home" className="text-gray-300 hover:text-white transition font-medium">Home</a>
-                        <a href="#projects" className="text-gray-300 hover:text-white transition font-medium">Projects</a>
                         <a href="#github" className="text-gray-300 hover:text-white transition font-medium">Github</a>
                     </nav>
                 </div>
@@ -125,65 +99,9 @@ export default function Home() {
                     <p className="text-xl md:text-2xl text-gray-400 mb-10 animate-fadeIn delay-150">
                         Full Stack Learner | {useTypewriter(phrases)} <span className="text-white blinking-cursor">|</span>
                     </p>
-                    <a
-                        href="#projects"
-                        className="border border-gray-500 hover:border-white text-gray-300 hover:text-white font-semibold px-8 py-3 rounded-full transition-all duration-300"
-                    >
-                        View My Projects
-                    </a>
                 </section>
 
 
-                <section id="projects" className="max-w-6xl mx-auto px-6 py-16 text-center relative z-20">
-
-                    <h3 className="text-4xl font-extrabold mb-12 bg-clip-text text-transparent bg-gradient-to-r from-slate-100 to-slate-400 animate-fadeIn">
-                        My Project Organizations
-                    </h3>
-
-                    <div className="flex flex-wrap justify-center gap-8 mb-20">
-                        {organizations.map((org, index) => (
-                            <a
-                                key={index}
-                                href={org.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="group relative flex flex-col items-center justify-center w-64 h-36 rounded-2xl border border-gray-700 bg-gradient-to-br from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 transition-all duration-300 hover:scale-105 p-4"
-                            >
-                                <span className="text-xl font-semibold text-gray-300 group-hover:text-white transition-colors text-center">
-                                    {org.name}
-                                </span>
-                                <p className="text-sm text-gray-400 group-hover:text-gray-200 mt-2 text-center">
-                                    {org.description}
-                                </p>
-                            </a>
-                        ))}
-                    </div>
-
-
-                    <h3 className="text-4xl font-bold text-center mb-12 text-slate-300 animate-fadeIn">
-                        Projects
-                    </h3>
-
-                    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                        {projects.map((project, index) => (
-                            <div
-                                key={index}
-                                className="border border-gray-700 rounded-xl p-6 bg-gradient-to-br from-gray-800 to-gray-700 hover:scale-105 hover:shadow-2xl transition-transform duration-300 animate-slideUp"
-                            >
-                                <h4 className="text-2xl font-semibold mb-2 text-white">{project.title}</h4>
-                                <p className="text-gray-400 mb-4">{project.description}</p>
-                                <a
-                                    href={project.link}
-                                    target="_blank"
-                                    className="text-slate-400 hover:text-white hover:underline transition-colors"
-                                >
-                                    View Project →
-                                </a>
-                            </div>
-                        ))}
-                    </div>
-
-                </section>
 
 
                 <section id="github" className="max-w-6xl mx-auto p-8 text-center relative z-20">
