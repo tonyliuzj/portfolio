@@ -112,7 +112,7 @@ export default function Home() {
                         Check out more of my work, experiments, and open-source contributions.
                     </p>
                     <a
-                        href="https://github.com/tonyliucloud"
+                        href="https://github.com/tonyliuzj"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-block bg-gradient-to-r from-slate-700 to-slate-500 hover:from-slate-600 hover:to-slate-400 text-white font-bold px-8 py-3 rounded-full transition-all duration-300 shadow-lg hover:shadow-2xl"
@@ -123,7 +123,7 @@ export default function Home() {
             </main>
 
             <footer className="text-center text-gray-600 bg-black p-6">
-                © {new Date().getFullYear()} Tony-Liu.com | TonyLiu.cloud. All rights reserved.
+                © {new Date().getFullYear()} Tony-Liu.com | TonyLiu.cloud. TonyLiu.uk All rights reserved.
             </footer>
         </>
     );
