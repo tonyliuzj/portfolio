@@ -3,22 +3,25 @@
 /* Custom animations */
 @layer utilities {
   .animate-fadeIn {
-    animation: fadeIn 1s ease-out forwards;
+    animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   .animate-slideUp {
-    animation: slideUp 1s ease-out forwards;
+    animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   .delay-150 {
     animation-delay: 0.15s;
   }
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes slideUp {
-    from { opacity: 0; transform: translateY(50px); }
+    from { opacity: 0; transform: translateY(40px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
