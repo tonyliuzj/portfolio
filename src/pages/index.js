@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Github, Linkedin, Mail, ExternalLink } from "lucide-react"
 
 const inter = Inter({ subsets: ['latin'] });
 const mono = JetBrains_Mono({ subsets: ['latin'] });
@@ -12,7 +16,7 @@ export default function Home() {
     useEffect(() => {
         setMounted(true);
         const handleMouseMove = (e) => {
-            setPosition({ x: e.pageX, y: e.pageY });
+            setPosition({ x: e.clientX, y: e.clientY });
         };
         window.addEventListener('mousemove', handleMouseMove);
         return () => window.removeEventListener('mousemove', handleMouseMove);
@@ -81,10 +85,16 @@ export default function Home() {
                         <div className="w-3 h-3 rounded-full bg-indigo-500 animate-pulse" />
                         <h1 className="text-white font-bold text-lg tracking-tight">Tony Liu</h1>
                     </div>
-                    <nav className="flex gap-6 text-sm font-medium">
-                        <a href="#home" className="hover:text-white transition-colors duration-200">Home</a>
-                        <a href="#projects" className="hover:text-white transition-colors duration-200">Projects</a>
-                        <a href="#github" className="hover:text-white transition-colors duration-200">Github</a>
+                    <nav className="flex gap-1">
+                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
+                            <a href="#home">Home</a>
+                        </Button>
+                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
+                            <a href="#projects">Projects</a>
+                        </Button>
+                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
+                            <a href="#contact">Contact</a>
+                        </Button>
                     </nav>
                 </div>
             </header>
@@ -110,16 +120,9 @@ export default function Home() {
                 </div>
 
                 {/* Hero Section */}
-                <section className="relative z-10 flex flex-col items-center justify-center flex-1 px-4 text-center max-w-4xl mx-auto mt-20 md:mt-0">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8 animate-fadeIn">
-                        <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                        </span>
-                        <span className="text-xs font-medium text-slate-300 tracking-wide uppercase">Open to Opportunities</span>
-                    </div>
+                <section className="relative z-10 flex flex-col items-center justify-center flex-1 px-4 text-center max-w-6xl mx-auto mt-20 md:mt-0">
 
-                    <h2 className="text-5xl md:text-8xl font-black mb-6 tracking-tighter text-white animate-slideUp">
+                    <h2 className="text-5xl md:text-8xl font-black mt-12 mb-6 tracking-tighter text-white animate-slideUp">
                         Hello, <br />
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white to-indigo-300">
                             I am Tony
@@ -127,26 +130,20 @@ export default function Home() {
                     </h2>
 
                     <div className={`${mono.className} text-sm md:text-base text-slate-400 mb-10 h-8 flex items-center justify-center gap-2 animate-fadeIn delay-150`}>
-                        <span className="text-indigo-400">&gt;</span>
+                        <span className="text-indigo-400">{'>'}</span>
                         <span>const currentFocus =</span>
-                        <span className="inline-block px-2 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded text-indigo-300 min-w-[100px] text-left">
+                        <Badge variant="outline" className="border-indigo-500/20 bg-indigo-500/10 text-indigo-300 px-2 py-1 font-normal">
                             "{typedText}"
-                        </span>
+                        </Badge>
                     </div>
 
                     <div className="flex gap-4 animate-fadeIn delay-300">
-                        <a 
-                            href="#github"
-                            className="bg-white text-black px-8 py-3 rounded-full font-semibold hover:bg-slate-200 transition-all active:scale-95"
-                        >
-                            View Work
-                        </a>
-                        <a 
-                            href="mailto:contact@tonyliu.cloud"
-                            className="px-8 py-3 rounded-full font-semibold border border-white/20 hover:bg-white/5 transition-all active:scale-95"
-                        >
-                            Contact Me
-                        </a>
+                        <Button asChild size="lg" className="rounded-full font-semibold px-8 h-12">
+                            <a href="#projects">View Work</a>
+                        </Button>
+                        <Button asChild variant="outline" size="lg" className="rounded-full font-semibold px-8 h-12 border-white/20 bg-transparent text-white hover:bg-white/5 hover:text-white">
+                            <a href="#contact">Contact Me</a>
+                        </Button>
                     </div>
                 </section>
 
@@ -162,27 +159,85 @@ export default function Home() {
                     </div>
                 </div>
 
-                {/* Github / CTA Section */}
-                <section id="github" className="w-full max-w-4xl mx-auto p-4 mb-24 relative z-10">
-                    <div className="bg-gradient-to-b from-white/5 to-transparent border border-white/10 rounded-2xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 backdrop-blur-sm">
-                        <div>
-                            <h3 className="text-2xl font-bold text-white mb-2">Check out my code</h3>
-                            <p className="text-slate-400 max-w-md">
-                                Explore my repositories, side projects, and open source contributions on GitHub.
-                            </p>
-                        </div>
-                        <a
-                            href="https://github.com/tonyliuzj"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group flex items-center gap-2 bg-[#24292e] hover:bg-[#2f363d] text-white px-6 py-3 rounded-xl font-medium transition-all border border-white/10 hover:border-white/20 shadow-lg hover:shadow-xl"
-                        >
-                            <span>GitHub Profile</span>
-                            <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                        </a>
+                {/* Featured Projects */}
+                <section id="projects" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10">
+                    <h3 className="text-3xl font-bold text-white mb-12 text-center animate-slideUp">Featured Projects</h3>
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group">
+                            <CardHeader>
+                                <CardTitle className="flex justify-between items-center text-xl text-white">
+                                    Shrinx
+                                    <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="flex-1">
+                                <p className="text-slate-400 mb-4">Shrinx is a modern, minimalistic URL shortener that transforms long links into concise, trackable URLs. Fast, secure, and easy to integrate with a RESTful API.</p>
+                                <div className="flex flex-wrap gap-2">
+                                    <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20">Next.js</Badge>
+                                    <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20">API</Badge>
+                                    <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20">Secure</Badge>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group">
+                            <CardHeader>
+                                <CardTitle className="flex justify-between items-center text-xl text-white">
+                                    Mailsy
+                                    <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="flex-1">
+                                <p className="text-slate-400 mb-4">A simple, modern disposable email web app built with Next.js, Tailwind CSS, and SQLite.</p>
+                                <div className="flex flex-wrap gap-2">
+                                    <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Next.js</Badge>
+                                    <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Tailwind CSS</Badge>
+                                    <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">SQLite</Badge>
+                                </div>
+                            </CardContent>
+                        </Card>
                     </div>
+                </section>
+
+                {/* Contact Section */}
+                <section id="contact" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10">
+                    <Card className="bg-gradient-to-b from-white/5 to-transparent border-white/10 overflow-hidden backdrop-blur-sm">
+                        <CardContent className="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div className="text-center md:text-left">
+                                <h3 className="text-2xl font-bold text-white mb-2">Get in Touch</h3>
+                                <p className="text-slate-400 max-w-md">
+                                    Feel free to reach out for collaborations, opportunities, or just to say hi. I'm always open to discussing new projects and ideas.
+                                </p>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <Button asChild size="lg" className="bg-white hover:bg-slate-200 text-black border border-white/10 hover:border-white/20 shadow-lg h-14 px-6 rounded-xl gap-2 group">
+                                    <a href="mailto:contact@tonyliu.uk">
+                                        <span>Email Me</span>
+                                        <Mail className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                                    </a>
+                                </Button>
+                                <Button asChild size="lg" className="bg-[#0077b5] hover:bg-[#006399] text-white border border-white/10 hover:border-white/20 shadow-lg h-14 px-6 rounded-xl gap-2 group">
+                                    <a
+                                        href="https://www.linkedin.com/in/tonyliuzj"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <span>LinkedIn</span>
+                                        <Linkedin className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                                    </a>
+                                </Button>
+                                <Button asChild size="lg" className="bg-[#24292e] hover:bg-[#2f363d] text-white border border-white/10 hover:border-white/20 shadow-lg h-14 px-6 rounded-xl gap-2 group">
+                                    <a
+                                        href="https://github.com/tonyliuzj"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <span>GitHub</span>
+                                        <Github className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                                    </a>
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </section>
             </main>
 
