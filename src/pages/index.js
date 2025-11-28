@@ -163,38 +163,42 @@ export default function Home() {
                 <section id="projects" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10">
                     <h3 className="text-3xl font-bold text-white mb-12 text-center animate-slideUp">Featured Projects</h3>
                     <div className="grid md:grid-cols-2 gap-8">
-                        <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group">
-                            <CardHeader>
-                                <CardTitle className="flex justify-between items-center text-xl text-white">
-                                    Shrinx
-                                    <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="flex-1">
-                                <p className="text-slate-400 mb-4">Shrinx is a modern, minimalistic URL shortener that transforms long links into concise, trackable URLs. Fast, secure, and easy to integrate with a RESTful API.</p>
-                                <div className="flex flex-wrap gap-2">
-                                    <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20">Next.js</Badge>
-                                    <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20">API</Badge>
-                                    <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20">Secure</Badge>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group">
-                            <CardHeader>
-                                <CardTitle className="flex justify-between items-center text-xl text-white">
-                                    Mailsy
-                                    <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="flex-1">
-                                <p className="text-slate-400 mb-4">A simple, modern disposable email web app built with Next.js, Tailwind CSS, and SQLite.</p>
-                                <div className="flex flex-wrap gap-2">
-                                    <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Next.js</Badge>
-                                    <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Tailwind CSS</Badge>
-                                    <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">SQLite</Badge>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <a href="https://shortenno.de" target="_blank" rel="noopener noreferrer" className="block">
+                            <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
+                                <CardHeader>
+                                    <CardTitle className="flex justify-between items-center text-xl text-white">
+                                        Shrinx
+                                        <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="flex-1">
+                                    <p className="text-slate-400 mb-4">Shrinx is a modern, minimalistic URL shortener that transforms long links into concise, trackable URLs. Fast, secure, and easy to integrate with a RESTful API.</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20">Next.js</Badge>
+                                        <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20">API</Badge>
+                                        <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20">Secure</Badge>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </a>
+                        <a href="https://emailno.de" target="_blank" rel="noopener noreferrer" className="block">
+                            <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
+                                <CardHeader>
+                                    <CardTitle className="flex justify-between items-center text-xl text-white">
+                                        Mailsy
+                                        <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="flex-1">
+                                    <p className="text-slate-400 mb-4">A simple, modern disposable email web app built with Next.js, Tailwind CSS, and SQLite.</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Next.js</Badge>
+                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Tailwind CSS</Badge>
+                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">SQLite</Badge>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </a>
                     </div>
                 </section>
 
