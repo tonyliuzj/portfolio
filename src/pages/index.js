@@ -210,6 +210,51 @@ export default function Home() {
                                 <span className="px-2 py-1 rounded bg-white/5">SQLite</span>
                             </div>
                         </a>
+
+                        {/* KumaView */}
+                        <a 
+                            href="https://statusno.de/" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="group p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all hover:-translate-y-1 hover:shadow-xl"
+                        >
+                            <div className="flex justify-between items-start mb-4">
+                                <h4 className="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">KumaView</h4>
+                                <svg className="w-5 h-5 text-slate-500 group-hover:text-indigo-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </div>
+                            <p className="text-slate-400 text-sm leading-relaxed mb-4">
+                                A modern frontend dashboard for monitoring multiple Uptime Kuma instances, built with Next.js, shadcn/ui, and SQLite.
+                            </p>
+                            <div className="flex flex-wrap gap-2 text-xs font-medium text-slate-500">
+                                <span className="px-2 py-1 rounded bg-white/5">Next.js</span>
+                                <span className="px-2 py-1 rounded bg-white/5">shadcn/ui</span>
+                                <span className="px-2 py-1 rounded bg-white/5">SQLite</span>
+                            </div>
+                        </a>
+
+                        {/* Librix */}
+                        <a 
+                            href="https://fileno.de" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="group p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all hover:-translate-y-1 hover:shadow-xl"
+                        >
+                            <div className="flex justify-between items-start mb-4">
+                                <h4 className="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">Librix</h4>
+                                <svg className="w-5 h-5 text-slate-500 group-hover:text-indigo-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </div>
+                            <p className="text-slate-400 text-sm leading-relaxed mb-4">
+                                A front-end NEXT.JS application for HTTP/WebDAV–style servers.
+                            </p>
+                            <div className="flex flex-wrap gap-2 text-xs font-medium text-slate-500">
+                                <span className="px-2 py-1 rounded bg-white/5">Next.js</span>
+                                <span className="px-2 py-1 rounded bg-white/5">WebDAV</span>
+                            </div>
+                        </a>
                     </div>
                 </section>
 
