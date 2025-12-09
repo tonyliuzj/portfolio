@@ -297,6 +297,7 @@ export default function Home() {
                         <span className="hover:text-slate-300 transition-colors cursor-pointer">Tony-Liu.com</span>
                         <span className="hover:text-slate-300 transition-colors cursor-pointer">TonyLiu.cloud</span>
                         <span className="hover:text-slate-300 transition-colors cursor-pointer">TonyLiu.uk</span>
+                        <span className="hover:text-slate-300 transition-colors cursor-pointer">LiuZJ.net</span>
                     </div>
                 </div>
             </footer>
