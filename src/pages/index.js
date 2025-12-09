@@ -259,7 +259,7 @@ export default function Home() {
                             </div>
                             <div className="flex flex-col sm:flex-row gap-4">
                                 <Button asChild size="lg" className="bg-white hover:bg-slate-200 text-black border border-white/10 hover:border-white/20 shadow-lg h-14 px-6 rounded-xl gap-2 group">
-                                    <a href="mailto:contact@tonyliu.uk">
+                                    <a href="mailto:tony@liuzj.net">
                                         <span>Email Me</span>
                                         <Mail className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                                     </a>
