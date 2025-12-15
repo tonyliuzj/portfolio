@@ -4,22 +4,74 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Github, Linkedin, Mail, ExternalLink } from "lucide-react"
+import { Github, Linkedin, Mail, ExternalLink, Menu, X, ChevronDown } from "lucide-react"
 
 const inter = Inter({ subsets: ['latin'] });
 const mono = JetBrains_Mono({ subsets: ['latin'] });
 
+// Interactive Iframe Component - Prevents scroll trap on mobile
+function InteractiveIframe({ src, title }) {
+    const [isInteracting, setIsInteracting] = useState(false);
+
+    return (
+        <div
+            className="relative w-full h-[60vh] md:h-[80vh] bg-black/20"
+            onMouseLeave={() => setIsInteracting(false)}
+        >
+            <div
+                className={`absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px] transition-all duration-300 cursor-pointer
+                ${isInteracting ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:bg-black/30'}`}
+                onClick={() => setIsInteracting(true)}
+            >
+                <Button variant="secondary" size="sm" className="pointer-events-none">
+                    Click to Interact
+                </Button>
+            </div>
+
+            <iframe
+                src={src}
+                className={`w-full h-full border-0 transition-all duration-500 ${isInteracting ? 'pointer-events-auto' : 'pointer-events-none opacity-40'}`}
+                title={title}
+            />
+        </div>
+    );
+}
+
 export default function Home() {
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [mounted, setMounted] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [scrollOpacity, setScrollOpacity] = useState(1);
 
     useEffect(() => {
         setMounted(true);
+
         const handleMouseMove = (e) => {
             setPosition({ x: e.clientX, y: e.clientY });
         };
+
+        let ticking = false;
+        const handleScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrollY = window.scrollY;
+                    const windowHeight = window.innerHeight;
+                    // Calculate opacity: 1 at top, 0 when scrolled past 50% of viewport
+                    const newOpacity = Math.max(0, 1 - (scrollY / (windowHeight * 0.5)));
+                    setScrollOpacity(newOpacity);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
         window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, []);
 
     function useTypewriter(words, speed = 90, pause = 1500) {
@@ -70,6 +122,14 @@ export default function Home() {
 
     const typedText = useTypewriter(phrases);
 
+    const navItems = [
+        { name: 'Home', href: '#home' },
+        { name: 'Projects', href: '#projects' },
+        { name: 'Status', href: '#status' },
+        { name: 'Monitor', href: '#monitor' },
+        { name: 'Contact', href: '#contact' },
+    ];
+
     return (
         <div className={`${inter.className} min-h-screen bg-black text-slate-300 selection:bg-indigo-500/30`}>
             <Head>
@@ -80,55 +140,88 @@ export default function Home() {
 
             {/* Navbar */}
             <header className="fixed top-0 w-full z-50 border-b border-white/5 bg-black/50 backdrop-blur-xl">
-                <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+                <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4 relative z-50">
                     <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full bg-indigo-500 animate-pulse" />
                         <h1 className="text-white font-bold text-lg tracking-tight">Tony Liu</h1>
                     </div>
-                    <nav className="flex gap-1">
-                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
-                            <a href="#home">Home</a>
-                        </Button>
-                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
-                            <a href="#projects">Projects</a>
-                        </Button>
-                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
-                            <a href="#status">Status</a>
-                        </Button>
-                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
-                            <a href="#monitor">Monitor</a>
-                        </Button>
-                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
-                            <a href="#contact">Contact</a>
-                        </Button>
+
+                    {/* Desktop Navigation */}
+                    <nav className="hidden md:flex gap-1">
+                        {navItems.map((item) => (
+                            <Button key={item.name} variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
+                                <a href={item.href}>{item.name}</a>
+                            </Button>
+                        ))}
                     </nav>
+
+                    {/* Mobile Menu Button */}
+                    <div className="md:hidden">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            className="text-slate-300 hover:text-white hover:bg-white/10"
+                        >
+                            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                        </Button>
+                    </div>
                 </div>
+
+                {/* Mobile Menu Dropdown */}
+                {isMobileMenuOpen && (
+                    <div className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-xl border-b border-white/10 shadow-2xl animate-slideDown max-h-[85vh] overflow-y-auto">
+                        <nav className="flex flex-col p-4">
+                            {navItems.map((item) => (
+                                <Button
+                                    key={item.name}
+                                    variant="ghost"
+                                    asChild
+                                    className="w-full justify-start text-base font-medium text-slate-400 hover:text-white hover:bg-white/5 h-12 px-4"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    <a href={item.href}>{item.name}</a>
+                                </Button>
+                            ))}
+                        </nav>
+                    </div>
+                )}
             </header>
 
-            <main id="home" className="relative pt-24 min-h-screen flex flex-col items-center overflow-hidden">
+            <main id="home" className="relative min-h-screen flex flex-col items-center overflow-hidden">
                 
-                {/* Background Grid & Spotlight */}
+                {/* Background Grid */}
                 <div className="fixed inset-0 z-0 pointer-events-none">
                     <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-                    <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-indigo-500 opacity-20 blur-[100px]"></div>
-                    {mounted && (
-                        <div
-                            className="absolute bg-indigo-500/10 rounded-full blur-3xl -z-10 transition-transform duration-75 will-change-transform"
-                            style={{
-                                width: '300px',
-                                height: '300px',
-                                left: 0,
-                                top: 0,
-                                transform: `translate(${position.x - 150}px, ${position.y - 150}px)`,
-                            }}
-                        />
-                    )}
+                    
+                    {/* The Blue Glow Effects - Controlled by scrollOpacity */}
+                    <div 
+                        className="transition-opacity duration-300 ease-out"
+                        style={{ opacity: scrollOpacity }}
+                    >
+                        {/* Static center glow */}
+                        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-indigo-500 opacity-20 blur-[100px]"></div>
+                        
+                        {/* Dynamic Mouse Follower */}
+                        {mounted && (
+                            <div
+                                className="absolute bg-indigo-500/15 rounded-full blur-3xl -z-10 transition-transform duration-75 will-change-transform"
+                                style={{
+                                    width: '400px',
+                                    height: '400px',
+                                    left: 0,
+                                    top: 0,
+                                    transform: `translate(${position.x - 200}px, ${position.y - 200}px)`,
+                                }}
+                            />
+                        )}
+                    </div>
                 </div>
 
                 {/* Hero Section */}
-                <section className="relative z-10 flex flex-col items-center justify-center flex-1 px-4 text-center max-w-6xl mx-auto mt-20 md:mt-0">
+                <section className="relative z-10 flex flex-col items-center justify-center min-h-screen w-full px-4 text-center max-w-6xl mx-auto pt-20">
 
-                    <h2 className="text-5xl md:text-8xl font-black mt-12 mb-6 tracking-tighter text-white animate-slideUp">
+                    <h2 className="text-5xl sm:text-6xl md:text-8xl font-black mb-6 tracking-tighter text-white animate-slideUp">
                         Hello, <br />
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white to-indigo-300">
                             I am Tony
@@ -137,25 +230,35 @@ export default function Home() {
 
                     <div className={`${mono.className} text-sm md:text-base text-slate-400 mb-10 h-8 flex items-center justify-center gap-2 animate-fadeIn delay-150`}>
                         <span className="text-indigo-400">{'>'}</span>
-                        <span>const currentFocus =</span>
+                        <span className="hidden sm:inline">const currentFocus =</span>
+                        <span className="sm:hidden">focus =</span>
                         <Badge variant="outline" className="border-indigo-500/20 bg-indigo-500/10 text-indigo-300 px-2 py-1 font-normal">
                             "{typedText}"
                         </Badge>
                     </div>
 
-                    <div className="flex gap-4 animate-fadeIn delay-300">
-                        <Button asChild size="lg" className="rounded-full font-semibold px-8 h-12">
+                    <div className="flex gap-4 animate-fadeIn delay-300 flex-col sm:flex-row w-full sm:w-auto px-6 sm:px-0">
+                        <Button asChild size="lg" className="rounded-full font-semibold px-8 h-12 w-full sm:w-auto">
                             <a href="#projects">View Work</a>
                         </Button>
-                        <Button asChild variant="outline" size="lg" className="rounded-full font-semibold px-8 h-12 border-white/20 bg-transparent text-white hover:bg-white/5 hover:text-white">
+                        <Button asChild variant="outline" size="lg" className="rounded-full font-semibold px-8 h-12 border-white/20 bg-transparent text-white hover:bg-white/5 hover:text-white w-full sm:w-auto">
                             <a href="#contact">Contact Me</a>
                         </Button>
+                    </div>
+
+                    {/* Scroll Down Indicator */}
+                    <div 
+                        className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center gap-2 transition-opacity duration-500"
+                        style={{ opacity: scrollOpacity }}
+                    >
+                        <span className="text-xs text-slate-500 uppercase tracking-widest">Scroll</span>
+                        <ChevronDown className="w-6 h-6 text-indigo-400" />
                     </div>
                 </section>
 
                 {/* Tech Stack Marquee (Mockup) */}
-                <div className="w-full mt-20 mb-20 overflow-hidden relative z-10 opacity-50">
-                    <div className="flex justify-center gap-8 md:gap-16 text-slate-600 font-bold uppercase tracking-widest text-sm">
+                <div className="w-full mb-20 overflow-hidden relative z-10 opacity-50 px-4">
+                    <div className="flex flex-wrap justify-center gap-6 md:gap-16 text-slate-600 font-bold uppercase tracking-widest text-xs md:text-sm text-center">
                         <span>React</span>
                         <span>Next.js</span>
                         <span>TypeScript</span>
@@ -169,6 +272,7 @@ export default function Home() {
                 <section id="projects" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
                     <h3 className="text-3xl font-bold text-white mb-12 text-center animate-slideUp">Featured Projects</h3>
                     <div className="grid md:grid-cols-2 gap-8">
+                        {/* Project 1 */}
                         <a href="https://shortenno.de" target="_blank" rel="noopener noreferrer" className="block">
                             <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
                                 <CardHeader>
@@ -178,7 +282,7 @@ export default function Home() {
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="flex-1">
-                                    <p className="text-slate-400 mb-4">
+                                    <p className="text-slate-400 mb-4 text-sm md:text-base">
                                         Shrinx is a modern, minimalistic URL shortener that transforms long links into concise, trackable URLs. Fast, secure, and easy to integrate with a RESTful API.
                                     </p>
                                     <div className="flex flex-wrap gap-2">
@@ -189,6 +293,8 @@ export default function Home() {
                                 </CardContent>
                             </Card>
                         </a>
+
+                        {/* Project 2 */}
                         <a href="https://emailno.de" target="_blank" rel="noopener noreferrer" className="block">
                             <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
                                 <CardHeader>
@@ -198,7 +304,7 @@ export default function Home() {
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="flex-1">
-                                    <p className="text-slate-400 mb-4">
+                                    <p className="text-slate-400 mb-4 text-sm md:text-base">
                                         A simple, modern disposable email web app built with Next.js, shadcn/ui, and SQLite.
                                     </p>
                                     <div className="flex flex-wrap gap-2">
@@ -209,6 +315,8 @@ export default function Home() {
                                 </CardContent>
                             </Card>
                         </a>
+
+                        {/* Project 3 */}
                         <a href="https://statusno.de" target="_blank" rel="noopener noreferrer" className="block">
                             <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
                                 <CardHeader>
@@ -218,7 +326,7 @@ export default function Home() {
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="flex-1">
-                                    <p className="text-slate-400 mb-4">
+                                    <p className="text-slate-400 mb-4 text-sm md:text-base">
                                         A modern frontend dashboard for monitoring multiple Uptime Kuma instances, built with Next.js, shadcn/ui, and SQLite.
                                     </p>
                                     <div className="flex flex-wrap gap-2">
@@ -229,6 +337,8 @@ export default function Home() {
                                 </CardContent>
                             </Card>
                         </a>
+
+                        {/* Project 4 */}
                         <a href="https://monitorno.de" target="_blank" rel="noopener noreferrer" className="block">
                             <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
                                 <CardHeader>
@@ -238,8 +348,9 @@ export default function Home() {
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="flex-1">
-                                    <p className="text-slate-400 mb-4">
-                                        A modern, lightweight web interface for monitoring system metrics and performance. Built with Next.js and designed to work seamlessly with PocketBase (Beszel) monitoring system, acts as a beautiful frontend.                                     </p>
+                                    <p className="text-slate-400 mb-4 text-sm md:text-base">
+                                        A modern, lightweight web interface for monitoring system metrics and performance. Built with Next.js and designed to work seamlessly with PocketBase (Beszel).
+                                    </p>
                                     <div className="flex flex-wrap gap-2">
                                         <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Next.js</Badge>
                                         <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">shadcn/ui</Badge>
@@ -248,6 +359,8 @@ export default function Home() {
                                 </CardContent>
                             </Card>
                         </a>
+
+                        {/* Project 5 */}
                         <a href="https://fileno.de" target="_blank" rel="noopener noreferrer" className="block">
                             <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
                                 <CardHeader>
@@ -257,7 +370,7 @@ export default function Home() {
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="flex-1">
-                                    <p className="text-slate-400 mb-4">
+                                    <p className="text-slate-400 mb-4 text-sm md:text-base">
                                         A front-end NEXT.JS application for HTTP/WebDAV–style servers.
                                     </p>
                                     <div className="flex flex-wrap gap-2">
@@ -268,6 +381,8 @@ export default function Home() {
                                 </CardContent>
                             </Card>
                         </a>
+
+                        {/* Project 6 */}
                         <a href="https://github.com/tonyliuzj/arkiv" target="_blank" rel="noopener noreferrer" className="block">
                             <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
                                 <CardHeader>
@@ -277,8 +392,8 @@ export default function Home() {
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="flex-1">
-                                    <p className="text-slate-400 mb-4">
-                                        A full-stack file library system for managing, storing, and accessing files with user authentication, file exploration, and search functionality. Secure, fast, and easy to use. 
+                                    <p className="text-slate-400 mb-4 text-sm md:text-base">
+                                        A full-stack file library system for managing, storing, and accessing files with user authentication.
                                     </p>
                                     <div className="flex flex-wrap gap-2">
                                         <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Next.js</Badge>
@@ -306,9 +421,8 @@ export default function Home() {
                             </div>
                         </div>
                         <CardContent className="p-0">
-                            <iframe 
-                                src="https://status.tony-liu.com/" 
-                                className="w-full h-[80vh] border-0"
+                            <InteractiveIframe
+                                src="https://status.tony-liu.com/"
                                 title="System Status"
                             />
                         </CardContent>
@@ -325,13 +439,12 @@ export default function Home() {
                                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
                             </div>
                             <div className="flex-1 ml-4 bg-black/20 rounded-md px-3 py-1 text-xs text-slate-500 font-mono text-center truncate">
-                                https://monitor.ovh
+                                https://monitor.tony-liu.com
                             </div>
                         </div>
                         <CardContent className="p-0">
-                            <iframe 
-                                src="https://monitor.ovh" 
-                                className="w-full h-[80vh] border-0"
+                            <InteractiveIframe
+                                src="https://monitor.tony-liu.com"
                                 title="Monitor"
                             />
                         </CardContent>
@@ -348,14 +461,14 @@ export default function Home() {
                                     Feel free to reach out for collaborations, opportunities, or just to say hi. I'm always open to discussing new projects and ideas.
                                 </p>
                             </div>
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <Button asChild size="lg" className="bg-white hover:bg-slate-200 text-black border border-white/10 hover:border-white/20 shadow-lg h-14 px-6 rounded-xl gap-2 group">
+                            <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                                <Button asChild size="lg" className="bg-white hover:bg-slate-200 text-black border border-white/10 hover:border-white/20 shadow-lg h-14 px-6 rounded-xl gap-2 group w-full sm:w-auto">
                                     <a href="mailto:tony@liuzj.net">
                                         <span>Email Me</span>
                                         <Mail className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                                     </a>
                                 </Button>
-                                <Button asChild size="lg" className="bg-[#0077b5] hover:bg-[#006399] text-white border border-white/10 hover:border-white/20 shadow-lg h-14 px-6 rounded-xl gap-2 group">
+                                <Button asChild size="lg" className="bg-[#0077b5] hover:bg-[#006399] text-white border border-white/10 hover:border-white/20 shadow-lg h-14 px-6 rounded-xl gap-2 group w-full sm:w-auto">
                                     <a
                                         href="https://www.linkedin.com/in/tonyliuzj"
                                         target="_blank"
@@ -365,7 +478,7 @@ export default function Home() {
                                         <Linkedin className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                                     </a>
                                 </Button>
-                                <Button asChild size="lg" className="bg-[#24292e] hover:bg-[#2f363d] text-white border border-white/10 hover:border-white/20 shadow-lg h-14 px-6 rounded-xl gap-2 group">
+                                <Button asChild size="lg" className="bg-[#24292e] hover:bg-[#2f363d] text-white border border-white/10 hover:border-white/20 shadow-lg h-14 px-6 rounded-xl gap-2 group w-full sm:w-auto">
                                     <a
                                         href="https://github.com/tonyliuzj"
                                         target="_blank"
@@ -384,7 +497,7 @@ export default function Home() {
             <footer className="border-t border-white/5 bg-black py-8 relative z-10">
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
                     <p>© {new Date().getFullYear()} Tony Liu. All rights reserved.</p>
-                    <div className="flex gap-4 mt-4 md:mt-0">
+                    <div className="flex flex-wrap justify-center gap-4 mt-4 md:mt-0">
                         <span className="hover:text-slate-300 transition-colors cursor-pointer">Tony-Liu.com</span>
                         <span className="hover:text-slate-300 transition-colors cursor-pointer">TonyLiu.cloud</span>
                         <span className="hover:text-slate-300 transition-colors cursor-pointer">TonyLiu.uk</span>
