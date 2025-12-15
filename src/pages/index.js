@@ -293,8 +293,18 @@ export default function Home() {
                 </section>
 
                 {/* Status Section */}
-                <section id="status" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
+                <section id="status" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-18">
                     <Card className="bg-white/5 border-white/10 backdrop-blur-sm overflow-hidden">
+                        <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5">
+                            <div className="flex gap-1.5">
+                                <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                                <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                            </div>
+                            <div className="flex-1 ml-4 bg-black/20 rounded-md px-3 py-1 text-xs text-slate-500 font-mono text-center truncate">
+                                https://status.tony-liu.com/
+                            </div>
+                        </div>
                         <CardContent className="p-0">
                             <iframe 
                                 src="https://status.tony-liu.com/" 
@@ -306,8 +316,18 @@ export default function Home() {
                 </section>
 
                 {/* Monitor Section */}
-                <section id="monitor" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
+                <section id="monitor" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-18">
                     <Card className="bg-white/5 border-white/10 backdrop-blur-sm overflow-hidden">
+                        <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5">
+                            <div className="flex gap-1.5">
+                                <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                                <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                            </div>
+                            <div className="flex-1 ml-4 bg-black/20 rounded-md px-3 py-1 text-xs text-slate-500 font-mono text-center truncate">
+                                https://monitor.ovh
+                            </div>
+                        </div>
                         <CardContent className="p-0">
                             <iframe 
                                 src="https://monitor.ovh" 
