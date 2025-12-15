@@ -504,18 +504,63 @@ export default function Home() {
                 </section>
             </main>
 
-            <footer className="border-t border-white/5 bg-black py-8 relative z-10">
-                <div className="max-w-7xl mx-auto px-6 flex flex-col items-center gap-4 text-sm text-slate-500">
-                    <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4">
-                        <div className="flex flex-wrap justify-center gap-4">
-                            <span className="hover:text-slate-300 transition-colors cursor-pointer">Tony-Liu.com</span>
-                            <span className="hover:text-slate-300 transition-colors cursor-pointer">TonyLiu.cloud</span>
-                            <span className="hover:text-slate-300 transition-colors cursor-pointer">TonyLiu.uk</span>
-                            <span className="hover:text-slate-300 transition-colors cursor-pointer">LiuZJ.net</span>
+            <footer className="border-t border-white/10 bg-black pt-16 pb-8 relative z-10">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+                        <div className="md:col-span-5">
+                            <h3 className="text-white font-bold text-xl mb-4 tracking-tight">Tony Liu</h3>
+                            <p className="text-slate-400 text-sm leading-relaxed mb-6 max-w-sm">
+                                Full Stack Developer building modern web applications with a focus on performance, user experience, and clean design.
+                            </p>
+                            <div className="flex gap-4">
+                                <a href="https://github.com/tonyliuzj" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors">
+                                    <Github className="w-5 h-5" />
+                                </a>
+                                <a href="https://www.linkedin.com/in/tonyliuzj" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors">
+                                    <Linkedin className="w-5 h-5" />
+                                </a>
+                                <a href="mailto:tony@liuzj.net" className="text-slate-400 hover:text-white transition-colors">
+                                    <Mail className="w-5 h-5" />
+                                </a>
+                            </div>
                         </div>
-                        <iframe src="https://uptime.tony-liu.com/badge?theme=dark" width="250" height="30" frameBorder="0" scrolling="no" style={{ colorScheme: 'normal' }}></iframe>
+                        
+                        <div className="md:col-span-3">
+                            <h4 className="text-white font-semibold mb-6">Navigation</h4>
+                            <ul className="flex flex-col gap-3 text-sm text-slate-400">
+                                {navItems.map((item) => (
+                                    <li key={item.name}>
+                                        <a href={item.href} className="hover:text-indigo-400 transition-colors">
+                                            {item.name}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div className="md:col-span-4">
+                            <h4 className="text-white font-semibold mb-6">Domains & Status</h4>
+                            <div className="flex flex-col gap-4">
+                                <div className="flex flex-wrap gap-2 text-sm text-slate-400">
+                                    <a href="https://tony-liu.com" className="hover:text-indigo-400 transition-colors">Tony-Liu.com</a>
+                                    <span className="text-slate-700">•</span>
+                                    <a href="https://tonyliu.cloud" className="hover:text-indigo-400 transition-colors">TonyLiu.cloud</a>
+                                    <span className="text-slate-700">•</span>
+                                    <a href="https://tonyliu.uk" className="hover:text-indigo-400 transition-colors">TonyLiu.uk</a>
+                                    <span className="text-slate-700">•</span>
+                                    <a href="https://liuzj.net" className="hover:text-indigo-400 transition-colors">LiuZJ.net</a>
+                                </div>
+                                <div className="mt-2">
+                                    <iframe src="https://uptime.tony-liu.com/badge?theme=dark" width="250" height="30" frameBorder="0" scrolling="no" style={{ colorScheme: 'normal' }}></iframe>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p>© {new Date().getFullYear()} Tony-Liu.com. All rights reserved.</p>
+
+                    <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <p className="text-slate-500 text-sm">© {new Date().getFullYear()} Tony Liu. All rights reserved.</p>
+                        <p className="text-slate-600 text-xs">Designed & Built with Next.js</p>
+                    </div>
                 </div>
             </footer>
         </div>
