@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Github, Linkedin, Mail, ExternalLink, Menu, X, ChevronDown } from "lucide-react"
 
 const inter = Inter({ subsets: ['latin'] });
@@ -408,7 +408,7 @@ export default function Home() {
                 </section>
 
                 {/* Status Section */}
-                <section id="status" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-18">
+                <section id="status" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-14">
                     <Card className="bg-white/5 border-white/10 backdrop-blur-sm overflow-hidden">
                         <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5">
                             <div className="flex gap-1.5">
@@ -426,11 +426,16 @@ export default function Home() {
                                 title="System Status"
                             />
                         </CardContent>
+                        <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
+                            <p className="text-xs text-slate-500">
+                                Powered by <a href="https://github.com/tonyliuzj/kumaview" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300 transition-colors">KumaView</a>, on <a href="https://tony-liu.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300 transition-colors">tony-liu.com</a>
+                            </p>
+                        </CardFooter>
                     </Card>
                 </section>
 
                 {/* Monitor Section */}
-                <section id="monitor" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-18">
+                <section id="monitor" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-14">
                     <Card className="bg-white/5 border-white/10 backdrop-blur-sm overflow-hidden">
                         <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5">
                             <div className="flex gap-1.5">
@@ -448,6 +453,11 @@ export default function Home() {
                                 title="Monitor"
                             />
                         </CardContent>
+                        <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
+                            <p className="text-xs text-slate-500">
+                                Powered by <a href="https://github.com/tonyliuzj/pocketview" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300 transition-colors">PocketView</a>, on <a href="https://tony-liu.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300 transition-colors">tony-liu.com</a>
+                            </p>
+                        </CardFooter>
                     </Card>
                 </section>
 
