@@ -505,14 +505,17 @@ export default function Home() {
             </main>
 
             <footer className="border-t border-white/5 bg-black py-8 relative z-10">
-                <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
-                    <p>© {new Date().getFullYear()} Tony-Liu.com. All rights reserved.</p>
-                    <div className="flex flex-wrap justify-center gap-4 mt-4 md:mt-0">
-                        <span className="hover:text-slate-300 transition-colors cursor-pointer">Tony-Liu.com</span>
-                        <span className="hover:text-slate-300 transition-colors cursor-pointer">TonyLiu.cloud</span>
-                        <span className="hover:text-slate-300 transition-colors cursor-pointer">TonyLiu.uk</span>
-                        <span className="hover:text-slate-300 transition-colors cursor-pointer">LiuZJ.net</span>
+                <div className="max-w-7xl mx-auto px-6 flex flex-col items-center gap-4 text-sm text-slate-500">
+                    <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div className="flex flex-wrap justify-center gap-4">
+                            <span className="hover:text-slate-300 transition-colors cursor-pointer">Tony-Liu.com</span>
+                            <span className="hover:text-slate-300 transition-colors cursor-pointer">TonyLiu.cloud</span>
+                            <span className="hover:text-slate-300 transition-colors cursor-pointer">TonyLiu.uk</span>
+                            <span className="hover:text-slate-300 transition-colors cursor-pointer">LiuZJ.net</span>
+                        </div>
+                        <iframe src="https://uptime.tony-liu.com/badge?theme=dark" width="250" height="30" frameBorder="0" scrolling="no" style={{ colorScheme: 'normal' }}></iframe>
                     </div>
+                    <p>© {new Date().getFullYear()} Tony-Liu.com. All rights reserved.</p>
                 </div>
             </footer>
         </div>
