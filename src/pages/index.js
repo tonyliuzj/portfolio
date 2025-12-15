@@ -93,6 +93,12 @@ export default function Home() {
                             <a href="#projects">Projects</a>
                         </Button>
                         <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
+                            <a href="#status">Status</a>
+                        </Button>
+                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
+                            <a href="#monitor">Monitor</a>
+                        </Button>
+                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
                             <a href="#contact">Contact</a>
                         </Button>
                     </nav>
@@ -160,7 +166,7 @@ export default function Home() {
                 </div>
 
                 {/* Featured Projects */}
-                <section id="projects" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10">
+                <section id="projects" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
                     <h3 className="text-3xl font-bold text-white mb-12 text-center animate-slideUp">Featured Projects</h3>
                     <div className="grid md:grid-cols-2 gap-8">
                         <a href="https://shortenno.de" target="_blank" rel="noopener noreferrer" className="block">
@@ -286,8 +292,34 @@ export default function Home() {
                     </div>
                 </section>
 
+                {/* Status Section */}
+                <section id="status" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
+                    <Card className="bg-white/5 border-white/10 backdrop-blur-sm overflow-hidden">
+                        <CardContent className="p-0">
+                            <iframe 
+                                src="https://status.tony-liu.com/" 
+                                className="w-full h-[80vh] border-0"
+                                title="System Status"
+                            />
+                        </CardContent>
+                    </Card>
+                </section>
+
+                {/* Monitor Section */}
+                <section id="monitor" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
+                    <Card className="bg-white/5 border-white/10 backdrop-blur-sm overflow-hidden">
+                        <CardContent className="p-0">
+                            <iframe 
+                                src="https://monitor.ovh" 
+                                className="w-full h-[80vh] border-0"
+                                title="Monitor"
+                            />
+                        </CardContent>
+                    </Card>
+                </section>
+
                 {/* Contact Section */}
-                <section id="contact" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10">
+                <section id="contact" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
                     <Card className="bg-gradient-to-b from-white/5 to-transparent border-white/10 overflow-hidden backdrop-blur-sm">
                         <CardContent className="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
                             <div className="text-center md:text-left">
