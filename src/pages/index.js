@@ -506,7 +506,7 @@ export default function Home() {
 
             <footer className="border-t border-white/5 bg-black py-8 relative z-10">
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
-                    <p>© {new Date().getFullYear()} Tony Liu. All rights reserved.</p>
+                    <p>© {new Date().getFullYear()} Tony-Liu.com. All rights reserved.</p>
                     <div className="flex flex-wrap justify-center gap-4 mt-4 md:mt-0">
                         <span className="hover:text-slate-300 transition-colors cursor-pointer">Tony-Liu.com</span>
                         <span className="hover:text-slate-300 transition-colors cursor-pointer">TonyLiu.cloud</span>
