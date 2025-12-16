@@ -558,7 +558,7 @@ export default function Home() {
                     </div>
 
                     <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p className="text-slate-500 text-sm">© {new Date().getFullYear()} Tony Liu. All rights reserved.</p>
+                        <p className="text-slate-500 text-sm">© {new Date().getFullYear()} Tony Liu. (Tony.Liu.com) All rights reserved.</p>
                         <p className="text-slate-600 text-xs">Designed & Built with Next.js</p>
                     </div>
                 </div>
