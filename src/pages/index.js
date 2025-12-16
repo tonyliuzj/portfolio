@@ -510,7 +510,7 @@ export default function Home() {
                         <div className="md:col-span-5">
                             <h3 className="text-white font-bold text-xl mb-4 tracking-tight">Tony Liu</h3>
                             <p className="text-slate-400 text-sm leading-relaxed mb-6 max-w-sm">
-                                Trying to learn and build cool stuff even though its shit.
+                                Learning and building cool shit.
                             </p>
                             <div className="flex gap-4">
                                 <a href="https://github.com/tonyliuzj" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors">
