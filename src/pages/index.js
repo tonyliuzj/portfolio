@@ -551,7 +551,7 @@ export default function Home() {
                                     <a href="https://liuzj.net" className="hover:text-indigo-400 transition-colors">LiuZJ.net</a>
                                 </div>
                                 <div className="mt-2">
-                                    <iframe src="https://uptime.tony-liu.com/badge?theme=dark" width="250" height="30" frameBorder="0" scrolling="no" style={{ colorScheme: 'normal' }}></iframe>
+                                    <iframe src="https://tonyliu.betteruptime.com/badge?theme=dark" width="250" height="30" frameBorder="0" scrolling="no" style={{ colorScheme: 'normal' }}></iframe>
                                 </div>
                             </div>
                         </div>
