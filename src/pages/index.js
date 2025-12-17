@@ -417,12 +417,12 @@ export default function Home() {
                                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
                             </div>
                             <div className="flex-1 ml-4 bg-black/20 rounded-md px-3 py-1 text-xs text-slate-500 font-mono text-center truncate">
-                                https://status.tony-liu.com/
+                                https://statusno.de/
                             </div>
                         </div>
                         <CardContent className="p-0">
                             <InteractiveIframe
-                                src="https://status.tony-liu.com/"
+                                src="https://statusno.de/"
                                 title="System Status"
                             />
                         </CardContent>
@@ -444,12 +444,12 @@ export default function Home() {
                                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
                             </div>
                             <div className="flex-1 ml-4 bg-black/20 rounded-md px-3 py-1 text-xs text-slate-500 font-mono text-center truncate">
-                                https://monitor.tony-liu.com
+                                https://monitorno.de
                             </div>
                         </div>
                         <CardContent className="p-0">
                             <InteractiveIframe
-                                src="https://monitor.tony-liu.com"
+                                src="https://monitorno.de"
                                 title="Monitor"
                             />
                         </CardContent>
