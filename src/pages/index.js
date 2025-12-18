@@ -3,8 +3,8 @@ import Head from 'next/head';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Github, Linkedin, Mail, ExternalLink, Menu, X, ChevronDown } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card"
+import { Github, Linkedin, Mail, ExternalLink, Menu, X, ChevronDown, Globe, ShieldCheck } from "lucide-react"
 
 const inter = Inter({ subsets: ['latin'] });
 const mono = JetBrains_Mono({ subsets: ['latin'] });
@@ -34,6 +34,160 @@ function InteractiveIframe({ src, title }) {
                 title={title}
             />
         </div>
+    );
+}
+
+function DnsInfo() {
+    const [ipRecords, setIpRecords] = useState({ a: [], aaaa: [] });
+    const [loadingIPs, setLoadingIPs] = useState(true);
+
+    const staticNS = ['ns1.nameserver.sbs', 'ns2.nameserver.sbs'];
+
+    useEffect(() => {
+        const fetchIPs = async () => {
+            try {
+                const fetchDNS = async (name, typeCode) => {
+                    const typeStr = typeCode === 1 ? 'A' : 'AAAA';
+                    const res = await fetch(`https://dns.google/resolve?name=${name}&type=${typeStr}`);
+                    const data = await res.json();
+                    if (!data.Answer) return [];
+                    return data.Answer.filter(r => r.type === typeCode).map(r => r.data);
+                };
+
+                const fetchProvider = async (ip) => {
+                    try {
+                        const res = await fetch(`https://ipwho.is/${ip}`);
+                        const data = await res.json();
+                        return data.success ? (data.connection.isp || data.connection.org) : null;
+                    } catch {
+                        return null;
+                    }
+                };
+
+                const resolveWithProvider = async (name, typeCode) => {
+                    const ips = await fetchDNS(name, typeCode);
+                    const withProvider = await Promise.all(ips.map(async (ip) => {
+                        const provider = await fetchProvider(ip);
+                        return { ip, provider };
+                    }));
+                    return withProvider;
+                };
+
+                const minDelay = new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const [a, aaaa] = await Promise.all([
+                    resolveWithProvider('www.tony-liu.com', 1),
+                    resolveWithProvider('www.tony-liu.com', 28),
+                    minDelay
+                ]);
+
+                setIpRecords({ a, aaaa });
+            } catch (error) {
+                console.error('Failed to fetch IP records', error);
+            } finally {
+                setLoadingIPs(false);
+            }
+        };
+
+        fetchIPs();
+    }, []);
+
+    const SkeletonLoader = () => (
+        <div className="h-4 w-24 bg-white/10 rounded animate-pulse" />
+    );
+
+    return (
+        <Card className="bg-white/5 border-white/10 backdrop-blur-sm mt-6">
+            <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-xl text-white">
+                    <Globe className="w-5 h-5 text-indigo-400" />
+                    DNS Status
+                </CardTitle>
+                <CardDescription className="text-slate-400">
+                    www.tony-liu.com
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-4">
+                <div className="flex items-center gap-3 p-2.5 rounded-lg bg-orange-500/10 border border-orange-500/20 mb-2">
+                    <div className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500"></span>
+                    </div>
+                    <div className="flex items-center gap-2 text-orange-200 text-xs font-medium">
+                        <ShieldCheck className="w-3.5 h-3.5 text-orange-500" />
+                        Protected by Cloudflare
+                    </div>
+                </div>
+
+                <div>
+                    <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+                        Nameservers
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {staticNS.map((r, i) => (
+                            <div key={i} className="bg-black/20 rounded px-2 py-1.5 text-xs font-mono text-slate-300 border border-white/5 truncate">
+                                {r}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+                            IPv4 (A)
+                        </h4>
+                        <div className="grid gap-1.5">
+                            {loadingIPs ? (
+                                <div className="bg-black/20 rounded px-2 py-1.5 border border-white/5 flex items-center justify-between h-[30px]">
+                                    <SkeletonLoader />
+                                </div>
+                            ) : ipRecords.a.length > 0 ? (
+                                ipRecords.a.map((r, i) => (
+                                    <div key={i} className="bg-black/20 rounded px-2 py-1.5 text-xs font-mono text-slate-300 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 break-all">
+                                        <span>{r.ip}</span>
+                                        {r.provider && (
+                                            <span className="text-[10px] text-emerald-400/80 font-sans">{r.provider}</span>
+                                        )}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-xs text-slate-500 italic">No A records found</div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+                            IPv6 (AAAA)
+                        </h4>
+                        <div className="grid gap-1.5">
+                            {loadingIPs ? (
+                                <div className="bg-black/20 rounded px-2 py-1.5 border border-white/5 flex items-center justify-between h-[30px]">
+                                    <SkeletonLoader />
+                                </div>
+                            ) : ipRecords.aaaa.length > 0 ? (
+                                ipRecords.aaaa.map((r, i) => (
+                                    <div key={i} className="bg-black/20 rounded px-2 py-1.5 text-xs font-mono text-slate-300 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 break-all">
+                                        <span>{r.ip}</span>
+                                        {r.provider && (
+                                            <span className="text-[10px] text-blue-400/80 font-sans">{r.provider}</span>
+                                        )}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-xs text-slate-500 italic">No AAAA records found</div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </CardContent>
+            <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
+                <p className="text-xs text-slate-500">
+                    Powered by <a href="https://nameserver.sbs" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300 transition-colors">nameserver.sbs</a>
+                </p>
+            </CardFooter>
+        </Card>
     );
 }
 
@@ -432,6 +586,7 @@ export default function Home() {
                             </p>
                         </CardFooter>
                     </Card>
+                    <DnsInfo />
                 </section>
 
                 {/* Monitor Section */}
