@@ -196,6 +196,34 @@ export default function Home() {
     const [mounted, setMounted] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [scrollOpacity, setScrollOpacity] = useState(1);
+    const [projects, setProjects] = useState([]);
+    const [websites, setWebsites] = useState([]);
+
+    const getBadgeClasses = (color) => {
+        const colorMap = {
+            indigo: 'bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20',
+            emerald: 'bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20',
+            blue: 'bg-blue-500/10 text-blue-300 hover:bg-blue-500/20',
+            purple: 'bg-purple-500/10 text-purple-300 hover:bg-purple-500/20',
+            pink: 'bg-pink-500/10 text-pink-300 hover:bg-pink-500/20',
+            orange: 'bg-orange-500/10 text-orange-300 hover:bg-orange-500/20',
+            red: 'bg-red-500/10 text-red-300 hover:bg-red-500/20',
+            green: 'bg-green-500/10 text-green-300 hover:bg-green-500/20',
+            yellow: 'bg-yellow-500/10 text-yellow-300 hover:bg-yellow-500/20',
+            teal: 'bg-teal-500/10 text-teal-300 hover:bg-teal-500/20',
+            cyan: 'bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20',
+            sky: 'bg-sky-500/10 text-sky-300 hover:bg-sky-500/20',
+            violet: 'bg-violet-500/10 text-violet-300 hover:bg-violet-500/20',
+            fuchsia: 'bg-fuchsia-500/10 text-fuchsia-300 hover:bg-fuchsia-500/20',
+            rose: 'bg-rose-500/10 text-rose-300 hover:bg-rose-500/20',
+            amber: 'bg-amber-500/10 text-amber-300 hover:bg-amber-500/20',
+            lime: 'bg-lime-500/10 text-lime-300 hover:bg-lime-500/20',
+            slate: 'bg-slate-500/10 text-slate-300 hover:bg-slate-500/20',
+            gray: 'bg-gray-500/10 text-gray-300 hover:bg-gray-500/20',
+            white: 'bg-white/10 text-white hover:bg-white/20',
+        };
+        return colorMap[color] || colorMap.indigo;
+    };
 
     useEffect(() => {
         setMounted(true);
@@ -226,6 +254,36 @@ export default function Home() {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('scroll', handleScroll);
         };
+    }, []);
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                const response = await fetch('https://tonyliuzj.github.io/portfolio-static/data.json', {
+                    cache: 'no-cache',
+                    headers: {
+                        'Accept': 'application/json',
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const text = await response.text();
+                if (!text) {
+                    throw new Error('Empty response');
+                }
+
+                const data = JSON.parse(text);
+                setProjects(data.projects || []);
+                setWebsites(data.websites || []);
+            } catch (error) {
+                console.error('Failed to fetch projects:', error);
+            }
+        };
+
+        fetchProjects();
     }, []);
 
     function useTypewriter(words, speed = 90, pause = 1500) {
@@ -279,6 +337,7 @@ export default function Home() {
     const navItems = [
         { name: 'Home', href: '#home' },
         { name: 'Projects', href: '#projects' },
+        { name: 'Websites', href: '#websites' },
         { name: 'Status', href: '#status' },
         { name: 'Monitor', href: '#monitor' },
         { name: 'Contact', href: '#contact' },
@@ -426,140 +485,73 @@ export default function Home() {
                 <section id="projects" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
                     <h3 className="text-3xl font-bold text-white mb-12 text-center animate-slideUp">Featured Projects</h3>
                     <div className="grid md:grid-cols-2 gap-8">
-                        {/* Project 1 */}
-                        <a href="https://shortenno.de" target="_blank" rel="noopener noreferrer" className="block">
-                            <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
-                                <CardHeader>
-                                    <CardTitle className="flex justify-between items-center text-xl text-white">
-                                        Shrinx
-                                        <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="flex-1">
-                                    <p className="text-slate-400 mb-4 text-sm md:text-base">
-                                        Shrinx is a modern, minimalistic URL shortener that transforms long links into concise, trackable URLs. Fast, secure, and easy to integrate with a RESTful API.
-                                    </p>
-                                    <div className="flex flex-wrap gap-2">
-                                        <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20">Next.js</Badge>
-                                        <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20">API</Badge>
-                                        <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20">Secure</Badge>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </a>
-
-                        {/* Project 2 */}
-                        <a href="https://emailno.de" target="_blank" rel="noopener noreferrer" className="block">
-                            <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
-                                <CardHeader>
-                                    <CardTitle className="flex justify-between items-center text-xl text-white">
-                                        Mailsy
-                                        <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="flex-1">
-                                    <p className="text-slate-400 mb-4 text-sm md:text-base">
-                                        A simple, modern disposable email web app built with Next.js, shadcn/ui, and SQLite.
-                                    </p>
-                                    <div className="flex flex-wrap gap-2">
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Next.js</Badge>
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">shadcn/ui</Badge>
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">SQLite</Badge>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </a>
-
-                        {/* Project 3 */}
-                        <a href="https://statusno.de" target="_blank" rel="noopener noreferrer" className="block">
-                            <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
-                                <CardHeader>
-                                    <CardTitle className="flex justify-between items-center text-xl text-white">
-                                        KumaView
-                                        <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="flex-1">
-                                    <p className="text-slate-400 mb-4 text-sm md:text-base">
-                                        A modern frontend dashboard for monitoring multiple Uptime Kuma instances, built with Next.js, shadcn/ui, and SQLite.
-                                    </p>
-                                    <div className="flex flex-wrap gap-2">
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Next.js</Badge>
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">shadcn/ui</Badge>
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">SQLite</Badge>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </a>
-
-                        {/* Project 4 */}
-                        <a href="https://monitorno.de" target="_blank" rel="noopener noreferrer" className="block">
-                            <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
-                                <CardHeader>
-                                    <CardTitle className="flex justify-between items-center text-xl text-white">
-                                        PocketView
-                                        <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="flex-1">
-                                    <p className="text-slate-400 mb-4 text-sm md:text-base">
-                                        A modern, lightweight web interface for monitoring system metrics and performance. Built with Next.js and designed to work seamlessly with PocketBase (Beszel).
-                                    </p>
-                                    <div className="flex flex-wrap gap-2">
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Next.js</Badge>
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">shadcn/ui</Badge>
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">SQLite</Badge>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </a>
-
-                        {/* Project 5 */}
-                        <a href="https://fileno.de" target="_blank" rel="noopener noreferrer" className="block">
-                            <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
-                                <CardHeader>
-                                    <CardTitle className="flex justify-between items-center text-xl text-white">
-                                        Librix
-                                        <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="flex-1">
-                                    <p className="text-slate-400 mb-4 text-sm md:text-base">
-                                        A front-end NEXT.JS application for HTTP/WebDAV–style servers.
-                                    </p>
-                                    <div className="flex flex-wrap gap-2">
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Next.js</Badge>
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">shadcn/ui</Badge>
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">SQLite</Badge>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </a>
-
-                        {/* Project 6 */}
-                        <a href="https://github.com/tonyliuzj/arkiv" target="_blank" rel="noopener noreferrer" className="block">
-                            <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
-                                <CardHeader>
-                                    <CardTitle className="flex justify-between items-center text-xl text-white">
-                                        Arkiv
-                                        <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="flex-1">
-                                    <p className="text-slate-400 mb-4 text-sm md:text-base">
-                                        A full-stack file library system for managing, storing, and accessing files with user authentication.
-                                    </p>
-                                    <div className="flex flex-wrap gap-2">
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">Next.js</Badge>
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">shadcn/ui</Badge>
-                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">SQLite</Badge>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </a>
-
+                        {projects.map((project) => (
+                            <a key={project.id} href={project.url} target="_blank" rel="noopener noreferrer" className="block">
+                                <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
+                                    <CardHeader>
+                                        <CardTitle className="flex justify-between items-center text-xl text-white">
+                                            {project.title}
+                                            <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="flex-1">
+                                        <p className="text-slate-400 mb-4 text-sm md:text-base">
+                                            {project.description}
+                                        </p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {project.badges.map((badge, index) => (
+                                                <Badge
+                                                    key={index}
+                                                    variant="secondary"
+                                                    className={getBadgeClasses(badge.color)}
+                                                >
+                                                    {badge.text}
+                                                </Badge>
+                                            ))}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </a>
+                        ))}
                     </div>
                 </section>
+
+                {/* Websites Section */}
+                {websites.length > 0 && (
+                    <section id="websites" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
+                        <h3 className="text-3xl font-bold text-white mb-12 text-center animate-slideUp">Websites</h3>
+                        <div className={`grid gap-8 ${websites.length === 1 ? 'md:grid-cols-1 max-w-2xl mx-auto' : 'md:grid-cols-2'}`}>
+                            {websites.map((website) => (
+                                <a key={website.id} href={website.url} target="_blank" rel="noopener noreferrer" className="block">
+                                    <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
+                                        <CardHeader>
+                                            <CardTitle className="flex justify-between items-center text-xl text-white">
+                                                {website.title}
+                                                <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent className="flex-1">
+                                            <p className="text-slate-400 mb-4 text-sm md:text-base">
+                                                {website.description}
+                                            </p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {website.badges.map((badge, index) => (
+                                                    <Badge
+                                                        key={index}
+                                                        variant="secondary"
+                                                        className={getBadgeClasses(badge.color)}
+                                                    >
+                                                        {badge.text}
+                                                    </Badge>
+                                                ))}
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </a>
+                            ))}
+                        </div>
+                    </section>
+                )}
 
                 {/* Status Section */}
                 <section id="status" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-14">
