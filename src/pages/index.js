@@ -466,9 +466,13 @@ export default function Home() {
                         </Badge>
                     </div>
 
-                    <p className="max-w-3xl px-4 text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed mb-10 animate-fadeIn delay-200">
-                        {aboutMe}
-                    </p>
+                    <div className="max-w-3xl w-full px-4 mb-10 animate-fadeIn delay-200">
+                        <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 hover:bg-white/10 transition-all duration-300 shadow-xl shadow-black/20">
+                            <p className="text-slate-300 text-base sm:text-lg md:text-xl leading-relaxed font-medium tracking-wide">
+                                {aboutMe}
+                            </p>
+                        </div>
+                    </div>
 
                     <div className="flex gap-4 animate-fadeIn delay-300 flex-col sm:flex-row w-full sm:w-auto px-6 sm:px-0">
                         <Button asChild size="lg" className="rounded-full font-semibold px-8 h-12 w-full sm:w-auto">
