@@ -333,6 +333,9 @@ export default function Home() {
     ];
 
     const typedText = useTypewriter(phrases);
+    const siteTitle = "Tony Liu";
+    const siteUrl = "https://www.tony-liu.com";
+    const aboutMe = "I'm Tony Liu, a student learning full-stack development and building web projects with React, Next.js, Node.js, and cloud tools, focused on clean UX, performance, and maintainable systems.";
 
     const navItems = [
         { name: 'Home', href: '#home' },
@@ -346,9 +349,22 @@ export default function Home() {
     return (
         <div className={`${inter.className} min-h-screen bg-black text-slate-300 selection:bg-indigo-500/30`}>
             <Head>
-                <title>Tony Liu's Portfolio</title>
+                <title>{siteTitle}</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <meta name="description" content="Full Stack Developer Portfolio" />
+                <meta name="description" content={aboutMe} />
+                <link rel="canonical" href={siteUrl} />
+                <meta name="robots" content="index, follow, max-snippet:160, max-image-preview:large, max-video-preview:-1" />
+                <meta name="googlebot" content="index, follow, max-snippet:160, max-image-preview:large, max-video-preview:-1" />
+                <meta property="og:type" content="website" />
+                <meta property="og:site_name" content="Tony Liu" />
+                <meta property="og:title" content={siteTitle} />
+                <meta property="og:description" content={aboutMe} />
+                <meta property="og:url" content={siteUrl} />
+                <meta property="og:image" content={`${siteUrl}/logo.png`} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={siteTitle} />
+                <meta name="twitter:description" content={aboutMe} />
+                <meta name="twitter:image" content={`${siteUrl}/logo.png`} />
             </Head>
 
             {/* Navbar */}
@@ -441,7 +457,7 @@ export default function Home() {
                         </span>
                     </h2>
 
-                    <div className={`${mono.className} text-sm md:text-base text-slate-400 mb-10 h-8 flex items-center justify-center gap-2 animate-fadeIn delay-150`}>
+                    <div className={`${mono.className} text-sm md:text-base text-slate-400 mb-6 h-8 flex items-center justify-center gap-2 animate-fadeIn delay-150`}>
                         <span className="text-indigo-400">{'>'}</span>
                         <span className="hidden sm:inline">const currentFocus =</span>
                         <span className="sm:hidden">focus =</span>
@@ -449,6 +465,10 @@ export default function Home() {
                             "{typedText}"
                         </Badge>
                     </div>
+
+                    <p className="max-w-3xl px-4 text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed mb-10 animate-fadeIn delay-200">
+                        {aboutMe}
+                    </p>
 
                     <div className="flex gap-4 animate-fadeIn delay-300 flex-col sm:flex-row w-full sm:w-auto px-6 sm:px-0">
                         <Button asChild size="lg" className="rounded-full font-semibold px-8 h-12 w-full sm:w-auto">
@@ -482,7 +502,7 @@ export default function Home() {
                 </div>
 
                 {/* Featured Projects */}
-                <section id="projects" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
+                <section id="projects" data-nosnippet="" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
                     <h3 className="text-3xl font-bold text-white mb-12 text-center animate-slideUp">Featured Projects</h3>
                     <div className="grid md:grid-cols-2 gap-8">
                         {projects.map((project) => (
@@ -518,7 +538,7 @@ export default function Home() {
 
                 {/* Websites Section */}
                 {websites.length > 0 && (
-                    <section id="websites" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
+                    <section id="websites" data-nosnippet="" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
                         <h3 className="text-3xl font-bold text-white mb-12 text-center animate-slideUp">Websites</h3>
                         <div className={`grid gap-8 ${websites.length === 1 ? 'md:grid-cols-1 max-w-2xl mx-auto' : 'md:grid-cols-2'}`}>
                             {websites.map((website) => (
