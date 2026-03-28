@@ -335,7 +335,7 @@ export default function Home() {
     const typedText = useTypewriter(phrases);
     const siteTitle = "Tony Liu";
     const siteUrl = "https://www.tony-liu.com";
-    const aboutMe = "I'm Tony Liu, a student learning full-stack development and building wonderful projects";
+    const aboutMe = "Test. I'm Tony Liu, a student learning full-stack development and building wonderful projects";
 
     const navItems = [
         { name: 'Home', href: '#home' },
