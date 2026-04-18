@@ -134,7 +134,7 @@ function InteractiveIframe({ src, title }) {
     );
 }
 
-function DnsInfo() {
+function DnsInfo({ externalLinkProps }) {
     const [ipRecords, setIpRecords] = useState({ a: [], aaaa: [] });
     const [loadingIPs, setLoadingIPs] = useState(true);
 
@@ -291,7 +291,7 @@ function DnsInfo() {
             </CardContent>
             <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
                 <p className="text-xs text-slate-500">
-                    Powered by <a href="https://nameserver.sbs" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300 transition-colors">nameserver.sbs</a>
+                    Powered by <a {...externalLinkProps} href="https://nameserver.sbs" className="text-indigo-400 hover:text-indigo-300 transition-colors">nameserver.sbs</a>
                 </p>
             </CardFooter>
         </Card>
@@ -301,6 +301,7 @@ function DnsInfo() {
 export default function Home() {
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [mounted, setMounted] = useState(false);
+    const [isNestedFrame, setIsNestedFrame] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [scrollOpacity, setScrollOpacity] = useState(1);
     const [projects, setProjects] = useState([]);
@@ -335,6 +336,11 @@ export default function Home() {
 
     useEffect(() => {
         setMounted(true);
+        try {
+            setIsNestedFrame(window.self !== window.top);
+        } catch {
+            setIsNestedFrame(true);
+        }
 
         const handleMouseMove = (e) => {
             setPosition({ x: e.clientX, y: e.clientY });
@@ -445,6 +451,10 @@ export default function Home() {
     const siteTitle = "Tony Liu";
     const siteUrl = "https://www.tony-liu.com";
     const aboutMe = "A student learning full-stack development and building wonderful projects";
+    const externalLinkProps = isNestedFrame
+        ? { target: '_top' }
+        : { target: '_blank', rel: 'noopener noreferrer' };
+    const sectionLinkProps = isNestedFrame ? { target: '_top' } : {};
 
     const navItems = [
         { name: 'Home', href: '#home' },
@@ -489,7 +499,7 @@ export default function Home() {
                     <nav className="hidden md:flex gap-1">
                         {navItems.map((item) => (
                             <Button key={item.name} variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
-                                <a href={item.href}>{item.name}</a>
+                                <a {...sectionLinkProps} href={item.href}>{item.name}</a>
                             </Button>
                         ))}
                     </nav>
@@ -519,7 +529,7 @@ export default function Home() {
                                     className="w-full justify-start text-base font-medium text-slate-400 hover:text-white hover:bg-white/5 h-12 px-4"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
-                                    <a href={item.href}>{item.name}</a>
+                                    <a {...sectionLinkProps} href={item.href}>{item.name}</a>
                                 </Button>
                             ))}
                         </nav>
@@ -620,7 +630,7 @@ export default function Home() {
                     <h3 className="text-3xl font-bold text-white mb-12 text-center animate-slideUp">Featured Projects</h3>
                     <div className="grid md:grid-cols-2 gap-8">
                         {projects.map((project) => (
-                            <a key={project.id} href={project.url} target="_blank" rel="noopener noreferrer" className="block">
+                            <a key={project.id} {...externalLinkProps} href={project.url} className="block">
                                 <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
                                     <CardHeader>
                                         <CardTitle className="flex justify-between items-center text-xl text-white">
@@ -656,7 +666,7 @@ export default function Home() {
                         <h3 className="text-3xl font-bold text-white mb-12 text-center animate-slideUp">Websites</h3>
                         <div className={`grid gap-8 ${websites.length === 1 ? 'md:grid-cols-1 max-w-2xl mx-auto' : 'md:grid-cols-2'}`}>
                             {websites.map((website) => (
-                                <a key={website.id} href={website.url} target="_blank" rel="noopener noreferrer" className="block">
+                                <a key={website.id} {...externalLinkProps} href={website.url} className="block">
                                     <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
                                         <CardHeader>
                                             <CardTitle className="flex justify-between items-center text-xl text-white">
@@ -689,7 +699,7 @@ export default function Home() {
 
                 {/* DNS Section */}
                 <section id="dns" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-14">
-                    <DnsInfo />
+                    <DnsInfo externalLinkProps={externalLinkProps} />
                 </section>
 
                 {/* Status Section */}
@@ -713,7 +723,7 @@ export default function Home() {
                         </CardContent>
                         <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
                             <p className="text-xs text-slate-500">
-                                Powered by <a href="https://github.com/tonyliuzj/kumaview" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300 transition-colors">KumaView</a>, on <a href="https://tony-liu.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300 transition-colors">tony-liu.com</a>
+                                Powered by <a {...externalLinkProps} href="https://github.com/tonyliuzj/kumaview" className="text-indigo-400 hover:text-indigo-300 transition-colors">KumaView</a>, on <a {...externalLinkProps} href="https://tony-liu.com" className="text-indigo-400 hover:text-indigo-300 transition-colors">tony-liu.com</a>
                             </p>
                         </CardFooter>
                     </Card>
@@ -740,7 +750,7 @@ export default function Home() {
                         </CardContent>
                         <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
                             <p className="text-xs text-slate-500">
-                                Powered by <a href="https://github.com/tonyliuzj/pocketview" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300 transition-colors">PocketView</a>, on <a href="https://tony-liu.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300 transition-colors">tony-liu.com</a>
+                                Powered by <a {...externalLinkProps} href="https://github.com/tonyliuzj/pocketview" className="text-indigo-400 hover:text-indigo-300 transition-colors">PocketView</a>, on <a {...externalLinkProps} href="https://tony-liu.com" className="text-indigo-400 hover:text-indigo-300 transition-colors">tony-liu.com</a>
                             </p>
                         </CardFooter>
                     </Card>
@@ -765,9 +775,8 @@ export default function Home() {
                                 </Button>
                                 <Button asChild size="lg" className="bg-[#0077b5] hover:bg-[#006399] text-white border border-white/10 hover:border-white/20 shadow-lg h-14 px-6 rounded-xl gap-2 group w-full sm:w-auto">
                                     <a
+                                        {...externalLinkProps}
                                         href="https://www.linkedin.com/in/tonyliuzj"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
                                     >
                                         <span>LinkedIn</span>
                                         <Linkedin className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -775,9 +784,8 @@ export default function Home() {
                                 </Button>
                                 <Button asChild size="lg" className="bg-[#24292e] hover:bg-[#2f363d] text-white border border-white/10 hover:border-white/20 shadow-lg h-14 px-6 rounded-xl gap-2 group w-full sm:w-auto">
                                     <a
+                                        {...externalLinkProps}
                                         href="https://github.com/tonyliuzj"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
                                     >
                                         <span>GitHub</span>
                                         <Github className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -798,10 +806,10 @@ export default function Home() {
                                 Learning and building cool shit.
                             </p>
                             <div className="flex gap-4">
-                                <a href="https://github.com/tonyliuzj" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors">
+                                <a {...externalLinkProps} href="https://github.com/tonyliuzj" className="text-slate-400 hover:text-white transition-colors">
                                     <Github className="w-5 h-5" />
                                 </a>
-                                <a href="https://www.linkedin.com/in/tonyliuzj" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors">
+                                <a {...externalLinkProps} href="https://www.linkedin.com/in/tonyliuzj" className="text-slate-400 hover:text-white transition-colors">
                                     <Linkedin className="w-5 h-5" />
                                 </a>
                                 <a href="mailto:tony@liuzj.net" className="text-slate-400 hover:text-white transition-colors">
@@ -815,7 +823,7 @@ export default function Home() {
                             <ul className="flex flex-col gap-3 text-sm text-slate-400">
                                 {navItems.map((item) => (
                                     <li key={item.name}>
-                                        <a href={item.href} className="hover:text-indigo-400 transition-colors">
+                                        <a {...sectionLinkProps} href={item.href} className="hover:text-indigo-400 transition-colors">
                                             {item.name}
                                         </a>
                                     </li>
@@ -830,12 +838,7 @@ export default function Home() {
                                     {domains.map((domain, index) => (
                                         <div key={domain.url} className="contents">
                                             {index > 0 && <span className="text-slate-700">•</span>}
-                                            <a
-                                                href={domain.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="hover:text-indigo-400 transition-colors"
-                                            >
+                                            <a {...externalLinkProps} href={domain.url} className="hover:text-indigo-400 transition-colors">
                                                 {domain.label}
                                             </a>
                                         </div>
