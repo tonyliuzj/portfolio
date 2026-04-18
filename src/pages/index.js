@@ -153,9 +153,19 @@ function DnsInfo() {
 
                 const fetchProvider = async (ip) => {
                     try {
-                        const res = await fetch(`https://ipwho.is/${ip}`);
+                        const res = await fetch(`https://ipapi.co/${encodeURIComponent(ip)}/json/`, {
+                            headers: {
+                                Accept: 'application/json',
+                            },
+                        });
+                        if (!res.ok) {
+                            return null;
+                        }
                         const data = await res.json();
-                        return data.success ? (data.connection.isp || data.connection.org) : null;
+                        if (data.error) {
+                            return null;
+                        }
+                        return data.org || data.asn || null;
                     } catch {
                         return null;
                     }
@@ -198,7 +208,7 @@ function DnsInfo() {
             <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-xl text-white">
                     <Globe className="w-5 h-5 text-indigo-400" />
-                    DNS Status
+                    DNS
                 </CardTitle>
                 <CardDescription className="text-slate-400">
                     www.tony-liu.com
@@ -440,6 +450,7 @@ export default function Home() {
         { name: 'Home', href: '#home' },
         { name: 'Projects', href: '#projects' },
         { name: 'Websites', href: '#websites' },
+        { name: 'DNS', href: '#dns' },
         { name: 'Status', href: '#status' },
         { name: 'Monitor', href: '#monitor' },
         { name: 'Contact', href: '#contact' },
@@ -676,6 +687,11 @@ export default function Home() {
                     </section>
                 )}
 
+                {/* DNS Section */}
+                <section id="dns" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-14">
+                    <DnsInfo />
+                </section>
+
                 {/* Status Section */}
                 <section id="status" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-14">
                     <Card className="bg-white/5 border-white/10 backdrop-blur-sm overflow-hidden">
@@ -701,7 +717,6 @@ export default function Home() {
                             </p>
                         </CardFooter>
                     </Card>
-                    <DnsInfo />
                 </section>
 
                 {/* Monitor Section */}
@@ -809,7 +824,7 @@ export default function Home() {
                         </div>
 
                         <div className="md:col-span-4">
-                            <h4 className="text-white font-semibold mb-6">Domains & Status</h4>
+                            <h4 className="text-white font-semibold mb-6">Domains, DNS & Status</h4>
                             <div className="flex flex-col gap-4">
                                 <div className="flex flex-wrap gap-2 text-sm text-slate-400">
                                     {domains.map((domain, index) => (
