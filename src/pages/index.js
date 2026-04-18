@@ -12,6 +12,89 @@ const defaultDomains = [
     { label: 'Tony-Liu.com', url: 'https://tony-liu.com' }
 ];
 
+const stripTrailingCommas = (input) => {
+    let output = '';
+    let inString = false;
+    let isEscaped = false;
+
+    for (let index = 0; index < input.length; index += 1) {
+        const char = input[index];
+
+        if (isEscaped) {
+            output += char;
+            isEscaped = false;
+            continue;
+        }
+
+        if (inString && char === '\\') {
+            output += char;
+            isEscaped = true;
+            continue;
+        }
+
+        if (char === '"') {
+            inString = !inString;
+            output += char;
+            continue;
+        }
+
+        if (!inString && char === ',') {
+            let nextIndex = index + 1;
+
+            while (nextIndex < input.length && /\s/.test(input[nextIndex])) {
+                nextIndex += 1;
+            }
+
+            if (input[nextIndex] === ']' || input[nextIndex] === '}') {
+                continue;
+            }
+        }
+
+        output += char;
+    }
+
+    return output;
+};
+
+const parsePortfolioData = (text) => {
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        const sanitizedText = stripTrailingCommas(text);
+
+        if (sanitizedText === text) {
+            throw error;
+        }
+
+        try {
+            console.warn('Recovered malformed portfolio data by removing trailing commas.');
+            return JSON.parse(sanitizedText);
+        } catch {
+            throw error;
+        }
+    }
+};
+
+const parsePortfolioItems = (items) => {
+    if (!Array.isArray(items)) return [];
+
+    return items
+        .filter((item) =>
+            typeof item?.title === 'string' &&
+            typeof item?.description === 'string' &&
+            typeof item?.url === 'string'
+        )
+        .map((item, index) => ({
+            id: item.id ?? `${item.title}-${index}`,
+            ...item,
+            badges: Array.isArray(item.badges)
+                ? item.badges.filter((badge) =>
+                    typeof badge?.text === 'string' && typeof badge?.color === 'string'
+                )
+                : [],
+        }));
+};
+
 const parseDomains = (domains) => {
     if (!Array.isArray(domains)) return defaultDomains;
 
@@ -45,6 +128,7 @@ function InteractiveIframe({ src, title }) {
                 src={src}
                 className={`w-full h-full border-0 transition-all duration-500 ${isInteracting ? 'pointer-events-auto' : 'pointer-events-none opacity-40'}`}
                 title={title}
+                sandbox="allow-forms allow-same-origin allow-scripts"
             />
         </div>
     );
@@ -285,13 +369,13 @@ export default function Home() {
                 }
 
                 const text = await response.text();
-                if (!text) {
+                if (!text.trim()) {
                     throw new Error('Empty response');
                 }
 
-                const data = JSON.parse(text);
-                setProjects(Array.isArray(data.projects) ? data.projects : []);
-                setWebsites(Array.isArray(data.websites) ? data.websites : []);
+                const data = parsePortfolioData(text);
+                setProjects(parsePortfolioItems(data.projects));
+                setWebsites(parsePortfolioItems(data.websites));
                 setDomains(parseDomains(data.domains));
             } catch (error) {
                 console.error('Failed to fetch content:', error);
