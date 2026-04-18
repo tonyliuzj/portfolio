@@ -8,6 +8,19 @@ import { Github, Linkedin, Mail, ExternalLink, Menu, X, ChevronDown, Globe, Shie
 
 const inter = Inter({ subsets: ['latin'] });
 const mono = JetBrains_Mono({ subsets: ['latin'] });
+const defaultDomains = [
+    { label: 'Tony-Liu.com', url: 'https://tony-liu.com' }
+];
+
+const parseDomains = (domains) => {
+    if (!Array.isArray(domains)) return defaultDomains;
+
+    const validDomains = domains.filter((domain) =>
+        typeof domain?.label === 'string' && typeof domain?.url === 'string'
+    );
+
+    return validDomains.length > 0 ? validDomains : defaultDomains;
+};
 
 // Interactive Iframe Component - Prevents scroll trap on mobile
 function InteractiveIframe({ src, title }) {
@@ -198,6 +211,7 @@ export default function Home() {
     const [scrollOpacity, setScrollOpacity] = useState(1);
     const [projects, setProjects] = useState([]);
     const [websites, setWebsites] = useState([]);
+    const [domains, setDomains] = useState(defaultDomains);
 
     const getBadgeClasses = (color) => {
         const colorMap = {
@@ -257,7 +271,7 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-        const fetchProjects = async () => {
+        const fetchContent = async () => {
             try {
                 const response = await fetch('https://tonyliuzj.github.io/portfolio-static/data.json', {
                     cache: 'no-cache',
@@ -276,14 +290,15 @@ export default function Home() {
                 }
 
                 const data = JSON.parse(text);
-                setProjects(data.projects || []);
-                setWebsites(data.websites || []);
+                setProjects(Array.isArray(data.projects) ? data.projects : []);
+                setWebsites(Array.isArray(data.websites) ? data.websites : []);
+                setDomains(parseDomains(data.domains));
             } catch (error) {
-                console.error('Failed to fetch projects:', error);
+                console.error('Failed to fetch content:', error);
             }
         };
 
-        fetchProjects();
+        fetchContent();
     }, []);
 
     function useTypewriter(words, speed = 90, pause = 1500) {
@@ -713,13 +728,14 @@ export default function Home() {
                             <h4 className="text-white font-semibold mb-6">Domains & Status</h4>
                             <div className="flex flex-col gap-4">
                                 <div className="flex flex-wrap gap-2 text-sm text-slate-400">
-                                    <a href="https://tony-liu.com" className="hover:text-indigo-400 transition-colors">Tony-Liu.com</a>
-                                    <span className="text-slate-700">•</span>
-                                    <a href="https://tonyliu.cloud" className="hover:text-indigo-400 transition-colors">TonyLiu.cloud</a>
-                                    <span className="text-slate-700">•</span>
-                                    <a href="https://tonyliu.uk" className="hover:text-indigo-400 transition-colors">TonyLiu.uk</a>
-                                    <span className="text-slate-700">•</span>
-                                    <a href="https://liuzj.net" className="hover:text-indigo-400 transition-colors">LiuZJ.net</a>
+                                    {domains.map((domain, index) => (
+                                        <div key={domain.url} className="contents">
+                                            {index > 0 && <span className="text-slate-700">•</span>}
+                                            <a href={domain.url} className="hover:text-indigo-400 transition-colors">
+                                                {domain.label}
+                                            </a>
+                                        </div>
+                                    ))}
                                 </div>
                                 <div className="mt-2">
                                     <iframe src="https://status.tony-liu.com/badge?theme=dark" width="250" height="30" frameBorder="0" scrolling="no" style={{ colorScheme: 'normal' }}></iframe>
