@@ -830,7 +830,12 @@ export default function Home() {
                                     {domains.map((domain, index) => (
                                         <div key={domain.url} className="contents">
                                             {index > 0 && <span className="text-slate-700">•</span>}
-                                            <a href={domain.url} className="hover:text-indigo-400 transition-colors">
+                                            <a
+                                                href={domain.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="hover:text-indigo-400 transition-colors"
+                                            >
                                                 {domain.label}
                                             </a>
                                         </div>
