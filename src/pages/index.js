@@ -138,7 +138,7 @@ function DnsInfo({ externalLinkProps }) {
     const [ipRecords, setIpRecords] = useState({ a: [], aaaa: [] });
     const [loadingIPs, setLoadingIPs] = useState(true);
 
-    const staticNS = ['ns1.nameserver.sbs', 'ns2.nameserver.sbs'];
+    const staticNS = ['ns1.nameserver.ing', 'ns2.nameserver.ing'];
 
     useEffect(() => {
         const fetchIPs = async () => {
@@ -183,8 +183,8 @@ function DnsInfo({ externalLinkProps }) {
                 const minDelay = new Promise(resolve => setTimeout(resolve, 1000));
                 
                 const [a, aaaa] = await Promise.all([
-                    resolveWithProvider('www.tony-liu.com', 1),
-                    resolveWithProvider('www.tony-liu.com', 28),
+                    resolveWithProvider('tony-liu.com', 1),
+                    resolveWithProvider('tony-liu.com', 28),
                     minDelay
                 ]);
 
@@ -211,7 +211,7 @@ function DnsInfo({ externalLinkProps }) {
                     DNS
                 </CardTitle>
                 <CardDescription className="text-slate-400">
-                    www.tony-liu.com
+                    tony-liu.com
                 </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
@@ -291,7 +291,7 @@ function DnsInfo({ externalLinkProps }) {
             </CardContent>
             <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
                 <p className="text-xs text-slate-500">
-                    Powered by <a {...externalLinkProps} href="https://nameserver.sbs" className="text-indigo-400 hover:text-indigo-300 transition-colors">nameserver.sbs</a>
+                    Powered by <a {...externalLinkProps} href="https://nameserver.ing" className="text-indigo-400 hover:text-indigo-300 transition-colors">nameserver.ing</a>
                 </p>
             </CardFooter>
         </Card>
@@ -449,7 +449,7 @@ export default function Home() {
 
     const typedText = useTypewriter(phrases);
     const siteTitle = "Tony Liu";
-    const siteUrl = "https://www.tony-liu.com";
+    const siteUrl = "https://tony-liu.com";
     const aboutMe = "A student learning full-stack development and building wonderful projects";
     const externalLinkProps = isNestedFrame
         ? { target: '_top' }
@@ -723,7 +723,7 @@ export default function Home() {
                         </CardContent>
                         <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
                             <p className="text-xs text-slate-500">
-                                Powered by <a {...externalLinkProps} href="https://github.com/tonyliuzj/kumaview" className="text-indigo-400 hover:text-indigo-300 transition-colors">KumaView</a>, on <a {...externalLinkProps} href="https://tony-liu.com" className="text-indigo-400 hover:text-indigo-300 transition-colors">tony-liu.com</a>
+                                Powered by <a {...externalLinkProps} href="https://github.com/tonyliuzj/kumaview" className="text-indigo-400 hover:text-indigo-300 transition-colors">KumaView</a>
                             </p>
                         </CardFooter>
                     </Card>
@@ -750,7 +750,7 @@ export default function Home() {
                         </CardContent>
                         <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
                             <p className="text-xs text-slate-500">
-                                Powered by <a {...externalLinkProps} href="https://github.com/tonyliuzj/pocketview" className="text-indigo-400 hover:text-indigo-300 transition-colors">PocketView</a>, on <a {...externalLinkProps} href="https://tony-liu.com" className="text-indigo-400 hover:text-indigo-300 transition-colors">tony-liu.com</a>
+                                Powered by <a {...externalLinkProps} href="https://github.com/tonyliuzj/pocketview" className="text-indigo-400 hover:text-indigo-300 transition-colors">PocketView</a>
                             </p>
                         </CardFooter>
                     </Card>
