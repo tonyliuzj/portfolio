@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -450,6 +451,7 @@ export default function Home() {
     const typedText = useTypewriter(phrases);
     const siteTitle = "Tony Liu";
     const siteUrl = "https://tony-liu.com";
+    const logoPath = "/parrot.gif";
     const aboutMe = "A student learning full-stack development and building wonderful projects";
     const externalLinkProps = isNestedFrame
         ? { target: '_top' }
@@ -480,18 +482,27 @@ export default function Home() {
                 <meta property="og:title" content={siteTitle} />
                 <meta property="og:description" content={aboutMe} />
                 <meta property="og:url" content={siteUrl} />
-                <meta property="og:image" content={`${siteUrl}/logo.png`} />
+                <meta property="og:image" content={`${siteUrl}${logoPath}`} />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content={siteTitle} />
                 <meta name="twitter:description" content={aboutMe} />
-                <meta name="twitter:image" content={`${siteUrl}/logo.png`} />
+                <meta name="twitter:image" content={`${siteUrl}${logoPath}`} />
             </Head>
 
             {/* Navbar */}
             <header className="fixed top-0 w-full z-50 border-b border-white/5 bg-black/50 backdrop-blur-xl">
                 <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4 relative z-50">
                     <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-indigo-500 animate-pulse" />
+                        <Image
+                            src={logoPath}
+                            alt=""
+                            aria-hidden="true"
+                            width={32}
+                            height={32}
+                            priority
+                            unoptimized
+                            className="h-8 w-8 shrink-0"
+                        />
                         <h1 className="text-white font-bold text-lg tracking-tight">Tony Liu</h1>
                     </div>
 
