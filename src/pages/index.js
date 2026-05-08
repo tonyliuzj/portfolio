@@ -934,9 +934,16 @@ export default function Home() {
                                 <a key={website.id} {...externalLinkProps} href={website.url} className="block">
                                     <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
                                         <CardHeader>
-                                            <CardTitle className="flex justify-between items-center text-xl text-white">
-                                                {website.title}
-                                                <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+                                            <CardTitle className="flex flex-col gap-2 text-xl text-white sm:flex-row sm:items-start sm:justify-between">
+                                                <span className="min-w-0 break-words leading-7">
+                                                    {website.title}
+                                                </span>
+                                                <span className="inline-flex min-w-0 items-start gap-2 sm:ml-4 sm:max-w-[55%] sm:justify-end">
+                                                    <span className="min-w-0 break-all font-mono text-xs font-normal leading-5 text-slate-500 transition-colors group-hover:text-slate-400 sm:text-right">
+                                                        {website.url}
+                                                    </span>
+                                                    <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+                                                </span>
                                             </CardTitle>
                                         </CardHeader>
                                         <CardContent className="flex-1">
