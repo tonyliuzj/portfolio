@@ -5,13 +5,39 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card"
-import { Github, Linkedin, Mail, ExternalLink, Menu, X, ChevronDown, Globe, ShieldCheck } from "lucide-react"
+import { Activity, Compass, Github, Linkedin, Mail, ExternalLink, Menu, X, ChevronDown, Globe, ShieldCheck } from "lucide-react"
 
 const inter = Inter({ subsets: ['latin'] });
 const mono = JetBrains_Mono({ subsets: ['latin'] });
 const defaultDomains = [
-    { label: 'Tony-Liu.com', url: 'https://tony-liu.com' }
+    { label: 'Tony-Liu.com', url: 'https://tony-liu.com', type: 'domain' }
 ];
+const domainTypeOrder = ['domain', 'redirect', 'alias'];
+const domainTypeConfig = {
+    domain: {
+        label: 'Primary',
+        title: 'Primary Domain',
+        description: 'Canonical home for the portfolio.',
+        badgeClass: 'border-indigo-400/20 bg-indigo-400/10 text-indigo-200',
+    },
+    redirect: {
+        label: 'Redirect',
+        title: 'Redirects',
+        description: 'Domains that forward visitors to the main site.',
+        badgeClass: 'border-amber-400/20 bg-amber-400/10 text-amber-200',
+    },
+    alias: {
+        label: 'Alias',
+        title: 'Aliases',
+        description: 'Extra hostnames that resolve to the portfolio.',
+        badgeClass: 'border-cyan-400/20 bg-cyan-400/10 text-cyan-200',
+    },
+};
+
+const normalizeDomainType = (type, index = 0) => {
+    if (domainTypeOrder.includes(type)) return type;
+    return index === 0 ? 'domain' : 'alias';
+};
 
 const stripTrailingCommas = (input) => {
     let output = '';
@@ -99,9 +125,14 @@ const parsePortfolioItems = (items) => {
 const parseDomains = (domains) => {
     if (!Array.isArray(domains)) return defaultDomains;
 
-    const validDomains = domains.filter((domain) =>
-        typeof domain?.label === 'string' && typeof domain?.url === 'string'
-    );
+    const validDomains = domains
+        .filter((domain) =>
+            typeof domain?.label === 'string' && typeof domain?.url === 'string'
+        )
+        .map((domain, index) => ({
+            ...domain,
+            type: normalizeDomainType(domain.type, index),
+        }));
 
     return validDomains.length > 0 ? validDomains : defaultDomains;
 };
@@ -299,6 +330,168 @@ function DnsInfo({ externalLinkProps }) {
     );
 }
 
+function UptimeBadge({ className = '', loading = 'lazy' }) {
+    return (
+        <iframe
+            src="https://status.tony-liu.com/badge?theme=dark"
+            title="Tony Liu uptime status badge"
+            width="250"
+            height="30"
+            frameBorder="0"
+            scrolling="no"
+            loading={loading}
+            className={`h-[30px] w-full max-w-[250px] ${className}`}
+            style={{ colorScheme: 'normal' }}
+        />
+    );
+}
+
+function FooterGroup({ group }) {
+    const Icon = group.icon;
+
+    return (
+        <section className="min-w-0 rounded-lg border border-white/10 bg-white/[0.03] p-4">
+            <div className="mb-4 flex items-start gap-3">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-white/5 text-indigo-300 ring-1 ring-white/10">
+                    <Icon className="h-4 w-4" />
+                </span>
+                <div className="min-w-0">
+                    <h4 className="text-sm font-semibold text-white">{group.title}</h4>
+                    <p className="mt-0.5 text-xs leading-5 text-slate-500">{group.description}</p>
+                </div>
+            </div>
+
+            <ul className="space-y-2.5 text-sm text-slate-400">
+                {group.items.map((item) => (
+                    <li key={`${group.title}-${item.label}`}>
+                        <a
+                            {...item.linkProps}
+                            href={item.href}
+                            className="group/link flex min-w-0 items-center justify-between gap-3 rounded-md px-2 py-1.5 transition-colors hover:bg-white/5 hover:text-indigo-300"
+                        >
+                            <span className="truncate">{item.label}</span>
+                            {item.external && (
+                                <ExternalLink className="h-3.5 w-3.5 shrink-0 opacity-50 transition-opacity group-hover/link:opacity-100" />
+                            )}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+
+            {group.note && (
+                <div className="mt-4 flex items-center gap-2 rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-2 text-xs font-medium text-emerald-200">
+                    <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
+                    <span>{group.note}</span>
+                </div>
+            )}
+
+            {group.pills && (
+                <div className="mt-4">
+                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-600">Nameservers</p>
+                    <div className="grid gap-2">
+                        {group.pills.map((pill) => (
+                            <span key={pill} className="truncate rounded-md border border-white/5 bg-black/25 px-2 py-1.5 font-mono text-xs text-slate-400">
+                                {pill}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {group.statusBadge && (
+                <div className="mt-4 overflow-hidden">
+                    <UptimeBadge />
+                </div>
+            )}
+        </section>
+    );
+}
+
+function DomainFooterGroup({ domains, externalLinkProps }) {
+    const domainGroups = domainTypeOrder
+        .map((type) => ({
+            type,
+            ...domainTypeConfig[type],
+            domains: domains.filter((domain) => normalizeDomainType(domain.type) === type),
+        }))
+        .filter((group) => group.domains.length > 0);
+
+    const totalDomains = domains.length;
+    const aliasCount = domains.filter((domain) => normalizeDomainType(domain.type) === 'alias').length;
+
+    return (
+        <section className="min-w-0 rounded-lg border border-white/10 bg-white/[0.03] p-4">
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex items-start gap-3">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-white/5 text-indigo-300 ring-1 ring-white/10">
+                        <Globe className="h-4 w-4" />
+                    </span>
+                    <div className="min-w-0">
+                        <h4 className="text-sm font-semibold text-white">Domains</h4>
+                        <p className="mt-0.5 text-xs leading-5 text-slate-500">
+                            Grouped by primary, redirect, and alias records.
+                        </p>
+                    </div>
+                </div>
+                <div className="flex shrink-0 gap-2 text-[11px] font-medium">
+                    <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-slate-400">
+                        {totalDomains} total
+                    </span>
+                    {aliasCount > 0 && (
+                        <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2 py-1 text-cyan-200">
+                            {aliasCount} aliases
+                        </span>
+                    )}
+                </div>
+            </div>
+
+            <div>
+                <div className="grid gap-4">
+                    {domainGroups.map((group) => {
+                        return (
+                            <div key={group.type} className="min-w-0 border-t border-white/10 pt-4 first:border-t-0 first:pt-0">
+                                <div className="mb-2.5 flex items-center justify-between gap-3">
+                                    <div className="min-w-0">
+                                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                            {group.title}
+                                        </p>
+                                        <p className="mt-0.5 text-xs leading-5 text-slate-600">
+                                            {group.description}
+                                        </p>
+                                    </div>
+                                    <span className={`shrink-0 rounded-full border px-2 py-1 text-[11px] font-medium ${group.badgeClass}`}>
+                                        {group.domains.length}
+                                    </span>
+                                </div>
+
+                                <div className="grid gap-1.5 sm:grid-cols-2">
+                                    {group.domains.map((domain) => (
+                                        <a
+                                            key={`${group.type}-${domain.url}`}
+                                            {...externalLinkProps}
+                                            href={domain.url}
+                                            className="group/domain flex min-w-0 items-start justify-between gap-2 rounded-md px-2 py-1.5 text-sm text-slate-400 transition-colors hover:bg-white/5 hover:text-indigo-300"
+                                        >
+                                            <span className="min-w-0 flex-1">
+                                                <span className="block break-all font-mono text-[13px] leading-5">
+                                                    {domain.label}
+                                                </span>
+                                            </span>
+                                            <span className={`mt-0.5 shrink-0 rounded-full border px-1.5 py-0.5 text-[10px] font-medium ${group.badgeClass}`}>
+                                                {group.label}
+                                            </span>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        </section>
+    );
+}
+
 export default function Home() {
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [mounted, setMounted] = useState(false);
@@ -468,6 +661,63 @@ export default function Home() {
         { name: 'Contact', href: '#contact' },
     ];
 
+    const footerGroups = [
+        {
+            title: 'Navigation',
+            description: 'Jump around the page.',
+            icon: Compass,
+            items: navItems.map((item) => ({
+                label: item.name,
+                href: item.href,
+                linkProps: sectionLinkProps,
+            })),
+        },
+        {
+            title: 'DNS',
+            description: 'Records, provider, and nameservers.',
+            icon: ShieldCheck,
+            items: [
+                {
+                    label: 'DNS records',
+                    href: '#dns',
+                    linkProps: sectionLinkProps,
+                },
+                {
+                    label: 'nameserver.ing',
+                    href: 'https://nameserver.ing',
+                    linkProps: externalLinkProps,
+                    external: true,
+                },
+            ],
+            note: 'Cloudflare protected',
+            pills: ['ns1.nameserver.ing', 'ns2.nameserver.ing'],
+        },
+        {
+            title: 'Status',
+            description: 'Uptime and monitoring surfaces.',
+            icon: Activity,
+            items: [
+                {
+                    label: 'Status page',
+                    href: '#status',
+                    linkProps: sectionLinkProps,
+                },
+                {
+                    label: 'Monitor page',
+                    href: '#monitor',
+                    linkProps: sectionLinkProps,
+                },
+                {
+                    label: 'Public badge',
+                    href: 'https://status.tony-liu.com',
+                    linkProps: externalLinkProps,
+                    external: true,
+                },
+            ],
+            statusBadge: true,
+        },
+    ];
+
     return (
         <div className={`${inter.className} min-h-screen bg-black text-slate-300 selection:bg-indigo-500/30`}>
             <Head>
@@ -491,8 +741,8 @@ export default function Home() {
 
             {/* Navbar */}
             <header className="fixed top-0 w-full z-50 border-b border-white/5 bg-black/50 backdrop-blur-xl">
-                <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4 relative z-50">
-                    <div className="flex items-center gap-2">
+                <div className="relative z-50 mx-auto grid h-16 max-w-7xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 px-6">
+                    <div className="flex items-center gap-2 justify-self-start">
                         <Image
                             src={logoPath}
                             alt=""
@@ -507,7 +757,7 @@ export default function Home() {
                     </div>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex gap-1">
+                    <nav className="hidden justify-self-center md:flex gap-1">
                         {navItems.map((item) => (
                             <Button key={item.name} variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white">
                                 <a {...sectionLinkProps} href={item.href}>{item.name}</a>
@@ -515,8 +765,12 @@ export default function Home() {
                         ))}
                     </nav>
 
+                    <div className="hidden h-[30px] w-[250px] items-center justify-self-end overflow-hidden xl:flex">
+                        <UptimeBadge loading="eager" />
+                    </div>
+
                     {/* Mobile Menu Button */}
-                    <div className="md:hidden">
+                    <div className="justify-self-end md:hidden">
                         <Button
                             variant="ghost"
                             size="icon"
@@ -808,63 +1062,42 @@ export default function Home() {
                 </section>
             </main>
 
-            <footer className="border-t border-white/10 bg-black pt-16 pb-8 relative z-10">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
-                        <div className="md:col-span-5">
-                            <h3 className="text-white font-bold text-xl mb-4 tracking-tight">Tony Liu</h3>
-                            <p className="text-slate-400 text-sm leading-relaxed mb-6 max-w-sm">
-                                Learning and building cool shit.
+            <footer className="relative z-10 border-t border-white/10 bg-black py-10 sm:py-14">
+                <div className="mx-auto max-w-7xl px-6">
+                    <div className="grid gap-8 lg:grid-cols-[minmax(240px,0.8fr)_minmax(0,2.2fr)]">
+                        <div className="max-w-sm">
+                            <h3 className="text-xl font-bold tracking-tight text-white">Tony Liu</h3>
+                            <p className="mt-4 text-sm leading-6 text-slate-400">
+                                Learning full-stack development and shipping small, useful web projects.
                             </p>
-                            <div className="flex gap-4">
-                                <a {...externalLinkProps} href="https://github.com/tonyliuzj" className="text-slate-400 hover:text-white transition-colors">
-                                    <Github className="w-5 h-5" />
+                            <div className="mt-6 flex gap-3">
+                                <a {...externalLinkProps} href="https://github.com/tonyliuzj" aria-label="GitHub" className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-white/20 hover:text-white">
+                                    <Github className="h-4 w-4" />
                                 </a>
-                                <a {...externalLinkProps} href="https://www.linkedin.com/in/tonyliuzj" className="text-slate-400 hover:text-white transition-colors">
-                                    <Linkedin className="w-5 h-5" />
+                                <a {...externalLinkProps} href="https://www.linkedin.com/in/tonyliuzj" aria-label="LinkedIn" className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-white/20 hover:text-white">
+                                    <Linkedin className="h-4 w-4" />
                                 </a>
-                                <a href="mailto:tony@liuzj.net" className="text-slate-400 hover:text-white transition-colors">
-                                    <Mail className="w-5 h-5" />
+                                <a href="mailto:tony@liuzj.net" aria-label="Email" className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-white/20 hover:text-white">
+                                    <Mail className="h-4 w-4" />
                                 </a>
                             </div>
-                        </div>
-                        
-                        <div className="md:col-span-3">
-                            <h4 className="text-white font-semibold mb-6">Navigation</h4>
-                            <ul className="flex flex-col gap-3 text-sm text-slate-400">
-                                {navItems.map((item) => (
-                                    <li key={item.name}>
-                                        <a {...sectionLinkProps} href={item.href} className="hover:text-indigo-400 transition-colors">
-                                            {item.name}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
                         </div>
 
-                        <div className="md:col-span-4">
-                            <h4 className="text-white font-semibold mb-6">Domains, DNS & Status</h4>
-                            <div className="flex flex-col gap-4">
-                                <div className="flex flex-wrap gap-2 text-sm text-slate-400">
-                                    {domains.map((domain, index) => (
-                                        <div key={domain.url} className="contents">
-                                            {index > 0 && <span className="text-slate-700">•</span>}
-                                            <a {...externalLinkProps} href={domain.url} className="hover:text-indigo-400 transition-colors">
-                                                {domain.label}
-                                            </a>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="mt-2">
-                                    <iframe src="https://status.tony-liu.com/badge?theme=dark" width="250" height="30" frameBorder="0" scrolling="no" style={{ colorScheme: 'normal' }}></iframe>
-                                </div>
-                            </div>
+                        <div className="grid gap-4 md:grid-cols-3">
+                            <FooterGroup group={footerGroups[0]} />
+                            {footerGroups.slice(1).map((group) => (
+                                <FooterGroup key={group.title} group={group} />
+                            ))}
                         </div>
                     </div>
 
-                    <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p className="text-slate-500 text-sm">© {new Date().getFullYear()} Tony Liu. (tony-liu.com) All rights reserved.</p>
-                        <p className="text-slate-600 text-xs">Designed & Built with Next.js</p>
+                    <div className="mt-6">
+                        <DomainFooterGroup domains={domains} externalLinkProps={externalLinkProps} />
+                    </div>
+
+                    <div className="mt-10 border-t border-white/10 pt-6 flex flex-col gap-3 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+                        <p>© {new Date().getFullYear()} Tony Liu. tony-liu.com. All rights reserved.</p>
+                        <p className="text-xs text-slate-600">Designed and built with Next.js</p>
                     </div>
                 </div>
             </footer>
