@@ -5,13 +5,14 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card"
-import { Activity, Compass, Github, Linkedin, Mail, ExternalLink, Menu, X, ChevronDown, Globe, ShieldCheck } from "lucide-react"
+import { Activity, Compass, Github, Linkedin, Mail, ExternalLink, Menu, X, ChevronDown, ChevronUp, Globe, ShieldCheck, Network, Server, Route, HardDrive, Cable, PlugZap, Monitor, Keyboard, Gauge, Thermometer, Droplets } from "lucide-react"
 
 const inter = Inter({ subsets: ['latin'] });
 const mono = JetBrains_Mono({ subsets: ['latin'] });
 const defaultDomains = [
     { label: 'Tony-Liu.com', url: 'https://tony-liu.com', type: 'domain' }
 ];
+const aliasWindowSize = 3;
 const domainTypeOrder = ['domain', 'redirect', 'alias'];
 const domainTypeConfig = {
     domain: {
@@ -166,74 +167,395 @@ function InteractiveIframe({ src, title }) {
     );
 }
 
-function DnsInfo({ externalLinkProps }) {
-    const [ipRecords, setIpRecords] = useState({ a: [], aaaa: [] });
-    const [loadingIPs, setLoadingIPs] = useState(true);
-
-    const staticNS = ['ns1.nameserver.ing', 'ns2.nameserver.ing'];
-
-    useEffect(() => {
-        const fetchIPs = async () => {
-            try {
-                const fetchDNS = async (name, typeCode) => {
-                    const typeStr = typeCode === 1 ? 'A' : 'AAAA';
-                    const res = await fetch(`https://dns.google/resolve?name=${name}&type=${typeStr}`);
-                    const data = await res.json();
-                    if (!data.Answer) return [];
-                    return data.Answer.filter(r => r.type === typeCode).map(r => r.data);
-                };
-
-                const fetchProvider = async (ip) => {
-                    try {
-                        const res = await fetch(`https://ipapi.co/${encodeURIComponent(ip)}/json/`, {
-                            headers: {
-                                Accept: 'application/json',
-                            },
-                        });
-                        if (!res.ok) {
-                            return null;
-                        }
-                        const data = await res.json();
-                        if (data.error) {
-                            return null;
-                        }
-                        return data.org || data.asn || null;
-                    } catch {
-                        return null;
-                    }
-                };
-
-                const resolveWithProvider = async (name, typeCode) => {
-                    const ips = await fetchDNS(name, typeCode);
-                    const withProvider = await Promise.all(ips.map(async (ip) => {
-                        const provider = await fetchProvider(ip);
-                        return { ip, provider };
-                    }));
-                    return withProvider;
-                };
-
-                const minDelay = new Promise(resolve => setTimeout(resolve, 1000));
-                
-                const [a, aaaa] = await Promise.all([
-                    resolveWithProvider('tony-liu.com', 1),
-                    resolveWithProvider('tony-liu.com', 28),
-                    minDelay
-                ]);
-
-                setIpRecords({ a, aaaa });
-            } catch (error) {
-                console.error('Failed to fetch IP records', error);
-            } finally {
-                setLoadingIPs(false);
-            }
-        };
-
-        fetchIPs();
-    }, []);
-
-    const SkeletonLoader = () => (
-        <div className="h-4 w-24 bg-white/10 rounded animate-pulse" />
+function SectionHeader({ eyebrow, title, description }) {
+    return (
+        <div className="mb-8 max-w-2xl">
+            {eyebrow && (
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-indigo-300">
+                    {eyebrow}
+                </p>
+            )}
+            <h3 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{title}</h3>
+            {description && (
+                <p className="mt-3 text-sm leading-6 text-slate-400 sm:text-base">
+                    {description}
+                </p>
+            )}
+        </div>
     );
+}
+
+function BrowserFrame({ id, url, title, src, footerHref, footerLabel, externalLinkProps }) {
+    return (
+        <div id={id} className="scroll-mt-24">
+            <Card className="bg-white/5 border-white/10 backdrop-blur-sm overflow-hidden">
+                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5">
+                    <div className="flex gap-1.5">
+                        <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                        <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                        <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                    </div>
+                    <div className="flex-1 ml-4 bg-black/20 rounded-md px-3 py-1 text-xs text-slate-500 font-mono text-center truncate">
+                        {url}
+                    </div>
+                </div>
+                <CardContent className="p-0">
+                    <InteractiveIframe src={src} title={title} />
+                </CardContent>
+                <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
+                    <p className="text-xs text-slate-500">
+                        Powered by <a {...externalLinkProps} href={footerHref} className="text-indigo-400 hover:text-indigo-300 transition-colors">{footerLabel}</a>
+                    </p>
+                </CardFooter>
+            </Card>
+        </div>
+    );
+}
+
+function RackModel() {
+    const rackDevices = [
+        {
+            id: 'tor',
+            title: 'Top-of-rack switches',
+            shortLabel: 'TOR switches',
+            startU: 41,
+            sizeU: 2,
+            icon: Network,
+            className: 'border-cyan-400/30 bg-cyan-400/15 text-cyan-100',
+            description: 'Switching fabric for server access, internal traffic, and rack uplinks.',
+            details: ['Top-of-rack switching', 'Server access ports', 'Network aggregation point'],
+        },
+        {
+            id: 'blank-below-switches',
+            title: '1U blanking panel below switches',
+            shortLabel: 'Blanking panel',
+            startU: 40,
+            sizeU: 1,
+            icon: Server,
+            className: 'border-white/10 bg-white/[0.06] text-slate-300',
+            description: 'A 1U blanking panel directly below the top-of-rack switches.',
+            details: ['Below switches', '1U spacing', 'Airflow control'],
+        },
+        {
+            id: 'cabling',
+            title: 'Patch and cable management',
+            shortLabel: 'Patch / cable',
+            startU: 38,
+            sizeU: 2,
+            icon: Cable,
+            className: 'border-slate-300/20 bg-slate-300/10 text-slate-200',
+            description: 'Structured cabling paths for keeping compute, storage, and appliances serviceable.',
+            details: ['Patch management', 'Front-to-back cable paths', 'Serviceable rack layout'],
+        },
+        {
+            id: 'blank-network-upper',
+            title: '1U blanking panel',
+            shortLabel: 'Blanking panel',
+            startU: 37,
+            sizeU: 1,
+            icon: Server,
+            className: 'border-white/10 bg-white/[0.06] text-slate-300',
+            description: 'A 1U blanking panel between network devices for spacing and airflow management.',
+            details: ['1U spacing', 'Airflow control', 'Cleaner rack layout'],
+        },
+        {
+            id: 'network-appliances',
+            title: 'Network appliances',
+            shortLabel: 'Network appliances',
+            startU: 34,
+            sizeU: 3,
+            icon: Route,
+            className: 'border-indigo-400/30 bg-indigo-400/15 text-indigo-100',
+            description: 'Routing, firewall, NAT, and overlay networking experiments live here.',
+            details: ['Routing and NAT concepts', 'Overlay networking tests', 'Firewall and edge services'],
+        },
+        {
+            id: 'blank-network-lower',
+            title: '1U blanking panel',
+            shortLabel: 'Blanking panel',
+            startU: 33,
+            sizeU: 1,
+            icon: Server,
+            className: 'border-white/10 bg-white/[0.06] text-slate-300',
+            description: 'A 1U blanking panel between network devices for spacing and airflow management.',
+            details: ['1U spacing', 'Airflow control', 'Cleaner rack layout'],
+        },
+        {
+            id: 'monitor',
+            title: 'Rack monitor',
+            shortLabel: 'Monitor',
+            startU: 29,
+            sizeU: 4,
+            icon: Monitor,
+            className: 'border-violet-400/30 bg-violet-400/15 text-violet-100',
+            description: 'Rack-mounted monitor for local console access and quick checks.',
+            details: ['Local console display', 'Rack-side troubleshooting', 'Current setup'],
+        },
+        {
+            id: 'keyboard-tray',
+            title: 'Keyboard tray',
+            shortLabel: 'Keyboard tray',
+            startU: 28,
+            sizeU: 1,
+            icon: Keyboard,
+            className: 'border-fuchsia-400/30 bg-fuchsia-400/15 text-fuchsia-100',
+            description: 'Sliding keyboard tray for local interaction with rack systems.',
+            details: ['Local input', 'Console access', 'Slides into the rack'],
+        },
+        {
+            id: 'r730',
+            title: 'Dell PowerEdge R730',
+            shortLabel: 'Dell R730',
+            startU: 24,
+            sizeU: 2,
+            icon: Server,
+            className: 'border-white/30 bg-white/15 text-white',
+            description: 'One of the first servers that started the rack build.',
+            details: ['Started the home lab', 'Compute-focused node', 'KVM and service workloads'],
+        },
+        {
+            id: 'r730xd',
+            title: 'Dell PowerEdge R730XD',
+            shortLabel: 'Dell R730XD',
+            startU: 21,
+            sizeU: 2,
+            icon: HardDrive,
+            className: 'border-amber-400/30 bg-amber-400/15 text-amber-100',
+            description: 'Storage-heavy Dell node used as part of the rack-scale lab foundation.',
+            details: ['Started the home lab', 'Storage-focused node', 'Bulk disks and lab data'],
+        },
+        {
+            id: 'shelf',
+            title: '4U rack shelf',
+            shortLabel: 'Shelf',
+            startU: 17,
+            sizeU: 4,
+            icon: Server,
+            className: 'border-lime-400/30 bg-lime-400/15 text-lime-100',
+            description: 'A 4U rack shelf mounted below the server area for supporting smaller equipment or console hardware.',
+            details: ['Below the servers', '4U shelf space', 'Part of current rack layout'],
+        },
+        {
+            id: 'power',
+            title: 'Power distribution',
+            shortLabel: 'PDUs / power',
+            startU: 3,
+            sizeU: 2,
+            icon: PlugZap,
+            className: 'border-rose-400/30 bg-rose-400/15 text-rose-100',
+            description: '2U power distribution from U3 to U4 for the current rack setup.',
+            details: ['Rack PDUs', 'U3-U4 position', 'Power delivery for rack equipment'],
+        },
+        {
+            id: 'bottom-cable-entry',
+            title: 'Bottom cable entry',
+            shortLabel: 'Cable entry',
+            startU: 1,
+            sizeU: 1,
+            icon: Cable,
+            className: 'border-sky-400/30 bg-sky-400/15 text-sky-100',
+            description: '1U bottom space for power, fiber, and Ethernet cables entering the rack.',
+            details: ['Power cable entry', 'Fiber cable entry', 'Ethernet cable entry'],
+        },
+    ];
+    const rackSensorGroup = {
+        id: 'sensors',
+        title: 'Rack sensors',
+        locationLabel: 'Wall and front-mounted',
+        icon: Thermometer,
+        className: 'border-orange-300/40 bg-orange-300/15 text-orange-100',
+        description: 'Environmental and power telemetry sensors mounted separately from the rack power distribution hardware.',
+        details: ['4 wall-mounted temperature sensors', '1 center humidity sensor', 'Power / current sensor in front of PDU'],
+    };
+    const rackUnits = Array.from({ length: 42 }, (_, index) => 42 - index);
+    const [selectedDeviceId, setSelectedDeviceId] = useState('r730');
+    const selectedRackItem = selectedDeviceId === rackSensorGroup.id
+        ? rackSensorGroup
+        : rackDevices.find((device) => device.id === selectedDeviceId) ?? rackDevices[0];
+    const SelectedIcon = selectedRackItem.icon;
+    const rackSensorMarkers = [
+        { id: 'temp-upper-left', label: 'Temperature sensor 1', icon: Thermometer, top: '43%', left: '37%', className: 'border-orange-300/40 bg-orange-300/15 text-orange-100' },
+        { id: 'temp-upper-right', label: 'Temperature sensor 2', icon: Thermometer, top: '43%', left: '63%', className: 'border-orange-300/40 bg-orange-300/15 text-orange-100' },
+        { id: 'humidity-center', label: 'Humidity sensor', icon: Droplets, top: '52%', left: '50%', className: 'border-sky-300/40 bg-sky-300/15 text-sky-100' },
+        { id: 'temp-lower-left', label: 'Temperature sensor 3', icon: Thermometer, top: '61%', left: '37%', className: 'border-orange-300/40 bg-orange-300/15 text-orange-100' },
+        { id: 'temp-lower-right', label: 'Temperature sensor 4', icon: Thermometer, top: '61%', left: '63%', className: 'border-orange-300/40 bg-orange-300/15 text-orange-100' },
+        { id: 'power-current', label: 'Power / current sensor in front of PDU', icon: Gauge, top: '91.5%', left: '72%', className: 'border-teal-400/40 bg-teal-400/15 text-teal-100' },
+    ];
+    const rackSelectableItems = [...rackDevices, rackSensorGroup];
+
+    const getRackGridRow = (device) => {
+        const topUnit = device.startU + device.sizeU - 1;
+        return `${43 - topUnit} / span ${device.sizeU}`;
+    };
+
+    const getUnitRange = (device) => {
+        const topUnit = device.startU + device.sizeU - 1;
+        return device.sizeU === 1 ? `U${device.startU}` : `U${device.startU}-U${topUnit}`;
+    };
+
+    return (
+        <div className="mt-4 max-w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.03] p-3 sm:p-5">
+            <div className="mb-4 flex flex-col gap-3 md:mb-5 md:flex-row md:items-start md:justify-between">
+                <div>
+                    <h4 className="text-sm font-semibold text-white sm:text-base">My current 42U home lab rack</h4>
+                    <p className="mt-2 max-w-3xl text-xs leading-5 text-slate-400 sm:text-sm sm:leading-6">
+                        This is my current self-contained rack-scale infrastructure setup, with compute, storage, networking, and power distribution arranged in one standardized datacenter cabinet.
+                    </p>
+                </div>
+                <span className="shrink-0 rounded-full border border-indigo-400/20 bg-indigo-400/10 px-2.5 py-1 text-xs font-medium text-indigo-200">
+                    Current setup
+                </span>
+            </div>
+
+            <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(280px,0.95fr)_minmax(0,1.05fr)] lg:gap-5">
+                <div className="min-w-0 rounded-lg border border-white/10 bg-black/20 p-2 sm:p-3">
+                    <div className="grid h-[31rem] min-w-0 grid-cols-[1.5rem_minmax(0,1fr)] gap-1 sm:h-[36rem] sm:grid-cols-[2rem_minmax(0,1fr)_1.25rem] sm:gap-2">
+                        <div className="grid [grid-template-rows:repeat(42,minmax(0,1fr))] text-[8px] leading-none text-slate-600 sm:text-[9px]">
+                            {rackUnits.map((unit) => (
+                                <span key={unit} className="flex items-center justify-end pr-0.5 sm:pr-1">
+                                    {unit % 2 === 0 ? `U${unit}` : ''}
+                                </span>
+                            ))}
+                        </div>
+
+                        <div className="relative rounded-md border border-slate-700/80 bg-black/40 p-1 shadow-inner shadow-black">
+                            <div className="absolute inset-1 grid [grid-template-rows:repeat(42,minmax(0,1fr))] gap-px">
+                                {rackUnits.map((unit) => (
+                                    <div key={unit} className="rounded-[1px] border border-white/[0.03] bg-white/[0.025]" />
+                                ))}
+                            </div>
+
+                            <div className="absolute inset-1 grid [grid-template-rows:repeat(42,minmax(0,1fr))] gap-px">
+                                {rackDevices.map((device) => {
+                                    const Icon = device.icon;
+                                    const isSelected = selectedRackItem.id === device.id;
+
+                                    return (
+                                        <button
+                                            key={device.id}
+                                            type="button"
+                                            onClick={() => setSelectedDeviceId(device.id)}
+                                            onMouseEnter={() => setSelectedDeviceId(device.id)}
+                                            onFocus={() => setSelectedDeviceId(device.id)}
+                                            style={{ gridRow: getRackGridRow(device) }}
+                                            aria-pressed={isSelected}
+                                            className={`group flex min-h-0 touch-manipulation items-center justify-between gap-1 overflow-hidden rounded border px-1.5 text-left text-[9px] font-semibold leading-none transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:gap-2 sm:px-2 sm:text-[10px] ${device.className} ${isSelected ? 'ring-2 ring-white/40' : 'opacity-80 hover:opacity-100'}`}
+                                        >
+                                            <span className="flex min-w-0 items-center gap-1 sm:gap-1.5">
+                                                <Icon className="h-2.5 w-2.5 shrink-0 sm:h-3 sm:w-3" />
+                                                <span className="truncate">{device.shortLabel}</span>
+                                            </span>
+                                            <span className="shrink-0 font-mono text-[8px] opacity-70 sm:text-[9px]">{getUnitRange(device)}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            {rackSensorMarkers.map((sensor) => {
+                                const Icon = sensor.icon;
+
+                                return (
+                                    <button
+                                        key={sensor.id}
+                                        type="button"
+                                        title={sensor.label}
+                                        onClick={() => setSelectedDeviceId(rackSensorGroup.id)}
+                                        onMouseEnter={() => setSelectedDeviceId(rackSensorGroup.id)}
+                                        onFocus={() => setSelectedDeviceId(rackSensorGroup.id)}
+                                        style={{ top: sensor.top, left: sensor.left }}
+                                        className={`absolute z-10 flex h-5 w-5 -translate-x-1/2 -translate-y-1/2 touch-manipulation items-center justify-center rounded-full border shadow-lg shadow-black/30 transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${sensor.className}`}
+                                        aria-label={sensor.label}
+                                        aria-pressed={selectedRackItem.id === rackSensorGroup.id}
+                                    >
+                                        <Icon className="h-3 w-3" />
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        <div className="hidden [grid-template-rows:repeat(42,minmax(0,1fr))] sm:grid">
+                            {rackUnits.map((unit) => (
+                                <span key={unit} className="mx-auto my-0.5 h-1 w-1 rounded-full bg-slate-700" />
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="mt-3 flex max-w-full min-w-0 gap-2 overflow-x-auto overscroll-x-contain pb-1 lg:hidden">
+                        {rackSelectableItems.map((item) => {
+                            const Icon = item.icon;
+                            const isSelected = selectedRackItem.id === item.id;
+
+                            return (
+                                <button
+                                    key={item.id}
+                                    type="button"
+                                    onClick={() => setSelectedDeviceId(item.id)}
+                                    aria-pressed={isSelected}
+                                    className={`flex max-w-[11rem] shrink-0 touch-manipulation items-center gap-1.5 rounded-md border px-2.5 py-2 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${item.className} ${isSelected ? 'ring-2 ring-white/40' : 'opacity-80'}`}
+                                >
+                                    <Icon className="h-3.5 w-3.5 shrink-0" />
+                                    <span className="truncate">{item.shortLabel ?? item.title}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div className="min-w-0 flex flex-col gap-4">
+                    <div className="rounded-lg border border-white/10 bg-black/20 p-4 sm:p-5">
+                        <div className="flex items-start gap-3">
+                            <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md border sm:h-10 sm:w-10 ${selectedRackItem.className}`}>
+                                <SelectedIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+                            </span>
+                            <div className="min-w-0">
+                                <p className="font-mono text-xs text-slate-500">{selectedRackItem.locationLabel ?? getUnitRange(selectedRackItem)}</p>
+                                <h5 className="mt-1 text-base font-semibold text-white sm:text-lg">{selectedRackItem.title}</h5>
+                                <p className="mt-2 text-sm leading-6 text-slate-400">{selectedRackItem.description}</p>
+                            </div>
+                        </div>
+
+                        <div className="mt-5 grid gap-2">
+                            {selectedRackItem.details.map((detail) => (
+                                <div key={detail} className="flex items-center gap-2 rounded-md border border-white/5 bg-white/[0.03] px-3 py-2 text-sm text-slate-300">
+                                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-300" />
+                                    <span>{detail}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="grid gap-3 sm:grid-cols-2">
+                        <div className="rounded-lg border border-white/10 bg-black/20 p-3 sm:p-4">
+                            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-600">Rack scale</p>
+                            <p className="mt-1 text-2xl font-bold text-white">42U</p>
+                            <p className="mt-2 text-xs leading-5 text-slate-500">Full-height standardized datacenter cabinet.</p>
+                        </div>
+                        <div className="rounded-lg border border-white/10 bg-black/20 p-3 sm:p-4">
+                            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-600">Scope</p>
+                            <p className="mt-1 text-sm font-semibold text-white">Compute, storage, network, console, power</p>
+                            <p className="mt-2 text-xs leading-5 text-slate-500">A self-contained cabinet-scale lab environment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function DnsInfo({ externalLinkProps }) {
+    const nameserverRoutes = [
+        { resolver: 'ns1.nameserver.ing', answer: 'one.ns.nameserver.ing' },
+        { resolver: 'ns2.nameserver.ing', answer: 'two.ns.nameserver.ing' },
+    ];
+    const cloudflareRecords = {
+        a: ['104.21.75.157', '172.67.178.111'],
+        aaaa: ['2606:4700:3030::6815:4b9d', '2606:4700:3033::ac43:b26f'],
+    };
+    const hostingPath = [
+        { label: 'DNS provider', value: 'nameserver.ing', tone: 'text-indigo-300' },
+        { label: 'Public edge', value: 'Cloudflare IPs', tone: 'text-orange-200' },
+        { label: 'Website host', value: 'hostname.ee', tone: 'text-emerald-300' },
+    ];
 
     return (
         <Card className="bg-white/5 border-white/10 backdrop-blur-sm mt-6">
@@ -243,87 +565,98 @@ function DnsInfo({ externalLinkProps }) {
                     DNS
                 </CardTitle>
                 <CardDescription className="text-slate-400">
-                    tony-liu.com
+                    tony-liu.com routes through nameserver.ing, Cloudflare, and hostname.ee.
                 </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4">
-                <div className="flex items-center gap-3 p-2.5 rounded-lg bg-orange-500/10 border border-orange-500/20 mb-2">
-                    <div className="relative flex h-2.5 w-2.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500"></span>
+            <CardContent className="grid gap-5">
+                <div className="flex flex-col gap-3 rounded-lg border border-orange-500/20 bg-orange-500/10 p-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="relative flex h-2.5 w-2.5 shrink-0">
+                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75"></span>
+                            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-orange-500"></span>
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-2 text-xs font-semibold text-orange-200">
+                                <ShieldCheck className="h-3.5 w-3.5 text-orange-500" />
+                                Protected by Cloudflare
+                            </div>
+                            <p className="mt-1 text-xs leading-5 text-orange-100/70">
+                                Public A and AAAA records point at Cloudflare edge IPs.
+                            </p>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2 text-orange-200 text-xs font-medium">
-                        <ShieldCheck className="w-3.5 h-3.5 text-orange-500" />
-                        Protected by Cloudflare
-                    </div>
+                    <a {...externalLinkProps} href="https://hostname.ee" className="inline-flex items-center gap-1.5 self-start rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-1 text-xs font-medium text-emerald-200 transition-colors hover:bg-emerald-400/15 sm:self-center">
+                        Hosted through hostname.ee
+                        <ExternalLink className="h-3 w-3" />
+                    </a>
+                </div>
+
+                <div className="grid gap-2 md:grid-cols-3">
+                    {hostingPath.map((item) => (
+                        <div key={item.label} className="rounded-lg border border-white/10 bg-black/20 p-3">
+                            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-600">{item.label}</p>
+                            <p className={`mt-1 truncate text-sm font-semibold ${item.tone}`}>{item.value}</p>
+                        </div>
+                    ))}
                 </div>
 
                 <div>
-                    <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
-                        Nameservers
+                    <h4 className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                        Nameserver routing
                     </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {staticNS.map((r, i) => (
-                            <div key={i} className="bg-black/20 rounded px-2 py-1.5 text-xs font-mono text-slate-300 border border-white/5 truncate">
-                                {r}
+                    <div className="grid gap-2 sm:grid-cols-2">
+                        {nameserverRoutes.map((route) => (
+                            <div key={route.resolver} className="rounded-lg border border-white/5 bg-black/20 p-3">
+                                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-600">Asked at</p>
+                                <p className="mt-1 truncate font-mono text-xs text-slate-300">{route.resolver}</p>
+                                <div className="my-2 h-px bg-white/10" />
+                                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-600">Returns</p>
+                                <p className="mt-1 truncate font-mono text-xs text-indigo-300">{route.answer}</p>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid gap-4 md:grid-cols-2">
                     <div>
-                        <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
-                            IPv4 (A)
+                        <h4 className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                            IPv4 A records
                         </h4>
                         <div className="grid gap-1.5">
-                            {loadingIPs ? (
-                                <div className="bg-black/20 rounded px-2 py-1.5 border border-white/5 flex items-center justify-between h-[30px]">
-                                    <SkeletonLoader />
+                            {cloudflareRecords.a.map((ip) => (
+                                <div key={ip} className="flex items-center justify-between gap-3 rounded-md border border-white/5 bg-black/20 px-2 py-1.5 text-xs">
+                                    <span className="min-w-0 break-all font-mono text-slate-300">{ip}</span>
+                                    <span className="shrink-0 rounded-full border border-orange-400/20 bg-orange-400/10 px-1.5 py-0.5 text-[10px] font-medium text-orange-200">
+                                        Cloudflare IP
+                                    </span>
                                 </div>
-                            ) : ipRecords.a.length > 0 ? (
-                                ipRecords.a.map((r, i) => (
-                                    <div key={i} className="bg-black/20 rounded px-2 py-1.5 text-xs font-mono text-slate-300 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 break-all">
-                                        <span>{r.ip}</span>
-                                        {r.provider && (
-                                            <span className="text-[10px] text-emerald-400/80 font-sans">{r.provider}</span>
-                                        )}
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="text-xs text-slate-500 italic">No A records found</div>
-                            )}
+                            ))}
                         </div>
                     </div>
 
                     <div>
-                        <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
-                            IPv6 (AAAA)
+                        <h4 className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                            IPv6 AAAA records
                         </h4>
                         <div className="grid gap-1.5">
-                            {loadingIPs ? (
-                                <div className="bg-black/20 rounded px-2 py-1.5 border border-white/5 flex items-center justify-between h-[30px]">
-                                    <SkeletonLoader />
+                            {cloudflareRecords.aaaa.map((ip) => (
+                                <div key={ip} className="flex items-center justify-between gap-3 rounded-md border border-white/5 bg-black/20 px-2 py-1.5 text-xs">
+                                    <span className="min-w-0 break-all font-mono text-slate-300">{ip}</span>
+                                    <span className="shrink-0 rounded-full border border-orange-400/20 bg-orange-400/10 px-1.5 py-0.5 text-[10px] font-medium text-orange-200">
+                                        Cloudflare IP
+                                    </span>
                                 </div>
-                            ) : ipRecords.aaaa.length > 0 ? (
-                                ipRecords.aaaa.map((r, i) => (
-                                    <div key={i} className="bg-black/20 rounded px-2 py-1.5 text-xs font-mono text-slate-300 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 break-all">
-                                        <span>{r.ip}</span>
-                                        {r.provider && (
-                                            <span className="text-[10px] text-blue-400/80 font-sans">{r.provider}</span>
-                                        )}
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="text-xs text-slate-500 italic">No AAAA records found</div>
-                            )}
+                            ))}
                         </div>
                     </div>
                 </div>
             </CardContent>
-            <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
+            <CardFooter className="flex flex-col justify-between gap-2 border-t border-white/10 bg-white/5 px-4 py-2 sm:flex-row sm:items-center">
                 <p className="text-xs text-slate-500">
-                    Powered by <a {...externalLinkProps} href="https://nameserver.ing" className="text-indigo-400 hover:text-indigo-300 transition-colors">nameserver.ing</a>
+                    WHOIS lookup
+                </p>
+                <p className="text-xs text-slate-500">
+                    DNS by <a {...externalLinkProps} href="https://nameserver.ing" className="text-indigo-400 transition-colors hover:text-indigo-300">nameserver.ing</a>
                 </p>
             </CardFooter>
         </Card>
@@ -407,7 +740,8 @@ function FooterGroup({ group }) {
     );
 }
 
-function DomainFooterGroup({ domains, externalLinkProps }) {
+function DomainRecordsGroup({ domains, externalLinkProps }) {
+    const [aliasStartIndex, setAliasStartIndex] = useState(0);
     const domainGroups = domainTypeOrder
         .map((type) => ({
             type,
@@ -418,6 +752,10 @@ function DomainFooterGroup({ domains, externalLinkProps }) {
 
     const totalDomains = domains.length;
     const aliasCount = domains.filter((domain) => normalizeDomainType(domain.type) === 'alias').length;
+
+    useEffect(() => {
+        setAliasStartIndex((currentIndex) => Math.min(currentIndex, Math.max(aliasCount - aliasWindowSize, 0)));
+    }, [aliasCount]);
 
     return (
         <section className="min-w-0 rounded-lg border border-white/10 bg-white/[0.03] p-4">
@@ -448,6 +786,16 @@ function DomainFooterGroup({ domains, externalLinkProps }) {
             <div>
                 <div className="grid gap-4">
                     {domainGroups.map((group) => {
+                        const isAliasGroup = group.type === 'alias';
+                        const maxAliasStartIndex = Math.max(group.domains.length - aliasWindowSize, 0);
+                        const currentAliasStartIndex = Math.min(aliasStartIndex, maxAliasStartIndex);
+                        const visibleDomains = isAliasGroup
+                            ? group.domains.slice(currentAliasStartIndex, currentAliasStartIndex + aliasWindowSize)
+                            : group.domains;
+                        const canPageAliases = isAliasGroup && group.domains.length > aliasWindowSize;
+                        const canPageAliasesUp = currentAliasStartIndex > 0;
+                        const canPageAliasesDown = currentAliasStartIndex < maxAliasStartIndex;
+
                         return (
                             <div key={group.type} className="min-w-0 border-t border-white/10 pt-4 first:border-t-0 first:pt-0">
                                 <div className="mb-2.5 flex items-center justify-between gap-3">
@@ -459,13 +807,37 @@ function DomainFooterGroup({ domains, externalLinkProps }) {
                                             {group.description}
                                         </p>
                                     </div>
-                                    <span className={`shrink-0 rounded-full border px-2 py-1 text-[11px] font-medium ${group.badgeClass}`}>
-                                        {group.domains.length}
-                                    </span>
+                                    <div className="flex shrink-0 items-center gap-1.5">
+                                        {canPageAliases && (
+                                            <div className="flex overflow-hidden rounded-md border border-white/10 bg-white/5">
+                                                <button
+                                                    type="button"
+                                                    aria-label="Previous aliases"
+                                                    disabled={!canPageAliasesUp}
+                                                    onClick={() => setAliasStartIndex((currentIndex) => Math.max(currentIndex - 1, 0))}
+                                                    className="flex h-6 w-6 items-center justify-center text-slate-400 transition-colors hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-transparent disabled:hover:text-slate-400"
+                                                >
+                                                    <ChevronUp className="h-3.5 w-3.5" />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    aria-label="Next aliases"
+                                                    disabled={!canPageAliasesDown}
+                                                    onClick={() => setAliasStartIndex((currentIndex) => Math.min(currentIndex + 1, maxAliasStartIndex))}
+                                                    className="flex h-6 w-6 items-center justify-center border-l border-white/10 text-slate-400 transition-colors hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-transparent disabled:hover:text-slate-400"
+                                                >
+                                                    <ChevronDown className="h-3.5 w-3.5" />
+                                                </button>
+                                            </div>
+                                        )}
+                                        <span className={`rounded-full border px-2 py-1 text-[11px] font-medium ${group.badgeClass}`}>
+                                            {group.domains.length}
+                                        </span>
+                                    </div>
                                 </div>
 
-                                <div className="grid gap-1.5 sm:grid-cols-2">
-                                    {group.domains.map((domain) => (
+                                <div className={`grid gap-1.5 ${isAliasGroup ? '' : 'sm:grid-cols-2'}`}>
+                                    {visibleDomains.map((domain) => (
                                         <a
                                             key={`${group.type}-${domain.url}`}
                                             {...externalLinkProps}
@@ -473,7 +845,7 @@ function DomainFooterGroup({ domains, externalLinkProps }) {
                                             className="group/domain flex min-w-0 items-start justify-between gap-2 rounded-md px-2 py-1.5 text-sm text-slate-400 transition-colors hover:bg-white/5 hover:text-indigo-300"
                                         >
                                             <span className="min-w-0 flex-1">
-                                                <span className="block break-all font-mono text-[13px] leading-5">
+                                                <span className={`block font-mono text-[13px] leading-5 ${isAliasGroup ? 'truncate' : 'break-all'}`}>
                                                     {domain.label}
                                                 </span>
                                             </span>
@@ -645,19 +1017,31 @@ export default function Home() {
     const siteTitle = "Tony Liu";
     const siteUrl = "https://tony-liu.com";
     const logoPath = "/parrot.gif";
-    const aboutMe = "A student learning full-stack development and building wonderful projects";
+    const aboutMe = "Learning and building full stack web projects, with interests in home labs, DNS, virtualization, and networking infrastructure.";
     const externalLinkProps = isNestedFrame
         ? { target: '_top' }
         : { target: '_blank', rel: 'noopener noreferrer' };
     const sectionLinkProps = isNestedFrame ? { target: '_top' } : {};
+    const aboutFocusGroups = [
+        {
+            title: 'Networking',
+            description: 'How traffic moves, how networks connect, and how reachability is announced.',
+            icon: Network,
+            items: ['Overlay Networks', 'NAT and Networking Concepts', 'Network engineering, BGP and ASNs'],
+        },
+        {
+            title: 'Infrastructure',
+            description: 'The systems that keep services reachable, isolated, and understandable.',
+            icon: Server,
+            items: ['Domains and DNS', 'Virtualization, KVM and LXC Containers'],
+        },
+    ];
 
     const navItems = [
         { name: 'Home', href: '#home' },
-        { name: 'Projects', href: '#projects' },
-        { name: 'Websites', href: '#websites' },
-        { name: 'DNS', href: '#dns' },
-        { name: 'Status', href: '#status' },
-        { name: 'Monitor', href: '#monitor' },
+        { name: 'About', href: '#about' },
+        { name: 'Work', href: '#work' },
+        { name: 'Infrastructure', href: '#infrastructure' },
         { name: 'Contact', href: '#contact' },
     ];
 
@@ -677,6 +1061,11 @@ export default function Home() {
             description: 'Records, provider, and nameservers.',
             icon: ShieldCheck,
             items: [
+                {
+                    label: 'Infrastructure',
+                    href: '#infrastructure',
+                    linkProps: sectionLinkProps,
+                },
                 {
                     label: 'DNS records',
                     href: '#dns',
@@ -698,7 +1087,7 @@ export default function Home() {
             icon: Activity,
             items: [
                 {
-                    label: 'Status page',
+                    label: 'Live status',
                     href: '#status',
                     linkProps: sectionLinkProps,
                 },
@@ -861,10 +1250,19 @@ export default function Home() {
 
                     <div className="flex gap-4 animate-fadeIn delay-300 flex-col sm:flex-row w-full sm:w-auto px-6 sm:px-0">
                         <Button asChild size="lg" className="rounded-full font-semibold px-8 h-12 w-full sm:w-auto">
-                            <a href="#projects">View Work</a>
+                            <a href="#about">About Me</a>
+                        </Button>
+                        <Button asChild size="lg" className="rounded-full px-8 h-12 bg-white font-bold text-black shadow-xl shadow-indigo-500/25 ring-2 ring-indigo-300/50 hover:bg-slate-100 hover:text-black hover:ring-indigo-200 w-full sm:w-auto">
+                            <a
+                                {...externalLinkProps}
+                                href="https://github.com/tonyliuzj"
+                            >
+                                <Github className="w-4 h-4" />
+                                GitHub
+                            </a>
                         </Button>
                         <Button asChild variant="outline" size="lg" className="rounded-full font-semibold px-8 h-12 border-white/20 bg-transparent text-white hover:bg-white/5 hover:text-white w-full sm:w-auto">
-                            <a href="#contact">Contact Me</a>
+                            <a href="#work">View Work</a>
                         </Button>
                     </div>
 
@@ -890,68 +1288,102 @@ export default function Home() {
                     </div>
                 </div>
 
-                {/* Featured Projects */}
-                <section id="projects" data-nosnippet="" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
-                    <h3 className="text-3xl font-bold text-white mb-12 text-center animate-slideUp">Featured Projects</h3>
-                    <div className="grid md:grid-cols-2 gap-8">
-                        {projects.map((project) => (
-                            <a key={project.id} {...externalLinkProps} href={project.url} className="block">
-                                <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
-                                    <CardHeader>
-                                        <CardTitle className="flex justify-between items-center text-xl text-white">
-                                            {project.title}
-                                            <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="flex-1">
-                                        <p className="text-slate-400 mb-4 text-sm md:text-base">
-                                            {project.description}
-                                        </p>
-                                        <div className="flex flex-wrap gap-2">
-                                            {project.badges.map((badge, index) => (
-                                                <Badge
-                                                    key={index}
-                                                    variant="secondary"
-                                                    className={getBadgeClasses(badge.color)}
-                                                >
-                                                    {badge.text}
-                                                </Badge>
+                {/* About Section */}
+                <section id="about" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
+                    <SectionHeader
+                        eyebrow="About"
+                        title="Building web projects while learning the infrastructure underneath"
+                        description="I am interested in networking, DNS, virtualization, and internet infrastructure."
+                    />
+
+                    <div className="grid gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+                        <div className="rounded-lg border border-white/10 bg-white/[0.03] p-5">
+                            <div className="flex items-start gap-3">
+                                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-white/5 text-indigo-300 ring-1 ring-white/10">
+                                    <Route className="h-4 w-4" />
+                                </span>
+                                <div>
+                                    <h4 className="text-base font-semibold text-white">About me</h4>
+                                    <p className="mt-2 text-sm leading-6 text-slate-400">
+                                        I am a student learning full-stack development by building and shipping small web projects. I also like home labbing and working with rack-scale infrastructure.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="mt-5 flex flex-wrap gap-2">
+                                {['Full-stack learning', 'Home labbing', 'Infrastructure-minded', 'Builds in public'].map((item) => (
+                                    <span key={item} className="rounded-full border border-white/10 bg-black/20 px-2.5 py-1 text-xs font-medium text-slate-400">
+                                        {item}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="grid gap-4 md:grid-cols-2">
+                            {aboutFocusGroups.map((group) => {
+                                const Icon = group.icon;
+
+                                return (
+                                    <div key={group.title} className="rounded-lg border border-white/10 bg-white/[0.03] p-5">
+                                        <div className="flex items-start gap-3">
+                                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-white/5 text-indigo-300 ring-1 ring-white/10">
+                                                <Icon className="h-4 w-4" />
+                                            </span>
+                                            <div>
+                                                <h4 className="text-base font-semibold text-white">{group.title}</h4>
+                                                <p className="mt-2 text-sm leading-6 text-slate-500">{group.description}</p>
+                                            </div>
+                                        </div>
+                                        <div className="mt-4 grid gap-2">
+                                            {group.items.map((item) => (
+                                                <div key={item} className="flex items-center gap-2 rounded-md border border-white/5 bg-black/20 px-2.5 py-2 text-xs font-medium text-slate-300">
+                                                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-300" />
+                                                    <span>{item}</span>
+                                                </div>
                                             ))}
                                         </div>
-                                    </CardContent>
-                                </Card>
-                            </a>
-                        ))}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
+
+                    <RackModel />
                 </section>
 
-                {/* Websites Section */}
-                {websites.length > 0 && (
-                    <section id="websites" data-nosnippet="" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
-                        <h3 className="text-3xl font-bold text-white mb-12 text-center animate-slideUp">Websites</h3>
-                        <div className={`grid gap-8 ${websites.length === 1 ? 'md:grid-cols-1 max-w-2xl mx-auto' : 'md:grid-cols-2'}`}>
-                            {websites.map((website) => (
-                                <a key={website.id} {...externalLinkProps} href={website.url} className="block">
+                {/* Work Section */}
+                <section id="work" data-nosnippet="" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
+                    <SectionHeader
+                        eyebrow="Work"
+                        title="Projects and Websites"
+                        description="A focused collection of shipped projects, experiments, and public web surfaces."
+                    />
+
+                    <div id="projects" className="scroll-mt-24">
+                        <div className="mb-5 flex items-end justify-between gap-4">
+                            <div>
+                                <h4 className="text-xl font-semibold text-white">Featured Projects</h4>
+                                <p className="mt-1 text-sm text-slate-500">Code-heavy work and practical builds.</p>
+                            </div>
+                            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-slate-400">
+                                {projects.length} projects
+                            </span>
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-8">
+                            {projects.map((project) => (
+                                <a key={project.id} {...externalLinkProps} href={project.url} className="block">
                                     <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
                                         <CardHeader>
-                                            <CardTitle className="flex flex-col gap-2 text-xl text-white sm:flex-row sm:items-start sm:justify-between">
-                                                <span className="min-w-0 break-words leading-7">
-                                                    {website.title}
-                                                </span>
-                                                <span className="inline-flex min-w-0 items-start gap-2 sm:ml-4 sm:max-w-[55%] sm:justify-end">
-                                                    <span className="min-w-0 break-all font-mono text-xs font-normal leading-5 text-slate-500 transition-colors group-hover:text-slate-400 sm:text-right">
-                                                        {website.url}
-                                                    </span>
-                                                    <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
-                                                </span>
+                                            <CardTitle className="flex justify-between items-center text-xl text-white">
+                                                {project.title}
+                                                <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
                                             </CardTitle>
                                         </CardHeader>
                                         <CardContent className="flex-1">
                                             <p className="text-slate-400 mb-4 text-sm md:text-base">
-                                                {website.description}
+                                                {project.description}
                                             </p>
                                             <div className="flex flex-wrap gap-2">
-                                                {website.badges.map((badge, index) => (
+                                                {project.badges.map((badge, index) => (
                                                     <Badge
                                                         key={index}
                                                         variant="secondary"
@@ -966,66 +1398,95 @@ export default function Home() {
                                 </a>
                             ))}
                         </div>
-                    </section>
-                )}
+                    </div>
 
-                {/* DNS Section */}
-                <section id="dns" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-14">
-                    <DnsInfo externalLinkProps={externalLinkProps} />
-                </section>
-
-                {/* Status Section */}
-                <section id="status" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-14">
-                    <Card className="bg-white/5 border-white/10 backdrop-blur-sm overflow-hidden">
-                        <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5">
-                            <div className="flex gap-1.5">
-                                <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                                <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                    {websites.length > 0 && (
+                        <div id="websites" className="mt-14 scroll-mt-24">
+                            <div className="mb-5 flex items-end justify-between gap-4">
+                                <div>
+                                    <h4 className="text-xl font-semibold text-white">Websites</h4>
+                                    <p className="mt-1 text-sm text-slate-500">Deployed web properties and public pages.</p>
+                                </div>
+                                <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-slate-400">
+                                    {websites.length} sites
+                                </span>
                             </div>
-                            <div className="flex-1 ml-4 bg-black/20 rounded-md px-3 py-1 text-xs text-slate-500 font-mono text-center truncate">
-                                https://statusno.de/
+                            <div className={`grid gap-8 ${websites.length === 1 ? 'md:grid-cols-1 max-w-2xl' : 'md:grid-cols-2'}`}>
+                                {websites.map((website) => (
+                                    <a key={website.id} {...externalLinkProps} href={website.url} className="block">
+                                        <Card className="flex flex-col bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group h-full">
+                                            <CardHeader>
+                                                <CardTitle className="flex flex-col gap-2 text-xl text-white sm:flex-row sm:items-start sm:justify-between">
+                                                    <span className="min-w-0 break-words leading-7">
+                                                        {website.title}
+                                                    </span>
+                                                    <span className="inline-flex min-w-0 items-start gap-2 sm:ml-4 sm:max-w-[55%] sm:justify-end">
+                                                        <span className="min-w-0 break-all font-mono text-xs font-normal leading-5 text-slate-500 transition-colors group-hover:text-slate-400 sm:text-right">
+                                                            {website.url}
+                                                        </span>
+                                                        <ExternalLink className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+                                                    </span>
+                                                </CardTitle>
+                                            </CardHeader>
+                                            <CardContent className="flex-1">
+                                                <p className="text-slate-400 mb-4 text-sm md:text-base">
+                                                    {website.description}
+                                                </p>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {website.badges.map((badge, index) => (
+                                                        <Badge
+                                                            key={index}
+                                                            variant="secondary"
+                                                            className={getBadgeClasses(badge.color)}
+                                                        >
+                                                            {badge.text}
+                                                        </Badge>
+                                                    ))}
+                                                </div>
+                                            </CardContent>
+                                        </Card>
+                                    </a>
+                                ))}
                             </div>
                         </div>
-                        <CardContent className="p-0">
-                            <InteractiveIframe
-                                src="https://statusno.de/"
-                                title="System Status"
-                            />
-                        </CardContent>
-                        <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
-                            <p className="text-xs text-slate-500">
-                                Powered by <a {...externalLinkProps} href="https://github.com/tonyliuzj/kumaview" className="text-indigo-400 hover:text-indigo-300 transition-colors">KumaView</a>
-                            </p>
-                        </CardFooter>
-                    </Card>
+                    )}
                 </section>
 
-                {/* Monitor Section */}
-                <section id="monitor" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-14">
-                    <Card className="bg-white/5 border-white/10 backdrop-blur-sm overflow-hidden">
-                        <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5">
-                            <div className="flex gap-1.5">
-                                <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                                <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                            </div>
-                            <div className="flex-1 ml-4 bg-black/20 rounded-md px-3 py-1 text-xs text-slate-500 font-mono text-center truncate">
-                                https://monitorno.de
-                            </div>
+                {/* Infrastructure Section */}
+                <section id="infrastructure" className="w-full max-w-6xl mx-auto p-4 mb-32 relative z-10 scroll-mt-24">
+                    <SectionHeader
+                        eyebrow="Infrastructure"
+                        title="DNS, Status, and Monitoring"
+                        description="The public operations layer for the portfolio, including DNS records and live monitoring surfaces."
+                    />
+
+                    <div id="dns" className="scroll-mt-24">
+                        <DnsInfo externalLinkProps={externalLinkProps} />
+                        <div className="mt-4">
+                            <DomainRecordsGroup domains={domains} externalLinkProps={externalLinkProps} />
                         </div>
-                        <CardContent className="p-0">
-                            <InteractiveIframe
-                                src="https://monitorno.de"
-                                title="Monitor"
-                            />
-                        </CardContent>
-                        <CardFooter className="py-2 px-4 bg-white/5 border-t border-white/10 flex justify-end">
-                            <p className="text-xs text-slate-500">
-                                Powered by <a {...externalLinkProps} href="https://github.com/tonyliuzj/pocketview" className="text-indigo-400 hover:text-indigo-300 transition-colors">PocketView</a>
-                            </p>
-                        </CardFooter>
-                    </Card>
+                    </div>
+
+                    <div className="mt-8 grid gap-8">
+                        <BrowserFrame
+                            id="status"
+                            url="https://statusno.de/"
+                            src="https://statusno.de/"
+                            title="System Status"
+                            footerHref="https://github.com/tonyliuzj/kumaview"
+                            footerLabel="KumaView"
+                            externalLinkProps={externalLinkProps}
+                        />
+                        <BrowserFrame
+                            id="monitor"
+                            url="https://monitorno.de"
+                            src="https://monitorno.de"
+                            title="Monitor"
+                            footerHref="https://github.com/tonyliuzj/pocketview"
+                            footerLabel="PocketView"
+                            externalLinkProps={externalLinkProps}
+                        />
+                    </div>
                 </section>
 
                 {/* Contact Section */}
@@ -1096,10 +1557,6 @@ export default function Home() {
                                 <FooterGroup key={group.title} group={group} />
                             ))}
                         </div>
-                    </div>
-
-                    <div className="mt-6">
-                        <DomainFooterGroup domains={domains} externalLinkProps={externalLinkProps} />
                     </div>
 
                     <div className="mt-10 border-t border-white/10 pt-6 flex flex-col gap-3 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
