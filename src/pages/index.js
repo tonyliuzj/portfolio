@@ -665,17 +665,21 @@ function DnsInfo({ externalLinkProps }) {
 
 function UptimeBadge({ className = '', loading = 'lazy' }) {
     return (
-        <iframe
-            src="https://status.tony-liu.com/badge?theme=dark"
-            title="Tony Liu uptime status badge"
-            width="250"
-            height="30"
-            frameBorder="0"
-            scrolling="no"
-            loading={loading}
-            className={`h-[30px] w-full max-w-[250px] ${className}`}
-            style={{ colorScheme: 'normal' }}
-        />
+        <a
+            href="#status"
+            aria-label="View uptime status"
+            className="inline-flex max-w-full rounded-md border border-white/10 bg-white/5 p-px transition-colors hover:border-emerald-400/40 hover:bg-emerald-400/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50"
+        >
+            <Image
+                src="https://img.shields.io/uptimerobot/status/m803126391-c9e521193579a442256878b6?style=for-the-badge&logo=uptimerobot&logoColor=white&label=uptime&labelColor=0f172a&up_color=10b981&down_color=ef4444"
+                alt="UptimeRobot status"
+                width={168}
+                height={28}
+                loading={loading}
+                unoptimized
+                className={`block h-7 w-auto max-w-full rounded-[5px] ${className}`}
+            />
+        </a>
     );
 }
 
@@ -1095,12 +1099,6 @@ export default function Home() {
                     label: 'Monitor page',
                     href: '#monitor',
                     linkProps: sectionLinkProps,
-                },
-                {
-                    label: 'Public badge',
-                    href: 'https://status.tony-liu.com',
-                    linkProps: externalLinkProps,
-                    external: true,
                 },
             ],
             statusBadge: true,
