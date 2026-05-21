@@ -12,6 +12,7 @@ const mono = JetBrains_Mono({ subsets: ['latin'] });
 const defaultDomains = [
     { label: 'Tony-Liu.com', url: 'https://tony-liu.com', type: 'domain' }
 ];
+const hashScrollRetryDelays = [0, 100, 350, 800];
 const aliasWindowSize = 3;
 const domainTypeOrder = ['domain', 'redirect', 'alias'];
 const domainTypeConfig = {
@@ -136,6 +137,42 @@ const parseDomains = (domains) => {
         }));
 
     return validDomains.length > 0 ? validDomains : defaultDomains;
+};
+
+const getCurrentHashId = () => {
+    if (typeof window === 'undefined' || window.location.hash.length <= 1) return '';
+
+    const hashId = window.location.hash.slice(1);
+
+    try {
+        return decodeURIComponent(hashId);
+    } catch {
+        return hashId;
+    }
+};
+
+const scrollToCurrentHash = (behavior = 'auto') => {
+    const targetId = getCurrentHashId();
+    if (!targetId) return;
+
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    target.scrollIntoView({ block: 'start', behavior });
+};
+
+const scheduleHashScroll = (behavior = 'auto') => {
+    if (typeof window === 'undefined' || !getCurrentHashId()) return () => {};
+
+    const frameId = window.requestAnimationFrame(() => scrollToCurrentHash(behavior));
+    const timeoutIds = hashScrollRetryDelays.map((delay) =>
+        window.setTimeout(() => scrollToCurrentHash(behavior), delay)
+    );
+
+    return () => {
+        window.cancelAnimationFrame(frameId);
+        timeoutIds.forEach((timeoutId) => window.clearTimeout(timeoutId));
+    };
 };
 
 // Interactive Iframe Component - Prevents scroll trap on mobile
@@ -877,6 +914,7 @@ export default function Home() {
     const [projects, setProjects] = useState([]);
     const [websites, setWebsites] = useState([]);
     const [domains, setDomains] = useState(defaultDomains);
+    const [portfolioContentLoaded, setPortfolioContentLoaded] = useState(false);
 
     const getBadgeClasses = (color) => {
         const colorMap = {
@@ -933,10 +971,20 @@ export default function Home() {
 
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('scroll', handleScroll, { passive: true });
+        let cancelHashScroll = scheduleHashScroll('auto');
+
+        const handleHashChange = () => {
+            cancelHashScroll();
+            cancelHashScroll = scheduleHashScroll('smooth');
+        };
+
+        window.addEventListener('hashchange', handleHashChange);
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('hashchange', handleHashChange);
+            cancelHashScroll();
         };
     }, []);
 
@@ -965,11 +1013,19 @@ export default function Home() {
                 setDomains(parseDomains(data.domains));
             } catch (error) {
                 console.error('Failed to fetch content:', error);
+            } finally {
+                setPortfolioContentLoaded(true);
             }
         };
 
         fetchContent();
     }, []);
+
+    useEffect(() => {
+        if (!portfolioContentLoaded) return undefined;
+
+        return scheduleHashScroll('auto');
+    }, [portfolioContentLoaded]);
 
     function useTypewriter(words, speed = 90, pause = 1500) {
         const [text, setText] = useState('');
