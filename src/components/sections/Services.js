@@ -51,54 +51,8 @@ export default function Services() {
 
             <div className="flex flex-col mt-24">
                 
-                {/* 1. Link Shortener */}
+                {/* 1. Public DNS Server */}
                 <FadeIn delay={0.1}>
-                    <div className="py-24 border-b border-border/50">
-                        <div className="grid lg:grid-cols-12 gap-12 items-center">
-                            <div className="lg:col-span-8">
-                                <div className="flex items-center gap-4 mb-6">
-                                    <div className="p-3 border border-border bg-muted/5">
-                                        <LinkIcon className="w-6 h-6 text-foreground" />
-                                    </div>
-                                    <h3 className="text-3xl md:text-4xl font-bold tracking-tight">Link Shortener.</h3>
-                                </div>
-                                <p className="text-lg text-muted-foreground font-light mb-8 max-w-xl">
-                                    A minimalist and modern link shortening service, powered by Link Guide. Open for public use to transform long URLs into concise, trackable links.
-                                </p>
-                                <div className="flex gap-2 mb-8">
-                                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">Link Guide</span>
-                                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">URL Shortener</span>
-                                </div>
-                                <LinkButton href="https://linkgui.de" label="Visit linkgui.de" />
-                            </div>
-                            <div className="lg:col-span-4 hidden lg:flex justify-end opacity-10">
-                                <LinkIcon className="w-64 h-64" strokeWidth={0.5} />
-                            </div>
-                        </div>
-                    </div>
-                </FadeIn>
-
-                {/* 2. EmailNode */}
-                <FadeIn delay={0.2}>
-                    <div className="py-24 border-b border-border/50 flex flex-col items-center text-center">
-                        <div className="w-24 h-24 rounded-full border border-border flex items-center justify-center mb-8 bg-muted/5 relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-foreground/5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-                            <Mail className="w-10 h-10 text-foreground relative z-10" strokeWidth={1} />
-                        </div>
-                        <h3 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">EmailNode.</h3>
-                        <p className="text-lg text-muted-foreground font-light mb-8 max-w-2xl">
-                            An email receiving service offering free, disposable email addresses. Protect your primary inbox from spam and tracking.
-                        </p>
-                        <div className="flex gap-2 justify-center mb-10">
-                            <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">Email</span>
-                            <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">Privacy</span>
-                        </div>
-                        <LinkButton href="https://emailno.de" label="Open EmailNode" />
-                    </div>
-                </FadeIn>
-
-                {/* 3. Public DNS Server */}
-                <FadeIn delay={0.3}>
                     <div className="py-24 border-b border-border/50">
                         <div className="grid lg:grid-cols-2 gap-16 items-center">
                             <div className="order-2 lg:order-1 bg-[#0a0a0a] rounded-lg p-6 border border-border shadow-2xl relative overflow-hidden group">
@@ -126,7 +80,7 @@ export default function Services() {
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-40"></span>
                                         <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                                     </span>
-                                    <h3 className="text-3xl md:text-4xl font-bold tracking-tight">Public DNS Server.</h3>
+                                    <h3 className="text-3xl md:text-4xl font-bold tracking-tight">Public DNS Server</h3>
                                 </div>
                                 <p className="text-lg text-muted-foreground font-light mb-8">
                                     A free, public DNS server powered by PowerDNS, providing reliable and fast domain name resolution without logging your queries.
@@ -141,8 +95,8 @@ export default function Services() {
                     </div>
                 </FadeIn>
 
-                {/* 4. Public DoH Service */}
-                <FadeIn delay={0.4}>
+                {/* 2. Public DoH Service */}
+                <FadeIn delay={0.2}>
                     <div className="py-24 border-b border-border/50">
                         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-12 bg-muted/5 border border-border p-8 md:p-12 relative overflow-hidden">
                             <div className="absolute -right-12 -top-12 opacity-5 pointer-events-none">
@@ -151,7 +105,7 @@ export default function Services() {
                             <div className="relative z-10 max-w-xl">
                                 <h3 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 flex items-center gap-3">
                                     <Shield className="w-8 h-8 text-foreground" />
-                                    Public DoH Service.
+                                    Public DoH Service
                                 </h3>
                                 <p className="text-lg text-muted-foreground font-light mb-6">
                                     DNS over HTTPS (DoH) service powered by PowerDNS. Encrypt your DNS queries to prevent tracking and spoofing on public networks.
@@ -169,6 +123,52 @@ export default function Services() {
                                 <CopyButton text="https://dns.liuzj.net/dns-query" label="Copy DoH URL" className="w-full lg:w-auto justify-center" />
                             </div>
                         </div>
+                    </div>
+                </FadeIn>
+                
+                {/* 3. Link Shortener */}
+                <FadeIn delay={0.3}>
+                    <div className="py-24 border-b border-border/50">
+                        <div className="grid lg:grid-cols-12 gap-12 items-center">
+                            <div className="lg:col-span-8">
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="p-3 border border-border bg-muted/5">
+                                        <LinkIcon className="w-6 h-6 text-foreground" />
+                                    </div>
+                                    <h3 className="text-3xl md:text-4xl font-bold tracking-tight">Link Shortener</h3>
+                                </div>
+                                <p className="text-lg text-muted-foreground font-light mb-8 max-w-xl">
+                                    A minimalist and modern link shortening service, powered by Link Guide. Open for public use to transform long URLs into concise, trackable links.
+                                </p>
+                                <div className="flex gap-2 mb-8">
+                                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">Link Guide</span>
+                                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">URL Shortener</span>
+                                </div>
+                                <LinkButton href="https://linkgui.de" label="Visit linkgui.de" />
+                            </div>
+                            <div className="lg:col-span-4 hidden lg:flex justify-end opacity-10">
+                                <LinkIcon className="w-64 h-64" strokeWidth={0.5} />
+                            </div>
+                        </div>
+                    </div>
+                </FadeIn>
+
+                {/* 4. EmailNode */}
+                <FadeIn delay={0.4}>
+                    <div className="py-24 border-b border-border/50 flex flex-col items-center text-center">
+                        <div className="w-24 h-24 rounded-full border border-border flex items-center justify-center mb-8 bg-muted/5 relative overflow-hidden group">
+                            <div className="absolute inset-0 bg-foreground/5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+                            <Mail className="w-10 h-10 text-foreground relative z-10" strokeWidth={1} />
+                        </div>
+                        <h3 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">EmailNode</h3>
+                        <p className="text-lg text-muted-foreground font-light mb-8 max-w-2xl">
+                            An email receiving service offering free, disposable email addresses. Protect your primary inbox from spam and tracking.
+                        </p>
+                        <div className="flex gap-2 justify-center mb-10">
+                            <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">Email</span>
+                            <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">Privacy</span>
+                        </div>
+                        <LinkButton href="https://emailno.de" label="Open EmailNode" />
                     </div>
                 </FadeIn>
 
@@ -199,7 +199,7 @@ export default function Services() {
                                 data-interactable="true"
                             >
                                 <Search className="w-5 h-5 text-muted-foreground group-hover:text-foreground shrink-0 ml-2" />
-                                <span className="font-mono text-muted-foreground group-hover:text-foreground transition-colors flex-1 text-left truncate">Search the web privately...</span>
+                                <span className="font-mono text-muted-foreground group-hover:text-foreground transition-colors flex-1 text-left truncate">search.liuzj.net</span>
                                 <div className="px-4 py-2 bg-foreground text-background text-xs font-mono uppercase tracking-widest shrink-0 hidden sm:block">
                                     Search
                                 </div>
