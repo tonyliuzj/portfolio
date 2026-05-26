@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { motion, useSpring } from 'framer-motion';
+import useDesktopPointer from '@/lib/useDesktopPointer';
 
 export default function Cursor() {
-  const [isMounted, setIsMounted] = useState(false);
+  const isDesktopPointer = useDesktopPointer();
   const [isHovering, setIsHovering] = useState(false);
 
   // Springs for the main dot (fast)
@@ -14,7 +15,10 @@ export default function Cursor() {
   const ringY = useSpring(0, { stiffness: 200, damping: 25, mass: 0.5 });
 
   useEffect(() => {
-    setIsMounted(true);
+    if (!isDesktopPointer) {
+      setIsHovering(false);
+      return;
+    }
     
     const moveCursor = (e) => {
       cursorX.set(e.clientX);
@@ -42,9 +46,9 @@ export default function Cursor() {
       window.removeEventListener('mousemove', moveCursor);
       window.removeEventListener('mouseover', handleMouseOver);
     };
-  }, [cursorX, cursorY, ringX, ringY]);
+  }, [cursorX, cursorY, isDesktopPointer, ringX, ringY]);
 
-  if (!isMounted) return null;
+  if (!isDesktopPointer) return null;
 
   return (
     <>

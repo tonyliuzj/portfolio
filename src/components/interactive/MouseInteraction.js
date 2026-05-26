@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { motion, useSpring } from 'framer-motion';
+import useDesktopPointer from '@/lib/useDesktopPointer';
 
 export default function MouseInteraction() {
-  const [isMounted, setIsMounted] = useState(false);
+  const isDesktopPointer = useDesktopPointer();
 
   // Smooth springs for spotlight tracking
   const mouseX = useSpring(0, { stiffness: 40, damping: 25, mass: 0.5 });
   const mouseY = useSpring(0, { stiffness: 40, damping: 25, mass: 0.5 });
 
   useEffect(() => {
-    setIsMounted(true);
+    if (!isDesktopPointer) return;
 
     const moveCursor = (e) => {
       mouseX.set(e.clientX);
@@ -18,9 +19,9 @@ export default function MouseInteraction() {
 
     window.addEventListener('mousemove', moveCursor);
     return () => window.removeEventListener('mousemove', moveCursor);
-  }, [mouseX, mouseY]);
+  }, [isDesktopPointer, mouseX, mouseY]);
 
-  if (!isMounted) return null;
+  if (!isDesktopPointer) return null;
 
   return (
     <motion.div
