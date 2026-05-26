@@ -75,6 +75,7 @@ export default function Infrastructure() {
                 label="Infrastructure"
                 title="Backbone"
                 description="Fabric"
+                summary="The underlying operations layer of my portfolio. A look into the homelab, routing, and virtualization stack."
             />
 
             <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">

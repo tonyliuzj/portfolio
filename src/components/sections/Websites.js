@@ -111,6 +111,7 @@ export default function Websites() {
                 label="Websites"
                 title="Public"
                 description="Surfaces"
+                summary="A collection of public-facing web properties, services, and experimental domains I operate."
             />
 
             <div className="flex flex-col border-t border-border">

@@ -153,6 +153,7 @@ export default function Projects() {
                 label="Projects"
                 title="Featured"
                 description="Projects"
+                summary="A selection of my recent work, focusing on full-stack development, network tools, and infrastructure experiments."
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16 lg:gap-y-32">

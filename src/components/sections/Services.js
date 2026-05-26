@@ -47,6 +47,7 @@ export default function Services() {
                 label="Services"
                 title="Public"
                 description="Services"
+                summary="Free and public services I host and maintain, for the spririt of free, open source and privacy."
             />
 
             <div className="flex flex-col mt-24">

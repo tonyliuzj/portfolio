@@ -189,7 +189,8 @@ export default function About() {
                     number="01.2"
                     label="Journey"
                     title="The"
-                    description="Journey."
+                    description="Journey"
+                    summary="A timeline of my progress, from writing my first lines of code to managing rack-scale infrastructure."
                 />
 
                 <div className="relative pl-6 md:pl-0 mt-24" ref={timelineRef}>

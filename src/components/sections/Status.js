@@ -85,6 +85,7 @@ export default function Status() {
                     label="Status"
                     title="Live"
                     description="Systems"
+                    summary="Real-time uptime monitoring and metrics for all my hosted services and infrastructure nodes."
                 />            </div>
 
             <div className="w-full flex flex-col gap-16 px-4 md:px-12 lg:px-24">

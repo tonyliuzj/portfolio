@@ -1,6 +1,6 @@
 import FadeIn from "@/components/interactive/FadeIn";
 
-export default function SectionHeader({ number, label, title, description, color = "muted-foreground" }) {
+export default function SectionHeader({ number, label, title, description, summary, color = "muted-foreground" }) {
     return (
         <FadeIn>
             <div className="flex items-center gap-6 mb-16">
@@ -10,12 +10,18 @@ export default function SectionHeader({ number, label, title, description, color
                 <div className="h-[1px] flex-1 bg-border/50 max-w-[200px]"></div>
             </div>
             
-            <h2 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-foreground mb-16">
+            <h2 className={`text-4xl md:text-6xl font-extrabold tracking-tighter text-foreground ${summary ? 'mb-8' : 'mb-16'}`}>
                 {title} <br className="hidden md:block" />
                 <span className={color === "muted-foreground" ? "text-muted-foreground" : `text-${color}`}>
                     {description}
                 </span>
             </h2>
+            
+            {summary && (
+                <p className="text-lg md:text-xl text-muted-foreground font-light max-w-2xl mb-16 leading-relaxed">
+                    {summary}
+                </p>
+            )}
         </FadeIn>
     );
 }
