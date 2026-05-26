@@ -470,7 +470,7 @@ export default function RackModel() {
                             {/* 3D Rack Frame */}
                             <div className="absolute inset-4 pointer-events-none border-[12px] border-muted/30 [transform:translateZ(-10px)]" />
                             
-                            <div className="relative grid grid-cols-[32px_1fr] gap-4 h-[500px] sm:h-[600px] [transform-style:preserve-3d]">
+                            <div className="relative grid grid-cols-[32px_1fr] gap-4 h-[500px] sm:h-[650px] [transform-style:preserve-3d]">
                                 {/* Unit Ticks */}
                                 <div className="flex flex-col justify-between py-2 border-r border-border/50 text-[9px] font-mono text-muted-foreground/50 [transform:translateZ(0px)]">
                                     {[42, 35, 28, 21, 14, 7, 1].map(u => (
@@ -489,35 +489,47 @@ export default function RackModel() {
                                             onMouseEnter={() => setIsHovering(device.id)}
                                             onMouseLeave={() => setIsHovering(null)}
                                             onClick={() => setSelectedId(device.id)}
-                                            className={`relative transition-all duration-500 group/item [transform-style:preserve-3d]
-                                                ${selectedId === device.id ? 'z-40' : isHovering === device.id ? 'z-30' : 'z-20'}
+                                            data-interactable={selectedId !== device.id ? "true" : "false"}
+                                            className={`relative transition-all duration-500 group/item [transform-style:preserve-3d] outline-none
+                                                ${selectedId === device.id ? 'z-40 pointer-events-none' : isHovering === device.id ? 'z-30' : 'z-20'}
+                                                /* Expanded hit area pseudo-element - remains active even when component is pointer-events-none */
+                                                /* We apply it to a child to keep the button logic clean */
                                             `}
                                             style={{ 
                                                 gridRow: `${43 - (device.startU + device.sizeU - 1)} / span ${device.sizeU}`,
                                                 transform: selectedId === device.id ? 'translateZ(30px)' : isHovering === device.id ? 'translateZ(10px)' : 'translateZ(0px)'
                                             }}
                                         >
+                                            {/* Actual Interaction Hitbox (Invisible, but blocks selected) */}
+                                            <div 
+                                                className={`absolute -inset-y-4 -inset-x-2 z-50 pointer-events-auto ${selectedId === device.id ? 'hidden' : ''}`}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setSelectedId(device.id);
+                                                }}
+                                            />
+
                                             {/* Front Face */}
-                                            <div className={`absolute inset-0 border transition-all duration-500 [transform:translateZ(0px)] overflow-hidden
+                                            <div className={`absolute inset-0 border transition-all duration-500 [transform:translateZ(0px)] overflow-hidden z-10
                                                 ${selectedId === device.id 
-                                                    ? `border-[hsl(var(--foreground))]/50 shadow-[0_0_30px_rgba(255,255,255,0.05)]` 
-                                                    : 'border-[#1a1a1a] group-hover/item:border-[#333]'
+                                                    ? `border-[hsl(var(--foreground))]/60 shadow-[0_0_40px_rgba(255,255,255,0.1)]` 
+                                                    : 'border-[#1a1a1a] group-hover/item:border-[#444]'
                                                 }
                                             `}>
-                                                <HardwareVisual device={device} isSelected={selectedId === device.id} />
+                                                <HardwareVisual device={device} isSelected={selectedId === device.id || isHovering === device.id} />
                                             </div>
 
                                             {/* Top Face */}
-                                            <div className={`absolute top-0 left-0 right-0 h-[40px] origin-top [transform:rotateX(-90deg)] border-x border-t transition-all duration-500 pointer-events-none bg-[#111] border-[#222]`} />
+                                            <div className={`absolute top-0 left-0 right-0 h-[40px] origin-top [transform:rotateX(-90deg)] border-x border-t transition-all duration-500 pointer-events-none bg-[#111] border-[#222] ${isHovering === device.id ? 'bg-[#1a1a1a]' : ''}`} />
 
                                             {/* Bottom Face */}
-                                            <div className={`absolute bottom-0 left-0 right-0 h-[40px] origin-bottom [transform:rotateX(90deg)] border-x border-b transition-all duration-500 pointer-events-none bg-[#0a0a0a] border-[#222]`} />
+                                            <div className={`absolute bottom-0 left-0 right-0 h-[40px] origin-bottom [transform:rotateX(90deg)] border-x border-b transition-all duration-500 pointer-events-none bg-[#0a0a0a] border-[#222] ${isHovering === device.id ? 'bg-[#111]' : ''}`} />
 
                                             {/* Right Face */}
-                                            <div className={`absolute top-0 bottom-0 right-0 w-[40px] origin-right [transform:rotateY(-90deg)] border-y border-r transition-all duration-500 pointer-events-none bg-[#151515] border-[#222]`} />
+                                            <div className={`absolute top-0 bottom-0 right-0 w-[40px] origin-right [transform:rotateY(-90deg)] border-y border-r transition-all duration-500 pointer-events-none bg-[#151515] border-[#222] ${isHovering === device.id ? 'bg-[#202020]' : ''}`} />
 
                                             {/* Left Face */}
-                                            <div className={`absolute top-0 bottom-0 left-0 w-[40px] origin-left [transform:rotateY(90deg)] border-y border-l transition-all duration-500 pointer-events-none bg-[#151515] border-[#222]`} />
+                                            <div className={`absolute top-0 bottom-0 left-0 w-[40px] origin-left [transform:rotateY(90deg)] border-y border-l transition-all duration-500 pointer-events-none bg-[#151515] border-[#222] ${isHovering === device.id ? 'bg-[#202020]' : ''}`} />
                                             
                                             {selectedId === device.id && (
                                                 <motion.div 
@@ -530,16 +542,32 @@ export default function RackModel() {
                                         </motion.button>
                                     ))}
 
-                                    {/* Sensor Overlays */}
+                                    {/* Sensor Overlays with expanded hit areas */}
                                     {rackSensorMarkers.map(sensor => (
                                         <button
                                             key={sensor.id}
                                             onClick={() => setSelectedId('sensors')}
-                                            className={`absolute z-50 w-2 h-2 rounded-full border border-cyan-400/50 bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)] transition-all hover:scale-150
-                                                ${selectedId === 'sensors' ? 'scale-125 [transform:translateZ(40px)]' : '[transform:translateZ(10px)] opacity-50'}
+                                            onMouseEnter={() => setIsHovering('sensors')}
+                                            onMouseLeave={() => setIsHovering(null)}
+                                            data-interactable="true"
+                                            className={`absolute z-50 group/sensor transition-all duration-300
+                                                ${selectedId === 'sensors' ? '[transform:translateZ(40px)]' : '[transform:translateZ(15px)]'}
                                             `}
                                             style={{ top: sensor.top, left: sensor.left }}
-                                        />
+                                        >
+                                            {/* Invisible hit area (24px) */}
+                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-transparent" />
+                                            
+                                            {/* Visual Marker */}
+                                            <div className={`w-2 h-2 rounded-full border border-cyan-400/50 bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)] transition-all duration-300 group-hover/sensor:scale-150
+                                                ${selectedId === 'sensors' ? 'scale-125' : 'opacity-50 group-hover/sensor:opacity-100'}
+                                            `} />
+                                            
+                                            {/* Minimal label on hover */}
+                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover/sensor:opacity-100 transition-opacity bg-background/80 backdrop-blur-sm border border-cyan-500/30 px-1.5 py-0.5 rounded text-[8px] font-mono text-cyan-400 whitespace-nowrap pointer-events-none">
+                                                {sensor.label}
+                                            </div>
+                                        </button>
                                     ))}
                                 </div>
                             </div>
