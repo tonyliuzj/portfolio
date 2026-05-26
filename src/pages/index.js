@@ -35,7 +35,7 @@ export default function Home() {
                 <div className="fixed top-4 left-4 md:top-6 md:left-6 z-50 mix-blend-difference">
                     <a href="#status" className="pointer-events-auto block transition-transform hover:scale-105 active:scale-95" data-interactable="true">
                         <img 
-                            src="https://img.shields.io/uptimerobot/status/m803126391-c9e521193579a442256878b6?style=for-the-badge&logo=uptimerobot&logoColor=white&label=uptime&labelColor=0f172a&up_color=10b981&down_color=ef4444" 
+                            src="https://img.shields.io/uptimerobot/status/m803126391-c9e521193579a442256878b6?style=for-the-badge&logo=uptimerobot&logoColor=white&label=status&labelColor=0f172a&up_color=10b981&down_color=ef4444" 
                             alt="Uptime Status" 
                             className="h-6 md:h-7 opacity-80"
                         />
