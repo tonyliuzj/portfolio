@@ -1,4 +1,4 @@
-import { ShieldCheck, Globe, Server, ExternalLink } from "lucide-react";
+import { ShieldCheck, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 import FadeIn from "@/components/interactive/FadeIn";
 import SectionHeader from "@/components/common/SectionHeader";
@@ -170,19 +170,30 @@ export default function Infrastructure() {
                                         <span className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[hsl(var(--muted)/0.1)] to-transparent z-10 pointer-events-none" />
                                         
                                         <motion.div 
-                                            className="flex whitespace-nowrap gap-8"
+                                            className="flex w-max whitespace-nowrap"
                                             animate={{ x: ["0%", "-50%"] }}
                                             transition={{ 
                                                 ease: "linear", 
-                                                duration: aliasDomains.length * 1.2, 
+                                                duration: 45, 
                                                 repeat: Infinity 
                                             }}
                                         >
-                                            {/* Duplicate array for seamless infinite scroll */}
-                                            {[...aliasDomains, ...aliasDomains].map((domain, i) => (
-                                                <a key={i} href={domain.url} target="_blank" rel="noopener noreferrer" className="font-mono text-[10px] text-muted-foreground hover:text-foreground transition-colors" data-interactable="true">
-                                                    {domain.label}
-                                                </a>
+                                            {[0, 1].map((groupIndex) => (
+                                                <div key={groupIndex} className="flex shrink-0 gap-8 pr-8" aria-hidden={groupIndex === 1}>
+                                                    {aliasDomains.map((domain) => (
+                                                        <a
+                                                            key={`${groupIndex}-${domain.url}`}
+                                                            href={domain.url}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            tabIndex={groupIndex === 1 ? -1 : undefined}
+                                                            className="font-mono text-[10px] text-muted-foreground hover:text-foreground transition-colors"
+                                                            data-interactable="true"
+                                                        >
+                                                            {domain.label}
+                                                        </a>
+                                                    ))}
+                                                </div>
                                             ))}
                                         </motion.div>
                                     </div>
