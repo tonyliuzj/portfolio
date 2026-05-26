@@ -19,7 +19,7 @@ const Cursor = dynamic(() => import('@/components/interactive/Cursor'), { ssr: f
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-    const siteTitle = "Tony Liu - Portfolio";
+    const siteTitle = "Tony Liu";
     const description = "Abstracting complexity. Building full-stack web applications and robust rack-scale infrastructure.";
     const url = "https://tony-liu.com";
 
