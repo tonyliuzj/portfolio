@@ -65,13 +65,12 @@ export default function Status() {
     return (
         <section id="status" className="w-full py-32 relative z-10 border-t border-border/50">
             <div className="max-w-7xl mx-auto px-6 md:px-12 mb-16">
-                <SectionHeader 
+                <SectionHeader
                     number="06"
                     label="Status"
                     title="Live"
                     description="Systems."
-                />
-            </div>
+                />            </div>
 
             <div className="w-full flex flex-col gap-16 px-4 md:px-12 lg:px-24">
                 <FadeIn delay={0.2} className="w-full">

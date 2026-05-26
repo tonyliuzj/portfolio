@@ -96,10 +96,24 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 2.4 }}
-                    className="max-w-md text-sm md:text-base text-muted-foreground font-light leading-relaxed"
+                    className="max-w-md text-sm md:text-base text-muted-foreground font-light leading-relaxed mb-8"
                 >
                     Abstracting complexity. Building full-stack web applications and robust rack-scale infrastructure.
                 </motion.p>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 2.6 }}
+                >
+                    <a 
+                        href="#example" 
+                        className="px-8 py-3 bg-foreground text-background text-xs font-bold uppercase tracking-widest hover:bg-muted transition-colors"
+                        data-interactable="true"
+                    >
+                        See Examples
+                    </a>
+                </motion.div>
             </motion.div>
 
             {/* Scroll indicator line */}

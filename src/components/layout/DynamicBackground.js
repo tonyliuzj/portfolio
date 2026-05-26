@@ -5,10 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 const bgColors = {
     home: 'rgba(14, 165, 233, 0.08)',       // Sky Blue
     about: 'rgba(139, 92, 246, 0.08)',      // Violet
-    timeline: 'rgba(245, 158, 11, 0.08)',   // Amber
     projects: 'rgba(236, 72, 153, 0.08)',   // Pink
     websites: 'rgba(59, 130, 246, 0.08)',   // Blue
     infrastructure: 'rgba(16, 185, 129, 0.08)', // Emerald
+    services: 'rgba(6, 182, 212, 0.08)',    // Cyan
     status: 'rgba(239, 68, 68, 0.08)'      // Red
 };
 
@@ -23,7 +23,7 @@ export default function DynamicBackground() {
                 window.requestAnimationFrame(() => {
                     // Trigger point: 40% down the screen
                     const triggerPoint = window.innerHeight * 0.4;
-                    const ids = ['home', 'about', 'timeline', 'projects', 'websites', 'infrastructure', 'status', 'contact'];
+                    const ids = ['home', 'about', 'projects', 'websites', 'infrastructure', 'services', 'status', 'contact'];
                     
                     let current = 'home';
                     
@@ -93,16 +93,7 @@ export default function DynamicBackground() {
                     </motion.div>
                 )}
 
-                {/* 02 // Journey: Chrono-Rings */}
-                {activeSection === 'timeline' && (
-                    <motion.div key="timeline" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }} className="absolute inset-0 flex items-center justify-center">
-                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 100, repeat: Infinity, ease: "linear" }} className="absolute w-[120vw] max-w-[1200px] aspect-square border-[1px] border-amber-500/10 rounded-full border-dashed opacity-50" style={{ borderDasharray: "4 24" }} />
-                        <motion.div animate={{ rotate: -360 }} transition={{ duration: 150, repeat: Infinity, ease: "linear" }} className="absolute w-[90vw] max-w-[900px] aspect-square border-[2px] border-orange-500/5 rounded-full border-dotted opacity-50" />
-                        <div className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-amber-500/20 to-transparent" />
-                    </motion.div>
-                )}
-
-                {/* 03 // Projects: 3D Wireframe Tumbling Cubes */}
+                {/* 02 // Projects: 3D Wireframe Tumbling Cubes */}
                 {activeSection === 'projects' && (
                     <motion.div key="projects" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }} className="absolute inset-0 perspective-[1000px] overflow-hidden">
                         {[...Array(4)].map((_, i) => (
@@ -115,7 +106,7 @@ export default function DynamicBackground() {
                     </motion.div>
                 )}
 
-                {/* 04 // Websites: Synthwave 3D Horizon Grid */}
+                {/* 03 // Websites: Synthwave 3D Horizon Grid */}
                 {activeSection === 'websites' && (
                     <motion.div key="websites" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }} className="absolute inset-0 perspective-[1000px] overflow-hidden">
                         <motion.div className="absolute bottom-[-20vh] w-[200%] left-[-50%] h-[80vh] bg-[linear-gradient(transparent_0%,rgba(59,130,246,0.2)_2%,transparent_3%),linear-gradient(90deg,transparent_0%,rgba(59,130,246,0.2)_2%,transparent_3%)] will-change-transform"
@@ -142,7 +133,20 @@ export default function DynamicBackground() {
                     </motion.div>
                 )}
 
-                {/* 06 // Status: Radar / Heartbeat */}
+                {/* 06 // Services: Data Nodes */}
+                {activeSection === 'services' && (
+                    <motion.div key="services" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }}>
+                        {[...Array(20)].map((_, i) => (
+                            <motion.div key={`s-${i}`} className="absolute w-2 h-2 rounded-full bg-cyan-500/20 blur-[2px] will-change-transform"
+                                style={{ left: `${Math.random() * 100}vw`, top: `${Math.random() * 100}vh` }}
+                                animate={{ y: [0, -100, 0], opacity: [0.1, 0.5, 0.1], scale: [1, 1.5, 1] }}
+                                transition={{ duration: Math.random() * 5 + 5, repeat: Infinity, ease: "easeInOut", delay: Math.random() * 2 }}
+                            />
+                        ))}
+                    </motion.div>
+                )}
+
+                {/* 07 // Status: Radar / Heartbeat */}
                 {activeSection === 'status' && (
                     <motion.div key="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }} className="absolute inset-0 flex items-center justify-center">
                         <div className="absolute w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] border border-red-500/20 rounded-full flex items-center justify-center">

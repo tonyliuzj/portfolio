@@ -72,10 +72,10 @@ export default function Infrastructure() {
     return (
         <section id="infrastructure" className="w-full max-w-7xl mx-auto px-6 md:px-12 py-32 relative z-10">
             <SectionHeader 
-                number="05"
+                number="04"
                 label="Infrastructure"
-                title="Routing &"
-                description="Telemetry."
+                title="Backbone"
+                description="Fabric."
             />
 
             <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">

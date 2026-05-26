@@ -4,11 +4,11 @@ import { Inter } from 'next/font/google';
 import SmoothScroll from '@/components/layout/SmoothScroll';
 import Preloader from '@/components/layout/Preloader';
 import Hero from '@/components/sections/Hero';
-import Timeline from '@/components/sections/Timeline';
 import About from '@/components/sections/About';
 import Projects from '@/components/sections/Projects';
 import Websites from '@/components/sections/Websites';
 import Infrastructure from '@/components/sections/Infrastructure';
+import Services from '@/components/sections/Services';
 import Status from '@/components/sections/Status';
 import Contact from '@/components/sections/Contact';
 import SideNav from '@/components/layout/SideNav';
@@ -60,10 +60,10 @@ export default function Home() {
                     <Preloader />
                     <Hero />
                     <About />
-                    <Timeline />
                     <Projects />
                     <Websites />
                     <Infrastructure />
+                    <Services />
                     <Status />
                     <Contact />
                 </main>

@@ -31,6 +31,20 @@ export default function Contact() {
         <footer id="contact" className="w-full border-t border-border bg-background pt-32 pb-16 relative z-10">
             <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <FadeIn>
+                    <div className="flex items-center gap-6 mb-16">
+                        <span className="text-xs font-mono tracking-widest uppercase text-muted-foreground">
+                            07 // Contact
+                        </span>
+                        <div className="h-[1px] flex-1 bg-border/50 max-w-[200px]"></div>
+                        <a 
+                            href="#example" 
+                            className="text-[10px] font-mono tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
+                            data-interactable="true"
+                        >
+                            Example
+                        </a>
+                    </div>
+
                     <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 mb-32">
                         <div>
                             <h2 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-foreground mb-8">

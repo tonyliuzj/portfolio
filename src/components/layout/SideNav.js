@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 const sections = [
     { id: 'home', label: '00 // Start' },
     { id: 'about', label: '01 // About' },
-    { id: 'timeline', label: '02 // Journey' },
-    { id: 'projects', label: '03 // Projects' },
-    { id: 'websites', label: '04 // Websites' },
-    { id: 'infrastructure', label: '05 // Infra' },
+    { id: 'projects', label: '02 // Projects' },
+    { id: 'websites', label: '03 // Websites' },
+    { id: 'infrastructure', label: '04 // Infra' },
+    { id: 'services', label: '05 // Services' },
     { id: 'status', label: '06 // Status' },
     { id: 'contact', label: '07 // Contact' },
 ];

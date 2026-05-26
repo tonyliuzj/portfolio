@@ -103,7 +103,7 @@ export default function Projects() {
     return (
         <section id="projects" className="w-full max-w-7xl mx-auto px-6 md:px-12 py-32 relative z-10">
             <SectionHeader 
-                number="03"
+                number="02"
                 label="Projects"
                 title="Featured"
                 description="Projects."
