@@ -45,8 +45,8 @@ export default function Services() {
             <SectionHeader 
                 number="05"
                 label="Services"
-                title="Hosted"
-                description="Systems."
+                title="Public"
+                description="Services"
             />
 
             <div className="flex flex-col mt-24">
@@ -163,6 +163,9 @@ export default function Services() {
                             </div>
                             <div className="relative z-10 shrink-0 w-full lg:w-auto">
                                 <div className="mb-3 text-xs text-muted-foreground font-mono uppercase tracking-widest">Query Endpoint</div>
+                                <div className="bg-background border border-border px-4 py-2 font-mono text-xs text-foreground mb-4 break-all">
+                                    https://dns.liuzj.net/dns-query
+                                </div>
                                 <CopyButton text="https://dns.liuzj.net/dns-query" label="Copy DoH URL" className="w-full lg:w-auto justify-center" />
                             </div>
                         </div>

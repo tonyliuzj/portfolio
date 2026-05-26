@@ -108,7 +108,7 @@ export default function About() {
                 number="01"
                 label="About"
                 title="Abstracting"
-                description="Complexity."
+                description="Complexity"
                 color="violet-400"
             />
 
@@ -116,7 +116,7 @@ export default function About() {
                 <div className="lg:col-span-5">
                     <FadeIn delay={0.1}>
                         <h2 className="text-3xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-8 leading-[1.1]">
-                            Building web projects while learning the infrastructure underneath.
+                            Building web projects while learning the infrastructure underneath
                         </h2>
                         <div className="space-y-6 text-base md:text-lg text-muted-foreground font-light leading-relaxed">
                             <p>
@@ -154,6 +154,30 @@ export default function About() {
                             </FadeIn>
                         );
                     })}
+
+                    {/* Public Services Highlight */}
+                    <FadeIn delay={0.4} className="md:col-span-2">
+                        <a 
+                            href="#services" 
+                            className="group flex flex-col md:flex-row items-center justify-between p-8 border border-border bg-background hover:bg-muted/10 transition-all duration-500"
+                            data-interactable="true"
+                        >
+                            <div className="flex items-center gap-6">
+                                <div className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover:bg-foreground group-hover:text-background transition-colors duration-500">
+                                    <Globe className="w-5 h-5" strokeWidth={1.5} />
+                                </div>
+                                <div className="flex flex-col">
+                                    <h3 className="text-xl font-bold tracking-tight text-foreground">Free Public Services</h3>
+                                    <p className="text-sm text-muted-foreground font-light leading-relaxed">
+                                        I am running some free public services including DNS, DoH, and privacy tools.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="mt-6 md:mt-0 px-6 py-2 border border-foreground/30 text-[10px] font-mono tracking-widest uppercase group-hover:bg-foreground group-hover:text-background transition-all">
+                                View Services
+                            </div>
+                        </a>
+                    </FadeIn>
                 </div>
             </div>
 

@@ -1,52 +1,50 @@
 import { useEffect, useState } from 'react';
 import { motion, useSpring } from 'framer-motion';
 import useDesktopPointer from '@/lib/useDesktopPointer';
+import usePointerMotion from '@/lib/usePointerMotion';
 
 export default function Cursor() {
   const isDesktopPointer = useDesktopPointer();
   const [isHovering, setIsHovering] = useState(false);
+  const { pointerX, pointerY } = usePointerMotion(isDesktopPointer);
 
   // Springs for the main dot (fast)
-  const cursorX = useSpring(0, { stiffness: 1000, damping: 50, mass: 0.1 });
-  const cursorY = useSpring(0, { stiffness: 1000, damping: 50, mass: 0.1 });
+  const cursorX = useSpring(pointerX, { stiffness: 1000, damping: 50, mass: 0.1 });
+  const cursorY = useSpring(pointerY, { stiffness: 1000, damping: 50, mass: 0.1 });
   
   // Springs for the outer ring (delayed/smooth)
-  const ringX = useSpring(0, { stiffness: 200, damping: 25, mass: 0.5 });
-  const ringY = useSpring(0, { stiffness: 200, damping: 25, mass: 0.5 });
+  const ringX = useSpring(pointerX, { stiffness: 200, damping: 25, mass: 0.5 });
+  const ringY = useSpring(pointerY, { stiffness: 200, damping: 25, mass: 0.5 });
 
   useEffect(() => {
     if (!isDesktopPointer) {
       setIsHovering(false);
       return;
     }
-    
-    const moveCursor = (e) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      
-      ringX.set(e.clientX);
-      ringY.set(e.clientY);
-    };
 
     const handleMouseOver = (e) => {
-      const isInteractable = 
-        e.target.tagName.toLowerCase() === 'a' ||
-        e.target.tagName.toLowerCase() === 'button' ||
+      if (!(e.target instanceof Element)) return;
+
+      const tagName = e.target.tagName.toLowerCase();
+      const isInteractable =
+        tagName === 'a' ||
+        tagName === 'button' ||
         e.target.closest('a') ||
         e.target.closest('button') ||
         e.target.closest('[data-interactable="true"]');
         
-      setIsHovering(!!isInteractable);
+      setIsHovering((prev) => {
+        const next = !!isInteractable;
+        return prev === next ? prev : next;
+      });
     };
 
-    window.addEventListener('mousemove', moveCursor);
     window.addEventListener('mouseover', handleMouseOver);
 
     return () => {
-      window.removeEventListener('mousemove', moveCursor);
       window.removeEventListener('mouseover', handleMouseOver);
     };
-  }, [cursorX, cursorY, isDesktopPointer, ringX, ringY]);
+  }, [isDesktopPointer]);
 
   if (!isDesktopPointer) return null;
 

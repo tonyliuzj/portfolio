@@ -1,5 +1,4 @@
 import { ShieldCheck, Globe } from "lucide-react";
-import { motion } from "framer-motion";
 import FadeIn from "@/components/interactive/FadeIn";
 import SectionHeader from "@/components/common/SectionHeader";
 
@@ -75,14 +74,14 @@ export default function Infrastructure() {
                 number="04"
                 label="Infrastructure"
                 title="Backbone"
-                description="Fabric."
+                description="Fabric"
             />
 
             <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
                 <div>
                     <FadeIn delay={0.1}>
                         <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-6">
-                            Routing & Telemetry.
+                            Routing & Telemetry
                         </h2>
                         <p className="text-lg text-muted-foreground font-light leading-relaxed mb-12 max-w-md">
                             The operations layer for the portfolio. Exploring abstract DNS routing, edge protection, and live monitoring surfaces.
@@ -169,15 +168,7 @@ export default function Infrastructure() {
                                         <span className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[hsl(var(--muted)/0.1)] to-transparent z-10 pointer-events-none" />
                                         <span className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[hsl(var(--muted)/0.1)] to-transparent z-10 pointer-events-none" />
                                         
-                                        <motion.div 
-                                            className="flex w-max whitespace-nowrap"
-                                            animate={{ x: ["0%", "-50%"] }}
-                                            transition={{ 
-                                                ease: "linear", 
-                                                duration: 45, 
-                                                repeat: Infinity 
-                                            }}
-                                        >
+                                        <div className="flex w-max whitespace-nowrap animate-domain-marquee">
                                             {[0, 1].map((groupIndex) => (
                                                 <div key={groupIndex} className="flex shrink-0 gap-8 pr-8" aria-hidden={groupIndex === 1}>
                                                     {aliasDomains.map((domain) => (
@@ -195,7 +186,7 @@ export default function Infrastructure() {
                                                     ))}
                                                 </div>
                                             ))}
-                                        </motion.div>
+                                        </div>
                                     </div>
                                 </div>
                             )}

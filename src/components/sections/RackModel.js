@@ -1,16 +1,16 @@
-import { useState, useMemo } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-    Server, Route, HardDrive, Cable, PlugZap, Monitor, 
-    Keyboard, Gauge, Thermometer, Droplets, Network, 
-    Activity, Shield, Cpu, Zap 
+import {
+    Server, Route, HardDrive, Cable, PlugZap, Monitor,
+    Keyboard, Thermometer, Network,
+    Activity, Shield, Cpu, Zap
 } from "lucide-react";
 import FadeIn from "@/components/interactive/FadeIn";
 
-const HardwareVisual = ({ device, isSelected }) => {
+const HardwareVisual = memo(function HardwareVisual({ device, isSelected }) {
     // Base metal finish
     const metalBg = "bg-gradient-to-b from-[#2a2a2a] via-[#1f1f1f] to-[#141414] border-t border-t-[#3a3a3a] border-b border-b-[#0a0a0a]";
-    
+
     if (device.type === 'Network') {
         // RJ45 ports with LEDs
         return (
@@ -42,7 +42,7 @@ const HardwareVisual = ({ device, isSelected }) => {
             </div>
         );
     }
-    
+
     if (device.type === 'Compute' || device.id === 'r730') {
         // Dell R730: 16x 2.5" Drive Bays based on reference image
         return (
@@ -56,7 +56,7 @@ const HardwareVisual = ({ device, isSelected }) => {
                     {/* Simulated VGA port */}
                     <div className="w-[8px] h-[4px] bg-blue-900/30 border border-[#000] rounded-[1px]" />
                 </div>
-                
+
                 {/* 16x 2.5" Bay Array (2x8 grid) */}
                 <div className="flex-1 h-[85%] grid grid-cols-8 grid-rows-2 gap-x-[2px] gap-y-[3px] bg-[#050505] p-[2px] rounded-sm shadow-[inset_0_2px_5px_rgba(0,0,0,1)]">
                     {[...Array(16)].map((_, i) => (
@@ -70,7 +70,7 @@ const HardwareVisual = ({ device, isSelected }) => {
                         </div>
                     ))}
                 </div>
-                
+
                 {/* Right Ear */}
                 <div className="w-[14px] h-[90%] bg-[#1a1a1a] border border-[#2a2a2a] rounded-sm flex flex-col items-center py-1">
                      <div className="w-[6px] h-[8px] border border-[#333] rounded-[1px] mt-auto" />
@@ -78,7 +78,7 @@ const HardwareVisual = ({ device, isSelected }) => {
             </div>
         );
     }
-    
+
     if (device.type === 'Storage' || device.id === 'r730xd') {
         // Dell R730XD: 12x 3.5" Drive Bays based on reference image
         return (
@@ -99,12 +99,12 @@ const HardwareVisual = ({ device, isSelected }) => {
                                 <div className="w-full h-[1px] bg-[#000]" />
                                 <div className="w-full h-[1px] bg-[#000]" />
                             </div>
-                            
+
                             {/* Latch handle mechanism */}
                             <div className="w-[40%] h-full bg-[#252525] border-l border-[#111] rounded-l-[1px] flex flex-col justify-between items-end p-[1px]">
                                 {/* Dark red release button representation */}
                                 <div className="w-[3px] h-[3px] bg-red-900/40 rounded-[1px]" />
-                                
+
                                 <div className="flex gap-[1px]">
                                     <div className={`w-[1px] h-[1px] rounded-full ${isSelected ? 'bg-emerald-500 shadow-[0_0_2px_#10b981]' : 'bg-[#1a3a2a]'}`} />
                                     <div className={`w-[1px] h-[1px] rounded-full ${isSelected && i % 3 === 0 ? 'bg-amber-500 shadow-[0_0_3px_#f59e0b]' : 'bg-[#333]'}`} />
@@ -113,13 +113,13 @@ const HardwareVisual = ({ device, isSelected }) => {
                         </div>
                     ))}
                 </div>
-                
+
                 {/* Right Ear */}
                 <div className="w-[12px] h-[90%] bg-[#1a1a1a] border border-[#2a2a2a] rounded-sm" />
             </div>
         );
     }
-    
+
     if (device.type === 'Passive') {
         // Patch Panels
         if (device.id.includes('patch')) {
@@ -147,7 +147,7 @@ const HardwareVisual = ({ device, isSelected }) => {
                 </div>
             );
         }
-        
+
         // Cable mgmt / bottom entry
         if (device.id === 'cabling' || device.id === 'bottom-cable-entry') {
             return (
@@ -160,7 +160,7 @@ const HardwareVisual = ({ device, isSelected }) => {
                 </div>
             );
         }
-        
+
         // Blanking panel
         return (
             <div className={`w-full h-full flex items-center justify-between px-2 ${metalBg} opacity-90`}>
@@ -170,7 +170,7 @@ const HardwareVisual = ({ device, isSelected }) => {
             </div>
         );
     }
-    
+
     if (device.type === 'Power') {
         // PDU with sockets and digital readout
         return (
@@ -202,7 +202,7 @@ const HardwareVisual = ({ device, isSelected }) => {
             </div>
         );
     }
-    
+
     if (device.type === 'Console') {
         if (device.id === 'monitor') {
             return (
@@ -237,17 +237,85 @@ const HardwareVisual = ({ device, isSelected }) => {
             );
         }
     }
-    
+
     // Fallback
     return (
         <div className={`w-full h-full flex items-center justify-center ${metalBg}`}>
             <device.icon className={`w-3 h-3 text-[#555] transition-transform duration-300 ${isSelected ? 'scale-110 opacity-100' : 'opacity-40'}`} />
         </div>
     );
-};
+});
+
+const RackDeviceButton = memo(function RackDeviceButton({
+    device,
+    isSelected,
+    isHovered,
+    onHover,
+    onLeave,
+    onSelect,
+}) {
+    const handleSelect = () => onSelect(device.id);
+    const handleHitboxSelect = (e) => {
+        e.stopPropagation();
+        onSelect(device.id);
+    };
+
+    return (
+        <motion.button
+            onMouseEnter={() => onHover(device.id)}
+            onMouseLeave={onLeave}
+            onClick={handleSelect}
+            data-interactable={!isSelected ? "true" : "false"}
+            className={`relative transition-all duration-500 group/item [transform-style:preserve-3d] outline-none
+                ${isSelected ? 'z-40 pointer-events-none' : isHovered ? 'z-30' : 'z-20'}
+            `}
+            style={{
+                gridRow: `${43 - (device.startU + device.sizeU - 1)} / span ${device.sizeU}`,
+                transform: isSelected ? 'translateZ(30px)' : isHovered ? 'translateZ(10px)' : 'translateZ(0px)'
+            }}
+        >
+            {/* Actual Interaction Hitbox (Invisible, but blocks selected) */}
+            <div
+                className={`absolute -inset-y-4 -inset-x-2 z-50 pointer-events-auto ${isSelected ? 'hidden' : ''}`}
+                onClick={handleHitboxSelect}
+            />
+
+            {/* Front Face */}
+            <div className={`absolute inset-0 border transition-all duration-500 [transform:translateZ(0px)] overflow-hidden z-10
+                ${isSelected
+                    ? `border-[hsl(var(--foreground))]/60 shadow-[0_0_40px_rgba(255,255,255,0.1)]`
+                    : 'border-[#1a1a1a] group-hover/item:border-[#444]'
+                }
+            `}>
+                <HardwareVisual device={device} isSelected={isSelected || isHovered} />
+            </div>
+
+            {/* Top Face */}
+            <div className={`absolute top-0 left-0 right-0 h-[40px] origin-top [transform:rotateX(-90deg)] border-x border-t transition-all duration-500 pointer-events-none bg-[#111] border-[#222] ${isHovered ? 'bg-[#1a1a1a]' : ''}`} />
+
+            {/* Bottom Face */}
+            <div className={`absolute bottom-0 left-0 right-0 h-[40px] origin-bottom [transform:rotateX(90deg)] border-x border-b transition-all duration-500 pointer-events-none bg-[#0a0a0a] border-[#222] ${isHovered ? 'bg-[#111]' : ''}`} />
+
+            {/* Right Face */}
+            <div className={`absolute top-0 bottom-0 right-0 w-[40px] origin-right [transform:rotateY(-90deg)] border-y border-r transition-all duration-500 pointer-events-none bg-[#151515] border-[#222] ${isHovered ? 'bg-[#202020]' : ''}`} />
+
+            {/* Left Face */}
+            <div className={`absolute top-0 bottom-0 left-0 w-[40px] origin-left [transform:rotateY(90deg)] border-y border-l transition-all duration-500 pointer-events-none bg-[#151515] border-[#222] ${isHovered ? 'bg-[#202020]' : ''}`} />
+
+            {isSelected && (
+                <motion.div
+                    layoutId="scanner"
+                    className="absolute -left-2 -right-2 h-[2px] bg-foreground/50 z-40 top-0 shadow-[0_0_15px_rgba(255,255,255,0.8)] [transform:translateZ(2px)] pointer-events-none"
+                    animate={{ top: ["0%", "100%", "0%"] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                />
+            )}
+        </motion.button>
+    );
+});
 
 export default function RackModel() {
-    const rackDevices = [
+    const rackDevices = useMemo(() => [
         {
             id: 'patch-1u-top',
             title: '1U 24-port Patch Panel',
@@ -380,9 +448,9 @@ export default function RackModel() {
             description: '1U bottom space for power, fiber, and Ethernet cables entering the rack.',
             details: ['Power cable entry', 'Fiber cable entry', 'Ethernet cable entry'],
         },
-    ];
+    ], []);
 
-    const rackSensorGroup = {
+    const rackSensorGroup = useMemo(() => ({
         id: 'sensors',
         title: 'Environmental Sensors',
         shortLabel: 'Sensors',
@@ -390,24 +458,28 @@ export default function RackModel() {
         icon: Thermometer,
         description: 'Environmental and power telemetry sensors mounted separately from the rack power distribution hardware.',
         details: ['4 wall-mounted temperature sensors', '1 center humidity sensor', 'Power / current sensor in front of PDU'],
-    };
+    }), []);
 
-    const rackSensorMarkers = [
+    const rackSensorMarkers = useMemo(() => [
         { id: 'temp-1', label: 'Temp 1', top: '43%', left: '37%' },
         { id: 'temp-2', label: 'Temp 2', top: '43%', left: '63%' },
         { id: 'hum-1', label: 'Humidity', top: '52%', left: '50%' },
         { id: 'temp-3', label: 'Temp 3', top: '61%', left: '37%' },
         { id: 'temp-4', label: 'Temp 4', top: '61%', left: '63%' },
         { id: 'pwr-1', label: 'Power', top: '91.5%', left: '72%' },
-    ];
+    ], []);
 
     const [selectedId, setSelectedId] = useState('r730');
     const [isHovering, setIsHovering] = useState(null);
+    const rackNavigationItems = useMemo(() => rackDevices.concat(rackSensorGroup), [rackDevices, rackSensorGroup]);
+    const handleHover = useCallback((id) => setIsHovering(id), []);
+    const handleLeave = useCallback(() => setIsHovering(null), []);
+    const handleSelect = useCallback((id) => setSelectedId(id), []);
 
     const activeItem = useMemo(() => {
         if (selectedId === 'sensors') return rackSensorGroup;
         return rackDevices.find(d => d.id === selectedId) || rackDevices[0];
-    }, [selectedId]);
+    }, [rackDevices, rackSensorGroup, selectedId]);
 
     const getTypeColor = (type) => {
         switch (type) {
@@ -442,13 +514,13 @@ export default function RackModel() {
                     <div className="space-y-1 md:order-last xl:order-first">
                         <span className="block text-[10px] font-mono text-muted-foreground uppercase mb-4 tracking-widest opacity-50">Select Device</span>
                         <div className="flex flex-wrap xl:flex-col gap-2">
-                            {rackDevices.concat(rackSensorGroup).map(item => (
+                            {rackNavigationItems.map(item => (
                                 <button
                                     key={item.id}
-                                    onClick={() => setSelectedId(item.id)}
+                                    onClick={() => handleSelect(item.id)}
                                     className={`text-left px-3 py-2 text-[10px] font-mono uppercase transition-all border w-full sm:w-auto xl:w-full
-                                        ${selectedId === item.id 
-                                            ? 'bg-foreground text-background border-foreground' 
+                                        ${selectedId === item.id
+                                            ? 'bg-foreground text-background border-foreground'
                                             : 'bg-muted/5 text-muted-foreground border-border/50 hover:border-border hover:text-foreground'
                                         }
                                     `}
@@ -462,14 +534,14 @@ export default function RackModel() {
                     {/* The Rack Schematic */}
                     <div className="relative group [perspective:1200px] mt-8 xl:mt-0">
                         <div className="absolute -inset-8 bg-gradient-to-b from-foreground/5 to-transparent rounded-3xl blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                        
+
                         <div className="relative z-10 p-4 transition-all duration-700 lg:[transform:rotateY(-12deg)] lg:hover:[transform:rotateY(-4deg)] [transform-style:preserve-3d]">
                             {/* 3D Backplate */}
                             <div className="absolute inset-0 bg-background/80 backdrop-blur-xl border border-border shadow-2xl [transform:translateZ(-40px)]" />
-                            
+
                             {/* 3D Rack Frame */}
                             <div className="absolute inset-4 pointer-events-none border-[12px] border-muted/30 [transform:translateZ(-10px)]" />
-                            
+
                             <div className="relative grid grid-cols-[32px_1fr] gap-4 h-[500px] sm:h-[650px] [transform-style:preserve-3d]">
                                 {/* Unit Ticks */}
                                 <div className="flex flex-col justify-between py-2 border-r border-border/50 text-[9px] font-mono text-muted-foreground/50 [transform:translateZ(0px)]">
@@ -484,71 +556,24 @@ export default function RackModel() {
                                 {/* Device Stack */}
                                 <div className="relative grid grid-rows-[repeat(42,1fr)] gap-[2px] [transform-style:preserve-3d] pt-1">
                                     {rackDevices.map((device) => (
-                                        <motion.button
+                                        <RackDeviceButton
                                             key={device.id}
-                                            onMouseEnter={() => setIsHovering(device.id)}
-                                            onMouseLeave={() => setIsHovering(null)}
-                                            onClick={() => setSelectedId(device.id)}
-                                            data-interactable={selectedId !== device.id ? "true" : "false"}
-                                            className={`relative transition-all duration-500 group/item [transform-style:preserve-3d] outline-none
-                                                ${selectedId === device.id ? 'z-40 pointer-events-none' : isHovering === device.id ? 'z-30' : 'z-20'}
-                                                /* Expanded hit area pseudo-element - remains active even when component is pointer-events-none */
-                                                /* We apply it to a child to keep the button logic clean */
-                                            `}
-                                            style={{ 
-                                                gridRow: `${43 - (device.startU + device.sizeU - 1)} / span ${device.sizeU}`,
-                                                transform: selectedId === device.id ? 'translateZ(30px)' : isHovering === device.id ? 'translateZ(10px)' : 'translateZ(0px)'
-                                            }}
-                                        >
-                                            {/* Actual Interaction Hitbox (Invisible, but blocks selected) */}
-                                            <div 
-                                                className={`absolute -inset-y-4 -inset-x-2 z-50 pointer-events-auto ${selectedId === device.id ? 'hidden' : ''}`}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setSelectedId(device.id);
-                                                }}
-                                            />
-
-                                            {/* Front Face */}
-                                            <div className={`absolute inset-0 border transition-all duration-500 [transform:translateZ(0px)] overflow-hidden z-10
-                                                ${selectedId === device.id 
-                                                    ? `border-[hsl(var(--foreground))]/60 shadow-[0_0_40px_rgba(255,255,255,0.1)]` 
-                                                    : 'border-[#1a1a1a] group-hover/item:border-[#444]'
-                                                }
-                                            `}>
-                                                <HardwareVisual device={device} isSelected={selectedId === device.id || isHovering === device.id} />
-                                            </div>
-
-                                            {/* Top Face */}
-                                            <div className={`absolute top-0 left-0 right-0 h-[40px] origin-top [transform:rotateX(-90deg)] border-x border-t transition-all duration-500 pointer-events-none bg-[#111] border-[#222] ${isHovering === device.id ? 'bg-[#1a1a1a]' : ''}`} />
-
-                                            {/* Bottom Face */}
-                                            <div className={`absolute bottom-0 left-0 right-0 h-[40px] origin-bottom [transform:rotateX(90deg)] border-x border-b transition-all duration-500 pointer-events-none bg-[#0a0a0a] border-[#222] ${isHovering === device.id ? 'bg-[#111]' : ''}`} />
-
-                                            {/* Right Face */}
-                                            <div className={`absolute top-0 bottom-0 right-0 w-[40px] origin-right [transform:rotateY(-90deg)] border-y border-r transition-all duration-500 pointer-events-none bg-[#151515] border-[#222] ${isHovering === device.id ? 'bg-[#202020]' : ''}`} />
-
-                                            {/* Left Face */}
-                                            <div className={`absolute top-0 bottom-0 left-0 w-[40px] origin-left [transform:rotateY(90deg)] border-y border-l transition-all duration-500 pointer-events-none bg-[#151515] border-[#222] ${isHovering === device.id ? 'bg-[#202020]' : ''}`} />
-                                            
-                                            {selectedId === device.id && (
-                                                <motion.div 
-                                                    layoutId="scanner"
-                                                    className="absolute -left-2 -right-2 h-[2px] bg-foreground/50 z-40 top-0 shadow-[0_0_15px_rgba(255,255,255,0.8)] [transform:translateZ(2px)] pointer-events-none"
-                                                    animate={{ top: ["0%", "100%", "0%"] }}
-                                                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                                                />
-                                            )}
-                                        </motion.button>
+                                            device={device}
+                                            isSelected={selectedId === device.id}
+                                            isHovered={isHovering === device.id}
+                                            onHover={handleHover}
+                                            onLeave={handleLeave}
+                                            onSelect={handleSelect}
+                                        />
                                     ))}
 
                                     {/* Sensor Overlays with expanded hit areas */}
                                     {rackSensorMarkers.map(sensor => (
                                         <button
                                             key={sensor.id}
-                                            onClick={() => setSelectedId('sensors')}
-                                            onMouseEnter={() => setIsHovering('sensors')}
-                                            onMouseLeave={() => setIsHovering(null)}
+                                            onClick={() => handleSelect('sensors')}
+                                            onMouseEnter={() => handleHover('sensors')}
+                                            onMouseLeave={handleLeave}
                                             data-interactable="true"
                                             className={`absolute z-50 group/sensor transition-all duration-300
                                                 ${selectedId === 'sensors' ? '[transform:translateZ(40px)]' : '[transform:translateZ(15px)]'}
@@ -557,12 +582,12 @@ export default function RackModel() {
                                         >
                                             {/* Invisible hit area (24px) */}
                                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-transparent" />
-                                            
+
                                             {/* Visual Marker */}
                                             <div className={`w-2 h-2 rounded-full border border-cyan-400/50 bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)] transition-all duration-300 group-hover/sensor:scale-150
                                                 ${selectedId === 'sensors' ? 'scale-125' : 'opacity-50 group-hover/sensor:opacity-100'}
                                             `} />
-                                            
+
                                             {/* Minimal label on hover */}
                                             <div className="absolute left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover/sensor:opacity-100 transition-opacity bg-background/80 backdrop-blur-sm border border-cyan-500/30 px-1.5 py-0.5 rounded text-[8px] font-mono text-cyan-400 whitespace-nowrap pointer-events-none">
                                                 {sensor.label}
@@ -587,7 +612,7 @@ export default function RackModel() {
                                 {/* Decorative elements */}
                                 <div className="absolute top-0 right-0 w-24 h-24 border-t border-r border-border/50" />
                                 <div className="absolute bottom-0 left-0 w-24 h-24 border-b border-l border-border/50" />
-                                
+
                                 <div className="flex items-center gap-4 mb-8">
                                     <div className={`p-3 border ${getTypeColor(activeItem.type)}`}>
                                         <activeItem.icon className="w-6 h-6" />
@@ -613,7 +638,7 @@ export default function RackModel() {
                                     <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] block mb-2">Technical Specs</span>
                                     <div className="grid gap-3">
                                         {activeItem.details.map((detail, i) => (
-                                            <motion.div 
+                                            <motion.div
                                                 key={i}
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}

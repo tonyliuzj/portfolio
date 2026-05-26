@@ -112,12 +112,105 @@
 .blinking-cursor {
   animation: blink 1s infinite;
 }
+
+  @keyframes bg-home-primary {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+
+  @keyframes bg-home-secondary {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(-180deg) scale(1.2); }
+    100% { transform: rotate(-360deg) scale(1); }
+  }
+
+  @keyframes bg-about-shape {
+    0% { opacity: 0; transform: rotate(0deg); }
+    50% { opacity: 0.3; }
+    100% { opacity: 0; transform: rotate(90deg); }
+  }
+
+  @keyframes bg-project-cube {
+    0% { transform: rotateX(0deg) rotateY(0deg) translateZ(0); }
+    50% { transform: rotateX(180deg) rotateY(180deg) translateZ(100px); }
+    100% { transform: rotateX(360deg) rotateY(360deg) translateZ(0); }
+  }
+
+  @keyframes bg-horizon-grid {
+    from { background-position: 0 0; }
+    to { background-position: 0 4rem; }
+  }
+
+  @keyframes bg-data-line {
+    from { transform: translateX(-400px); }
+    to { transform: translateX(100vw); }
+  }
+
+  @keyframes bg-service-node {
+    0%, 100% { opacity: 0.1; transform: translateY(0) scale(1); }
+    50% { opacity: 0.5; transform: translateY(-100px) scale(1.5); }
+  }
+
+  @keyframes bg-radar-line {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes bg-radar-pulse {
+    0%, 100% { opacity: 0.05; transform: scale(0.98); }
+    50% { opacity: 0.1; transform: scale(1.02); }
+  }
+
+  @keyframes domain-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .animate-bg-home-primary {
+    animation: bg-home-primary 60s linear infinite;
+  }
+
+  .animate-bg-home-secondary {
+    animation: bg-home-secondary 80s linear infinite;
+  }
+
+  .animate-bg-about-shape {
+    animation: bg-about-shape 20s linear infinite;
+  }
+
+  .animate-bg-project-cube {
+    animation: bg-project-cube 30s linear infinite;
+  }
+
+  .animate-bg-horizon-grid {
+    animation: bg-horizon-grid 4s linear infinite;
+  }
+
+  .animate-bg-data-line {
+    animation: bg-data-line 5s linear infinite;
+    animation-fill-mode: both;
+  }
+
+  .animate-bg-service-node {
+    animation: bg-service-node 7s ease-in-out infinite;
+  }
+
+  .animate-bg-radar-line {
+    animation: bg-radar-line 6s linear infinite;
+  }
+
+  .animate-bg-radar-pulse {
+    animation: bg-radar-pulse 3s ease-in-out infinite;
+  }
+
+  .animate-domain-marquee {
+    animation: domain-marquee 45s linear infinite;
+  }
 }
 
 /* ✨ Add smooth scrolling behavior to the whole site */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 6rem;
 }
 
 @layer base {

@@ -1,10 +1,20 @@
 import { ExternalLink } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import LazyIframe from "@/components/common/LazyIframe";
 import FadeIn from "@/components/interactive/FadeIn";
 import SectionHeader from "@/components/common/SectionHeader";
+import useNearViewport from "@/lib/useNearViewport";
 
 function BrowserFrame({ url, title, src, projectLink }) {
     const [isInteracting, setIsInteracting] = useState(false);
+    const [shouldLoad, setShouldLoad] = useState(false);
+    const [frameRef, isNearViewport] = useNearViewport('1000px');
+
+    useEffect(() => {
+        if (isNearViewport) {
+            setShouldLoad(true);
+        }
+    }, [isNearViewport]);
 
     return (
         <div className="w-full bg-background border-y border-border flex flex-col">
@@ -22,13 +32,17 @@ function BrowserFrame({ url, title, src, projectLink }) {
                 </a>
             </div>
             <div 
+                ref={frameRef}
                 className="relative w-full h-[600px] md:h-[700px] bg-muted/5 group"
                 onMouseLeave={() => setIsInteracting(false)}
             >
                 <div
                     className={`absolute inset-0 z-10 flex flex-col items-center justify-center bg-background/40 backdrop-blur-[2px] transition-all duration-300 cursor-pointer
                     ${isInteracting ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:bg-background/20'}`}
-                    onClick={() => setIsInteracting(true)}
+                    onClick={() => {
+                        setShouldLoad(true);
+                        setIsInteracting(true);
+                    }}
                     data-interactable="true"
                 >
                     <span className="px-4 py-2 bg-foreground text-background text-xs font-bold uppercase tracking-widest pointer-events-none">
@@ -36,7 +50,8 @@ function BrowserFrame({ url, title, src, projectLink }) {
                     </span>
                 </div>
 
-                <iframe
+                <LazyIframe
+                    shouldLoad={shouldLoad}
                     src={src}
                     className={`w-full h-full border-0 transition-all duration-500 ${isInteracting ? 'pointer-events-auto' : 'pointer-events-none opacity-40 grayscale'}`}
                     title={title}
@@ -69,7 +84,7 @@ export default function Status() {
                     number="06"
                     label="Status"
                     title="Live"
-                    description="Systems."
+                    description="Systems"
                 />            </div>
 
             <div className="w-full flex flex-col gap-16 px-4 md:px-12 lg:px-24">

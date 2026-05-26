@@ -36,20 +36,13 @@ export default function Contact() {
                             07 // Contact
                         </span>
                         <div className="h-[1px] flex-1 bg-border/50 max-w-[200px]"></div>
-                        <a 
-                            href="#example" 
-                            className="text-[10px] font-mono tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
-                            data-interactable="true"
-                        >
-                            Example
-                        </a>
                     </div>
 
                     <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 mb-32">
                         <div>
                             <h2 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-foreground mb-8">
                                 Let's <br className="hidden md:block" />
-                                <span className="text-muted-foreground">Collaborate.</span>
+                                <span className="text-muted-foreground">Collaborate</span>
                             </h2>
                             <p className="text-lg md:text-xl text-muted-foreground font-light max-w-md leading-relaxed">
                                 Currently exploring new opportunities in full-stack engineering and infrastructure. Reach out if you'd like to build something meaningful together.

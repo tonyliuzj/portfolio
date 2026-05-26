@@ -105,13 +105,12 @@ export default function Websites() {
     const websites = websitesData;
 
     return (
-        <section id="websites" className="w-full max-w-7xl mx-auto px-6 md:px-12 py-32 relative z-10 border-t border-border/50 scroll-mt-24">
-            <div id="example" className="absolute top-0 left-0" />
+        <section id="websites" className="w-full max-w-7xl mx-auto px-6 md:px-12 py-32 relative z-10 border-t border-border/50">
             <SectionHeader 
                 number="03"
                 label="Websites"
                 title="Public"
-                description="Surfaces."
+                description="Surfaces"
             />
 
             <div className="flex flex-col border-t border-border">
@@ -123,7 +122,7 @@ export default function Websites() {
                     if (hasUrl) {
                         try {
                             hostname = new URL(site.url).hostname;
-                        } catch (e) {
+                        } catch {
                             hostname = site.url;
                         }
                     }

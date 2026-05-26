@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useSpring } from 'framer-motion';
+import useActiveSection from '@/lib/useActiveSection';
 
 const sections = [
     { id: 'home', label: '00 // Start' },
@@ -14,23 +15,26 @@ const sections = [
 
 function MagneticItem({ children, onClick }) {
     const ref = useRef(null);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const x = useSpring(0, { stiffness: 150, damping: 15, mass: 0.1 });
+    const y = useSpring(0, { stiffness: 150, damping: 15, mass: 0.1 });
 
     const handleMouse = (e) => {
+        if (!ref.current) return;
+
         const { clientX, clientY } = e;
         const { height, width, left, top } = ref.current.getBoundingClientRect();
         const middleX = clientX - (left + width / 2);
         const middleY = clientY - (top + height / 2);
         
         // Gentle magnetic pull
-        setPosition({ x: middleX * 0.35, y: middleY * 0.35 });
+        x.set(middleX * 0.35);
+        y.set(middleY * 0.35);
     };
 
     const reset = () => {
-        setPosition({ x: 0, y: 0 });
+        x.set(0);
+        y.set(0);
     };
-
-    const { x, y } = position;
 
     return (
         <div
@@ -42,8 +46,7 @@ function MagneticItem({ children, onClick }) {
             data-interactable="true"
         >
             <motion.div
-                animate={{ x, y }}
-                transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+                style={{ x, y }}
                 className="flex items-center gap-4"
             >
                 {children}
@@ -53,37 +56,7 @@ function MagneticItem({ children, onClick }) {
 }
 
 export default function SideNav() {
-    const [activeSection, setActiveSection] = useState('home');
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const triggerPoint = window.innerHeight * 0.4;
-            
-            let current = 'home';
-            
-            for (const section of sections) {
-                const element = document.getElementById(section.id);
-                if (element) {
-                    const rect = element.getBoundingClientRect();
-                    if (rect.top <= triggerPoint) {
-                        current = section.id;
-                    }
-                }
-            }
-            
-            // Force contact section if scrolled to the absolute bottom
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
-                current = 'contact';
-            }
-
-            setActiveSection((prev) => current !== prev ? current : prev);
-        };
-
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        handleScroll();
-
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    const activeSection = useActiveSection();
 
     const scrollTo = (id) => {
         const element = document.getElementById(id);
@@ -97,7 +70,7 @@ export default function SideNav() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 1 }}
-            className="fixed right-2 md:right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col items-end hidden sm:flex"
+            className="fixed right-2 md:right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col items-end hidden sm:flex mix-blend-difference"
         >
             {sections.map((section, index) => {
                 const isActive = activeSection === section.id;

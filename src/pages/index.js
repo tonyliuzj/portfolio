@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
-import { Inter } from 'next/font/google';
 import SmoothScroll from '@/components/layout/SmoothScroll';
 import Preloader from '@/components/layout/Preloader';
 import Hero from '@/components/sections/Hero';
@@ -16,7 +15,6 @@ import DynamicBackground from '@/components/layout/DynamicBackground';
 import MouseInteraction from '@/components/interactive/MouseInteraction';
 
 const Cursor = dynamic(() => import('@/components/interactive/Cursor'), { ssr: false });
-const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
     const siteTitle = "Tony Liu";
@@ -25,7 +23,7 @@ export default function Home() {
 
     return (
         <SmoothScroll>
-            <div className={`${inter.className} min-h-screen bg-background text-foreground selection:bg-foreground/20 selection:text-foreground`}>
+            <div className="min-h-screen bg-background text-foreground selection:bg-foreground/20 selection:text-foreground">
                 <Cursor />
                 <SideNav />
                 <DynamicBackground />
@@ -56,7 +54,7 @@ export default function Home() {
                     <meta name="twitter:description" content={description} />
                 </Head>
 
-                <main className="relative flex flex-col items-center overflow-hidden sm:pr-24 lg:pr-32 xl:pr-0">
+                <main className="relative flex flex-col items-center overflow-hidden w-full">
                     <Preloader />
                     <Hero />
                     <About />

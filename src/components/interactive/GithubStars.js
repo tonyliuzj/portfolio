@@ -1,35 +1,61 @@
 import { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 
-export default function GithubStars({ url }) {
+const starCache = new Map();
+
+function getGithubApiUrl(url) {
+    try {
+        const urlObj = new URL(url);
+        const isGithub = urlObj.hostname === 'github.com' || urlObj.hostname === 'www.github.com';
+        if (!isGithub) return null;
+
+        const pathParts = urlObj.pathname.split('/').filter(Boolean);
+        if (pathParts.length < 2) return null;
+
+        return `https://api.github.com/repos/${pathParts[0]}/${pathParts[1]}`;
+    } catch {        return null;
+    }
+}
+
+export default function GithubStars({ url, active = true }) {
     const [stars, setStars] = useState(null);
 
     useEffect(() => {
-        if (!url) return;
-        
-        try {
-            const urlObj = new URL(url);
-            const isGithub = urlObj.hostname === 'github.com' || urlObj.hostname === 'www.github.com';
-            if (!isGithub) return;
+        if (!active || !url) return;
 
-            const pathParts = urlObj.pathname.split('/').filter(Boolean);
-            if (pathParts.length >= 2) {
-                const owner = pathParts[0];
-                const repo = pathParts[1];
-                
-                fetch(`https://api.github.com/repos/${owner}/${repo}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (typeof data.stargazers_count === 'number') {
-                            setStars(data.stargazers_count);
-                        }
-                    })
-                    .catch(err => console.error("Failed to fetch github stars", err));
-            }
-        } catch (e) {
-            // Silently fail for invalid URLs
+        const apiUrl = getGithubApiUrl(url);
+        if (!apiUrl) return;
+
+        if (starCache.has(apiUrl)) {
+            setStars(starCache.get(apiUrl));
+            return;
         }
-    }, [url]);
+
+        const controller = new AbortController();
+        let isMounted = true;
+
+        fetch(apiUrl, { signal: controller.signal })
+            .then(res => res.json())
+            .then(data => {
+                if (typeof data.stargazers_count === 'number') {
+                    starCache.set(apiUrl, data.stargazers_count);
+
+                    if (isMounted) {
+                        setStars(data.stargazers_count);
+                    }
+                }
+            })
+            .catch(err => {
+                if (err.name !== 'AbortError') {
+                    console.error("Failed to fetch github stars", err);
+                }
+            });
+
+        return () => {
+            isMounted = false;
+            controller.abort();
+        };
+    }, [active, url]);
 
     if (stars === null) return null;
 
