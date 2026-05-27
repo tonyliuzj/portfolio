@@ -56,62 +56,16 @@
   --radius-lg: 0.5rem;
   --radius-md: calc(0.5rem - 2px);
   --radius-sm: calc(0.5rem - 4px);
-
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
-
-  @keyframes accordion-down {
-    from { height: 0; }
-    to { height: var(--radix-accordion-content-height); }
-  }
-  @keyframes accordion-up {
-    from { height: var(--radix-accordion-content-height); }
-    to { height: 0; }
-  }
 }
 
 /* Custom animations */
 @layer utilities {
-  .animate-fadeIn {
-    animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  .animate-slideUp {
-    animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
   .delay-150 {
     animation-delay: 0.15s;
   }
   .delay-300 {
     animation-delay: 0.3s;
   }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(40px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .animate-slideDown {
-    animation: slideDown 0.2s ease-out forwards;
-  }
-
-  @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-.blinking-cursor {
-  animation: blink 1s infinite;
-}
 
   @keyframes bg-home-primary {
     0% { transform: rotate(0deg) scale(1); }
