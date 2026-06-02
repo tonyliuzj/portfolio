@@ -46,7 +46,7 @@ export default function Hero() {
                     transformStyle: "preserve-3d",
                     willChange: "transform, opacity"
                 }}
-                className="relative z-10 flex flex-col items-center text-center px-4"
+                className="relative z-10 flex flex-col items-center text-center px-4 max-w-[100vw] overflow-hidden"
             >
                 <div className="overflow-hidden mb-6">
                     <motion.p 
@@ -72,7 +72,7 @@ export default function Hero() {
                         filter: { duration: 1.2, delay: 1.8 },
                         y: { duration: 1.2, delay: 1.8, ease: [0.25, 1, 0.5, 1] }
                     }}
-                    className="text-[12vw] sm:text-[10vw] md:text-[8vw] font-black tracking-[0.03em] leading-[0.85] text-foreground uppercase ml-[0.03em]"
+                    className="text-[12vw] sm:text-[10vw] md:text-[8vw] font-black tracking-[0.03em] leading-[0.85] text-foreground uppercase ml-[0.03em] max-w-full break-words"
                 >
                     TONY LIU
                 </motion.h1>
@@ -96,7 +96,7 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 2.4 }}
-                    className="max-w-md text-sm md:text-base text-muted-foreground font-light leading-relaxed"
+                    className="max-w-md w-full px-4 text-sm md:text-base text-muted-foreground font-light leading-relaxed"
                 >
                     Abstracting complexity. Building full-stack web applications and robust rack-scale infrastructure.
                 </motion.p>
@@ -105,7 +105,7 @@ export default function Hero() {
             {/* Scroll indicator line */}
             <motion.div 
                 style={{ opacity }}
-                className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
+                className="absolute bottom-24 md:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
             >
                 <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground [writing-mode:vertical-lr] rotate-180">Scroll</span>
                 <div className="relative w-[1px] h-24 bg-muted/30 overflow-hidden">

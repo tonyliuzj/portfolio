@@ -78,40 +78,40 @@ export default function Infrastructure() {
                 summary="The underlying operations layer of my portfolio. A look into the homelab, routing, and virtualization stack."
             />
 
-            <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
-                <div>
+            <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start w-full min-w-0">
+                <div className="min-w-0 w-full">
                     <FadeIn delay={0.1}>
                         <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-6">
                             Routing & Telemetry
                         </h2>
-                        <p className="text-lg text-muted-foreground font-light leading-relaxed mb-12 max-w-md">
+                        <p className="text-lg text-muted-foreground font-light leading-relaxed mb-12 max-w-md w-full">
                             The operations layer for the portfolio. Exploring abstract DNS routing, edge protection, and live monitoring surfaces.
                         </p>
                     </FadeIn>
 
                     {/* Routing Path */}
                     <FadeIn delay={0.2}>
-                        <div className="relative border-l border-border ml-4 space-y-12 pb-8">
+                        <div className="relative border-l border-border ml-4 space-y-12 pb-8 overflow-hidden">
                             <div className="relative pl-8">
                                 <div className="absolute left-[-5px] top-1.5 w-2 h-2 rounded-full bg-foreground" />
                                 <h4 className="text-sm font-bold text-foreground tracking-wide uppercase mb-1">DNS Resolution</h4>
-                                <p className="text-xs text-muted-foreground font-mono">nameserver.ing</p>
+                                <p className="text-xs text-muted-foreground font-mono truncate">nameserver.ing</p>
                             </div>
                             <div className="relative pl-8">
                                 <div className="absolute left-[-5px] top-1.5 w-2 h-2 rounded-full bg-foreground/50" />
                                 <h4 className="text-sm font-bold text-foreground tracking-wide uppercase mb-1">Public Edge</h4>
-                                <p className="text-xs text-muted-foreground font-mono">Cloudflare Anycast</p>
+                                <p className="text-xs text-muted-foreground font-mono truncate">Cloudflare Anycast</p>
                             </div>
                             <div className="relative pl-8">
                                 <div className="absolute left-[-5px] top-1.5 w-2 h-2 rounded-full bg-background border border-foreground" />
                                 <h4 className="text-sm font-bold text-foreground tracking-wide uppercase mb-1">Origin Host</h4>
-                                <p className="text-xs text-muted-foreground font-mono">hostname.ee</p>
+                                <p className="text-xs text-muted-foreground font-mono truncate">hostname.ee</p>
                             </div>
                         </div>
                     </FadeIn>
                 </div>
 
-                <div className="space-y-8">
+                <div className="space-y-8 min-w-0 w-full">
                     {/* Security Node */}
                     <FadeIn delay={0.3}>
                         <div className="border border-border bg-background p-8 relative overflow-hidden group" data-interactable="true">
@@ -143,29 +143,49 @@ export default function Infrastructure() {
 
                     {/* Domains Matrix */}
                     <FadeIn delay={0.4}>
-                        <div className="border border-border bg-muted/10 p-8 overflow-hidden flex flex-col">
+                        <div className="border border-border bg-muted/10 p-8 overflow-hidden flex flex-col min-w-0 w-full">
                             <div className="flex items-center gap-3 mb-8">
                                 <Globe className="w-4 h-4 text-muted-foreground" />
                                 <span className="text-sm uppercase tracking-widest font-semibold text-foreground">Registered Domains</span>
                             </div>
                             
                             {/* Primary Domains Grid */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                                 {primaryDomains.map((domain, i) => (
-                                    <a key={i} href={domain.url} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-1 p-4 border border-border/50 hover:bg-muted/30 transition-colors" data-interactable="true">
+                                    <a key={i} href={domain.url} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-1 p-4 border border-border/50 hover:bg-muted/30 transition-colors overflow-hidden" data-interactable="true">
                                         <span className="text-[10px] text-muted-foreground uppercase tracking-widest">{domain.type}</span>
                                         <span className="font-mono text-xs text-foreground truncate">{domain.label}</span>
                                     </a>
                                 ))}
                             </div>
 
+                            {/* Tor Onion Service */}
+                            <div className="mb-8 border border-border/50 p-4 hover:bg-muted/30 transition-colors w-full overflow-hidden">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-[10px] text-muted-foreground uppercase tracking-widest">onion</span>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/80 animate-pulse shrink-0"></div>
+                                        <span className="text-[8px] uppercase tracking-widest text-emerald-500/80 font-mono shrink-0">Live</span>
+                                    </div>
+                                </div>
+                                <a 
+                                    href="http://tonyliuzjm4hmzzu3fnjhzuhaugfxivm6xyapadcu2olnrq3ixyoixyd.onion"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-mono text-[11px] sm:text-xs text-foreground hover:opacity-80 transition-opacity break-all block w-full min-w-0"
+                                    data-interactable="true"
+                                >
+                                    tonyliuzjm4hmzzu3fnjhzuhaugfxivm6xyapadcu2olnrq3ixyoixyd.onion
+                                </a>
+                            </div>
+
                             {/* Alias Domains Marquee */}
                             {aliasDomains.length > 0 && (
-                                <div className="relative flex items-center border-t border-border pt-6 mt-auto">
+                                <div className="relative flex items-center border-t border-border pt-6 mt-auto min-w-0 w-full">
                                     <span className="text-[9px] uppercase tracking-widest text-muted-foreground border-r border-border pr-4 mr-6 shrink-0">
                                         Aliases
                                     </span>
-                                    <div className="relative flex-1 overflow-x-hidden">
+                                    <div className="relative flex-1 overflow-x-hidden min-w-0">
                                         <span className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[hsl(var(--muted)/0.1)] to-transparent z-10 pointer-events-none" />
                                         <span className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[hsl(var(--muted)/0.1)] to-transparent z-10 pointer-events-none" />
                                         

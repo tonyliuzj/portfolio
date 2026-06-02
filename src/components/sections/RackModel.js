@@ -509,9 +509,9 @@ export default function RackModel() {
                 </div>
 
                 {/* Main Interactive Area */}
-                <div className="grid md:grid-cols-1 xl:grid-cols-[180px_240px_1fr] gap-8 w-full">
+                <div className="grid md:grid-cols-1 xl:grid-cols-[180px_240px_1fr] gap-8 w-full min-w-0">
                     {/* Navigation Sidebar (Content Level) */}
-                    <div className="space-y-1 md:order-last xl:order-first">
+                    <div className="space-y-1 md:order-last xl:order-first min-w-0">
                         <span className="block text-[10px] font-mono text-muted-foreground uppercase mb-4 tracking-widest opacity-50">Select Device</span>
                         <div className="flex flex-wrap xl:flex-col gap-2">
                             {rackNavigationItems.map(item => (
@@ -532,7 +532,7 @@ export default function RackModel() {
                     </div>
 
                     {/* The Rack Schematic */}
-                    <div className="relative group [perspective:1200px] mt-8 xl:mt-0">
+                    <div className="relative group [perspective:1200px] mt-8 xl:mt-0 min-w-0 max-w-full">
                         <div className="absolute -inset-8 bg-gradient-to-b from-foreground/5 to-transparent rounded-3xl blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
                         <div className="relative z-10 p-4 transition-all duration-700 lg:[transform:rotateY(-12deg)] lg:hover:[transform:rotateY(-4deg)] [transform-style:preserve-3d]">
@@ -542,7 +542,7 @@ export default function RackModel() {
                             {/* 3D Rack Frame */}
                             <div className="absolute inset-4 pointer-events-none border-[12px] border-muted/30 [transform:translateZ(-10px)]" />
 
-                            <div className="relative grid grid-cols-[32px_1fr] gap-4 h-[500px] sm:h-[650px] [transform-style:preserve-3d]">
+                            <div className="relative grid grid-cols-[32px_1fr] gap-4 h-[500px] sm:h-[650px] [transform-style:preserve-3d] min-w-0">
                                 {/* Unit Ticks */}
                                 <div className="flex flex-col justify-between py-2 border-r border-border/50 text-[9px] font-mono text-muted-foreground/50 [transform:translateZ(0px)]">
                                     {[42, 35, 28, 21, 14, 7, 1].map(u => (
@@ -554,7 +554,7 @@ export default function RackModel() {
                                 </div>
 
                                 {/* Device Stack */}
-                                <div className="relative grid grid-rows-[repeat(42,1fr)] gap-[2px] [transform-style:preserve-3d] pt-1">
+                                <div className="relative grid grid-rows-[repeat(42,1fr)] gap-[2px] [transform-style:preserve-3d] pt-1 min-w-0">
                                     {rackDevices.map((device) => (
                                         <RackDeviceButton
                                             key={device.id}
