@@ -80,16 +80,6 @@ const websitesData = [
     },
     {
       "id": 8,
-      "title": "Chickenist",
-      "url": "https://chicken.ist",
-      "description": "A Chickenist is someone who worships chickens and believes the universe is an egg. they also do not eat chicken but love to eat egg",
-      "badges": [
-        { "text": "Fun", "color": "white" },
-        { "text": "Chicken", "color": "yellow" }
-      ]
-    },
-    {
-      "id": 9,
       "title": "Party Parrots",
       "url": "https://parrots.click",
       "description": "Click to go to the party parrots",
