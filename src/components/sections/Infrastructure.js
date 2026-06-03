@@ -25,7 +25,6 @@ const domainsData = [
     { "label": "TonyLiu.ddnsgeek.com", "url": "https://tonyliu.ddnsgeek.com", "type": "alias" },
     { "label": "TonyLiu.freeddns.org", "url": "https://tonyliu.freeddns.org", "type": "alias" },
     { "label": "TonyLiu.loseyourip.com", "url": "https://tonyliu.loseyourip.com", "type": "alias" },
-    { "label": "TonyLiu.ddns.net", "url": "https://tonyliu.ddns.net", "type": "alias" },
     { "label": "Liu.qd.je", "url": "https://liu.qd.je", "type": "alias" },
     { "label": "Tony.zone.id", "url": "https://tony.zone.id", "type": "alias" },
     { "label": "Tony.nett.to", "url": "https://tony.nett.to", "type": "alias" },
