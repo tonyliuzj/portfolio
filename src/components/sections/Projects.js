@@ -30,8 +30,8 @@ const projectsData = [
     },
     {
       "id": 3,
-      "title": "Mailsy",
-      "url": "https://github.com/tonyliuzj/mailsy",
+      "title": "Email Node",
+      "url": "https://github.com/tonyliuzj/email-node",
       "description": "A simple, modern disposable email web app built with Next.js, shadcn/ui, and SQLite.",
       "stats": true,
       "badges": [
