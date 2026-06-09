@@ -66,8 +66,8 @@ const projectsData = [
     },
     {
       "id": 6,
-      "title": "Librix",
-      "url": "https://github.com/tonyliuzj/librix",
+      "title": "File Node",
+      "url": "https://github.com/tonyliuzj/file-node",
       "description": "A front-end NEXT.JS application for HTTP/WebDAV–style servers.",
       "stats": true,
       "badges": [
