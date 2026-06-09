@@ -139,10 +139,10 @@ export default function Services() {
                                     <h3 className="text-3xl md:text-4xl font-bold tracking-tight">Link Shortener</h3>
                                 </div>
                                 <p className="text-lg text-muted-foreground font-light mb-8 max-w-xl">
-                                    A minimalist and modern link shortening service, powered by Link Guide. Open for public use to transform long URLs into concise, trackable links.
+                                    A minimalist and modern link shortening service powered by Link Node. Open for public use to transform long URLs into concise, trackable links.
                                 </p>
                                 <div className="flex gap-2 mb-8">
-                                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">Link Guide</span>
+                                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">Link Node</span>
                                     <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">URL Shortener</span>
                                 </div>
                                 <LinkButton href="https://linkgui.de" label="Visit linkgui.de" />
@@ -154,22 +154,22 @@ export default function Services() {
                     </div>
                 </FadeIn>
 
-                {/* 4. EmailNode */}
+                {/* 4. Temporary Email */}
                 <FadeIn delay={0.4}>
                     <div className="py-24 border-b border-border/50 flex flex-col items-center text-center">
                         <div className="w-24 h-24 rounded-full border border-border flex items-center justify-center mb-8 bg-muted/5 relative overflow-hidden group">
                             <div className="absolute inset-0 bg-foreground/5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
                             <Mail className="w-10 h-10 text-foreground relative z-10" strokeWidth={1} />
                         </div>
-                        <h3 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">EmailNode</h3>
+                        <h3 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Temporary Email</h3>
                         <p className="text-lg text-muted-foreground font-light mb-8 max-w-2xl">
-                            An email receiving service offering free, disposable email addresses. Protect your primary inbox from spam and tracking.
+                            A temporary email service powered by Email Node, offering free, disposable email addresses. Protect your primary inbox from spam and tracking.
                         </p>
                         <div className="flex gap-2 justify-center mb-10">
                             <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">Email</span>
                             <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">Privacy</span>
                         </div>
-                        <LinkButton href="https://emailno.de" label="Open EmailNode" />
+                        <LinkButton href="https://emailno.de" label="Visit emailno.de" />
                     </div>
                 </FadeIn>
 
@@ -182,7 +182,7 @@ export default function Services() {
                                 SearXNG Search Engine.
                             </h3>
                             <p className="text-lg text-muted-foreground font-light mb-6">
-                                A privacy-respecting, hackable metasearch engine. Aggregates results from multiple search services without tracking your footprint.
+                                A privacy-respecting, hackable metasearch engine powered by SearXNG. Aggregates results from multiple search services without tracking your footprint.
                             </p>
                             <div className="flex gap-2 justify-center">
                                 <span className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border/50 px-2 py-1">SearXNG</span>
