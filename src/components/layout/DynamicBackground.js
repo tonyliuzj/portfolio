@@ -8,8 +8,7 @@ const bgColors = {
     projects: 'rgba(236, 72, 153, 0.08)',   // Pink
     websites: 'rgba(59, 130, 246, 0.08)',   // Blue
     infrastructure: 'rgba(16, 185, 129, 0.08)', // Emerald
-    services: 'rgba(6, 182, 212, 0.08)',    // Cyan
-    status: 'rgba(239, 68, 68, 0.08)'      // Red
+    services: 'rgba(6, 182, 212, 0.08)'    // Cyan
 };
 
 const aboutShapes = [
@@ -73,7 +72,7 @@ export default function DynamicBackground() {
     return (
         <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-background">
             {/* Global Noise Texture */}
-            <div className="absolute inset-0 opacity-[0.025] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay z-50"></div>
+            <div className="absolute inset-0 opacity-[0.035] mix-blend-overlay z-50 bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.3)_0_1px,transparent_1px),radial-gradient(circle_at_70%_60%,rgba(255,255,255,0.18)_0_1px,transparent_1px)] bg-[size:12px_12px,17px_17px]"></div>
 
             {/* Smooth Ambient Color Transition */}
             <motion.div
@@ -151,18 +150,6 @@ export default function DynamicBackground() {
                     </motion.div>
                 )}
 
-                {/* 07 // Status: Radar / Heartbeat */}
-                {activeSection === 'status' && (
-                    <motion.div key="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }} className="absolute inset-0 flex items-center justify-center">
-                        <div className="absolute w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] border border-red-500/20 rounded-full flex items-center justify-center">
-                            <div className="absolute w-[75%] h-[75%] border border-red-500/10 rounded-full" />
-                            <div className="absolute w-[50%] h-[50%] border border-red-500/10 rounded-full" />
-                            <div className="absolute w-[25%] h-[25%] border border-red-500/10 rounded-full" />
-                            <div className="absolute w-1/2 h-[2px] bg-gradient-to-r from-transparent to-red-500/60 origin-left animate-bg-radar-line" style={{ left: '50%' }} />
-                        </div>
-                        <div className="absolute w-64 h-64 bg-red-500/10 rounded-full blur-[60px] animate-bg-radar-pulse" />
-                    </motion.div>
-                )}
             </AnimatePresence>
 
             {/* Interactive Mouse Spotlight (Subtle global overlay) */}

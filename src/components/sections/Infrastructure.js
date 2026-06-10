@@ -1,4 +1,5 @@
 import { ShieldCheck, Globe } from "lucide-react";
+import BrowserFrame from "@/components/common/BrowserFrame";
 import FadeIn from "@/components/interactive/FadeIn";
 import SectionHeader from "@/components/common/SectionHeader";
 
@@ -214,6 +215,55 @@ export default function Infrastructure() {
                     </FadeIn>
                 </div>
             </div>
+
+            <FadeIn delay={0.5} className="mt-16 w-full">
+                <BrowserFrame
+                    url="https://status.tony-liu.com"
+                    title="Tony Liu Infrastructure Status"
+                    frameClassName="h-[520px] md:h-[640px]"
+                >
+                    <a
+                        href="https://status.tony-liu.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex h-full w-full flex-col justify-between p-6 sm:p-8 md:p-10 hover:bg-muted/10 transition-colors"
+                        data-interactable="true"
+                    >
+                        <div className="flex items-center justify-between gap-4">
+                            <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Live Operations</span>
+                            <span className="flex items-center gap-2 text-[9px] uppercase tracking-[0.25em] text-emerald-500/80 font-mono">
+                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/80 animate-pulse" />
+                                Online
+                            </span>
+                        </div>
+
+                        <div className="space-y-6">
+                            <div>
+                                <p className="font-mono text-xs uppercase tracking-[0.25em] text-muted-foreground mb-3">Status Endpoint</p>
+                                <h3 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tighter text-foreground break-words">
+                                    status.tony-liu.com
+                                </h3>
+                            </div>
+
+                            <div className="grid gap-3 sm:grid-cols-3">
+                                {['Services', 'Latency', 'Incidents'].map((metric) => (
+                                    <div key={metric} className="border border-border/60 bg-background/50 p-4">
+                                        <span className="block text-[9px] uppercase tracking-[0.25em] text-muted-foreground mb-3">{metric}</span>
+                                        <span className="font-mono text-sm text-foreground">Monitoring</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between gap-4 border-t border-border pt-5">
+                            <span className="font-mono text-xs text-muted-foreground truncate">https://status.tony-liu.com</span>
+                            <span className="shrink-0 bg-foreground px-4 py-2 text-xs font-bold uppercase tracking-widest text-background">
+                                Open Status
+                            </span>
+                        </div>
+                    </a>
+                </BrowserFrame>
+            </FadeIn>
         </section>
     );
 }

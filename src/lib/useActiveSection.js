@@ -7,7 +7,6 @@ export const SECTION_IDS = [
   'websites',
   'infrastructure',
   'services',
-  'status',
   'contact',
 ];
 

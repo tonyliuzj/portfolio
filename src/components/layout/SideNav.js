@@ -9,8 +9,7 @@ const sections = [
     { id: 'websites', label: '03 // Websites' },
     { id: 'infrastructure', label: '04 // Infra' },
     { id: 'services', label: '05 // Services' },
-    { id: 'status', label: '06 // Status' },
-    { id: 'contact', label: '07 // Contact' },
+    { id: 'contact', label: '06 // Contact' },
 ];
 
 function MagneticItem({ children, onClick }) {

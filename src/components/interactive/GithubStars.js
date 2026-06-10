@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Star } from "lucide-react";
+import Skeleton from "@/components/common/Skeleton";
 
 const starCache = new Map();
 
@@ -13,7 +14,8 @@ function getGithubApiUrl(url) {
         if (pathParts.length < 2) return null;
 
         return `https://api.github.com/repos/${pathParts[0]}/${pathParts[1]}`;
-    } catch {        return null;
+    } catch {
+        return null;
     }
 }
 
@@ -45,11 +47,7 @@ export default function GithubStars({ url, active = true }) {
                     }
                 }
             })
-            .catch(err => {
-                if (err.name !== 'AbortError') {
-                    console.error("Failed to fetch github stars", err);
-                }
-            });
+            .catch(() => {});
 
         return () => {
             isMounted = false;
@@ -57,7 +55,13 @@ export default function GithubStars({ url, active = true }) {
         };
     }, [active, url]);
 
-    if (stars === null) return null;
+    if (stars === null) {
+        return (
+            <Skeleton
+                className="h-[26px] w-[68px] rounded-full bg-amber-500/10 border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.12)]"
+            />
+        );
+    }
 
     return (
         <div className="flex items-center gap-1.5 text-xs font-mono font-bold tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/40 px-3 py-1 rounded-full shadow-[0_0_15px_rgba(245,158,11,0.2)] group-hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] group-hover:-translate-y-0.5 transition-all duration-300 backdrop-blur-sm" title="GitHub Stars">

@@ -33,7 +33,7 @@ export default function Contact() {
                 <FadeIn>
                     <div className="flex items-center gap-6 mb-16">
                         <span className="text-xs font-mono tracking-widest uppercase text-muted-foreground">
-                            07 // Contact
+                            06 // Contact
                         </span>
                         <div className="h-[1px] flex-1 bg-border/50 max-w-[200px]"></div>
                     </div>
