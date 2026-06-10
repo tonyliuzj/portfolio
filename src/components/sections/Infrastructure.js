@@ -221,6 +221,11 @@ export default function Infrastructure() {
                     url="https://status.tony-liu.com"
                     title="Tony Liu Infrastructure Status"
                     src="https://status.tony-liu.com"
+                    uptimeBadge={{
+                        href: "https://status.tony-liu.com",
+                        src: "https://img.shields.io/uptimerobot/status/m803126391-c9e521193579a442256878b6?style=for-the-badge&logo=uptimerobot&logoColor=white&label=uptime&labelColor=0f172a&up_color=10b981&down_color=ef4444",
+                        alt: "UptimeRobot status",
+                    }}
                     frameClassName="h-[520px] md:h-[640px]"
                 />
             </FadeIn>
