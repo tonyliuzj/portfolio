@@ -4,7 +4,7 @@ import LazyIframe from "@/components/common/LazyIframe";
 import Skeleton from "@/components/common/Skeleton";
 import useNearViewport from "@/lib/useNearViewport";
 
-export default function BrowserFrame({ children, url, title, src, projectLink, uptimeBadge, frameClassName = "h-[600px] md:h-[700px]" }) {
+export default function BrowserFrame({ children, url, title, src, projectLink, frameClassName = "h-[600px] md:h-[700px]" }) {
     const [isInteracting, setIsInteracting] = useState(false);
     const [shouldLoad, setShouldLoad] = useState(false);
     const [hasFrameLoaded, setHasFrameLoaded] = useState(false);
@@ -51,50 +51,10 @@ export default function BrowserFrame({ children, url, title, src, projectLink, u
                 <div className="flex-1 bg-background/50 border border-border rounded-none px-3 py-1 text-[10px] text-muted-foreground font-mono text-center truncate">
                     {url}
                 </div>
-                {uptimeBadge && (
-                    <a
-                        href={uptimeBadge.href || url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hidden md:inline-flex max-w-[168px] shrink-0 rounded-md border border-border/60 bg-muted/20 p-px transition-colors hover:border-emerald-400/40 hover:bg-emerald-400/10"
-                        data-interactable="true"
-                    >
-                        <img
-                            src={uptimeBadge.src}
-                            alt={uptimeBadge.alt}
-                            width="168"
-                            height="28"
-                            loading="lazy"
-                            decoding="async"
-                            className="block h-7 w-auto max-w-full rounded-[5px]"
-                        />
-                    </a>
-                )}
                 <a href={url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" data-interactable="true">
                     <ExternalLink className="w-3.5 h-3.5" />
                 </a>
             </div>
-            {uptimeBadge && (
-                <div className="flex justify-center border-b border-border bg-muted/5 px-4 py-2 md:hidden">
-                    <a
-                        href={uptimeBadge.href || url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex max-w-full rounded-md border border-border/60 bg-muted/20 p-px transition-colors hover:border-emerald-400/40 hover:bg-emerald-400/10"
-                        data-interactable="true"
-                    >
-                        <img
-                            src={uptimeBadge.src}
-                            alt={uptimeBadge.alt}
-                            width="168"
-                            height="28"
-                            loading="lazy"
-                            decoding="async"
-                            className="block h-7 w-auto max-w-full rounded-[5px]"
-                        />
-                    </a>
-                </div>
-            )}
             <div
                 ref={frameRef}
                 className={`relative w-full ${frameClassName} bg-muted/5 group`}

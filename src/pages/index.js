@@ -12,6 +12,7 @@ import Contact from '@/components/sections/Contact';
 import SideNav from '@/components/layout/SideNav';
 import DynamicBackground from '@/components/layout/DynamicBackground';
 import MouseInteraction from '@/components/interactive/MouseInteraction';
+import UptimeBadge from '@/components/common/UptimeBadge';
 
 const Cursor = dynamic(() => import('@/components/interactive/Cursor'), { ssr: false });
 
@@ -24,6 +25,7 @@ export default function Home() {
         <SmoothScroll>
             <div className="min-h-screen bg-background text-foreground selection:bg-foreground/20 selection:text-foreground">
                 <Cursor />
+                <UptimeBadge />
                 <SideNav />
                 <DynamicBackground />
                 <MouseInteraction />
