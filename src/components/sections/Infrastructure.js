@@ -54,7 +54,16 @@ const domainsData = [
     { "label": "Liu.js.org", "url": "https://liu.js.org", "type": "alias" },
     { "label": "Liu.2bd.net", "url": "https://liu.2bd.net", "type": "alias" },
     { "label": "Liu.jo3.org", "url": "https://liu.jo3.org", "type": "alias" },
-    { "label": "Liu.work.gd", "url": "https://liu.work.gd", "type": "alias" }
+    { "label": "Liu.work.gd", "url": "https://liu.work.gd", "type": "alias" },
+    { "label": "Tony.app.tc", "url": "https://tony.app.tc", "type": "alias" },
+    { "label": "Tony.dev.tc", "url": "https://tony.dev.tc", "type": "alias" },
+    { "label": "Tony.con.tc", "url": "https://tony.con.tc", "type": "alias" },
+    { "label": "Tony.isroot.in", "url": "https://tony.isroot.in", "type": "alias" },
+    { "label": "Tony.sld.tw", "url": "https://tony.sld.tw", "type": "alias" },
+    { "label": "TLiu.sld.tw", "url": "https://tliu.sld.tw", "type": "alias" },
+    { "label": "LiuZJ.sld.tw", "url": "https://liuzj.sld.tw", "type": "alias" },
+    { "label": "TonyL.sld.tw", "url": "https://tonyl.sld.tw", "type": "alias" },
+    { "label": "TonyLiu.sld.tw", "url": "https://tonyliu.sld.tw", "type": "alias" }
 ];
 
 export default function Infrastructure() {
