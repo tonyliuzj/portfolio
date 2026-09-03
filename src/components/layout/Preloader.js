@@ -5,11 +5,14 @@ export default function Preloader() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        document.body.style.overflow = 'hidden';
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const loadingDuration = prefersReducedMotion ? 0 : 650;
+
+        if (!prefersReducedMotion) document.body.style.overflow = 'hidden';
         const timer = setTimeout(() => {
             setIsLoading(false);
             document.body.style.overflow = '';
-        }, 2800); // Extended to allow full animation sequence
+        }, loadingDuration);
         
         return () => {
             clearTimeout(timer);
@@ -24,9 +27,9 @@ export default function Preloader() {
         exit: (i) => ({
             y: "-100%",
             transition: {
-                duration: 1.1,
+                duration: 0.35,
                 ease: [0.83, 0, 0.17, 1],
-                delay: 1.6 + (i * 0.08) // Staggered exit
+                delay: i * 0.025
             }
         })
     };
@@ -54,7 +57,7 @@ export default function Preloader() {
                                 initial={{ y: "100%" }}
                                 animate={{ y: "0%" }}
                                 exit={{ y: "-100%", opacity: 0 }}
-                                transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}
+                                transition={{ duration: 0.25, ease: [0.76, 0, 0.24, 1], delay: 0.05 }}
                                 className="text-background font-mono text-xs sm:text-sm tracking-[0.4em] uppercase block"
                             >
                                 Welcome
@@ -65,7 +68,7 @@ export default function Preloader() {
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: 1 }}
                             exit={{ scaleX: 0, opacity: 0 }}
-                            transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1], delay: 0.5 }}
+                            transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1], delay: 0.12 }}
                             className="w-32 sm:w-48 h-[1px] bg-background/30 origin-center"
                         />
 
@@ -77,9 +80,9 @@ export default function Preloader() {
                                     animate={{ opacity: [0, 1, 0] }}
                                     exit={{ opacity: 0 }}
                                     transition={{ 
-                                        duration: 1, 
-                                        repeat: 2, 
-                                        delay: 0.8 + (i * 0.1),
+                                        duration: 0.35,
+                                        repeat: 1,
+                                        delay: 0.2 + (i * 0.05),
                                         ease: "easeInOut"
                                     }}
                                     className="w-1 h-1 rounded-full bg-background"

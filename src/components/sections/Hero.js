@@ -52,7 +52,7 @@ export default function Hero() {
                     <motion.p 
                         initial={{ y: "100%" }}
                         animate={{ y: "0%" }}
-                        transition={{ duration: 1, ease: [0.25, 1, 0.5, 1], delay: 1.6 }}
+                        transition={{ duration: 0.55, ease: [0.25, 1, 0.5, 1], delay: 0.1 }}
                         className="text-xs md:text-sm tracking-[0.3em] uppercase text-muted-foreground font-semibold"
                     >
                         Student / Learner
@@ -68,9 +68,9 @@ export default function Hero() {
                     initial={{ opacity: 0, filter: "blur(10px)", y: 40 }}
                     animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
                     transition={{ 
-                        opacity: { duration: 1.2, delay: 1.8 },
-                        filter: { duration: 1.2, delay: 1.8 },
-                        y: { duration: 1.2, delay: 1.8, ease: [0.25, 1, 0.5, 1] }
+                        opacity: { duration: 0.65, delay: 0.15 },
+                        filter: { duration: 0.65, delay: 0.15 },
+                        y: { duration: 0.65, delay: 0.15, ease: [0.25, 1, 0.5, 1] }
                     }}
                     className="text-[12vw] sm:text-[10vw] md:text-[8vw] font-black tracking-[0.03em] leading-[0.85] text-foreground uppercase ml-[0.03em] max-w-full break-words"
                 >
@@ -84,7 +84,7 @@ export default function Hero() {
                     }}
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
-                    transition={{ duration: 1.5, delay: 2.1, ease: [0.25, 1, 0.5, 1] }}
+                    transition={{ duration: 0.7, delay: 0.25, ease: [0.25, 1, 0.5, 1] }}
                     className="h-[1px] w-[20vw] bg-border mt-12 mb-8 origin-center"
                 />
 
@@ -95,7 +95,7 @@ export default function Hero() {
                     }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 2.4 }}
+                    transition={{ duration: 0.6, delay: 0.35 }}
                     className="max-w-md w-full px-4 text-sm md:text-base text-muted-foreground font-light leading-relaxed"
                 >
                     Abstracting complexity. Building full-stack web applications and robust rack-scale infrastructure.

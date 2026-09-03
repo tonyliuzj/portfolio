@@ -641,16 +641,16 @@ export default function RackModel() {
                 </div>
 
                 {/* Main Interactive Area */}
-                <div className="grid grid-cols-1 lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)] xl:grid-cols-[minmax(160px,200px)_minmax(280px,320px)_minmax(0,1fr)] gap-6 lg:gap-8 w-full min-w-0 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-[150px_280px_minmax(0,1fr)] xl:grid-cols-[minmax(160px,200px)_minmax(280px,320px)_minmax(0,1fr)] gap-6 lg:gap-4 xl:gap-8 w-full min-w-0 items-start">
                     {/* Navigation Sidebar (Content Level) */}
-                    <div className="order-3 lg:col-span-2 xl:order-1 xl:col-span-1 space-y-1 min-w-0 w-full">
-                        <span className="block text-[10px] font-mono text-muted-foreground uppercase mb-4 tracking-widest opacity-50">Select Device</span>
-                        <div className="flex flex-wrap xl:flex-col gap-2">
+                    <div className="order-3 lg:order-1 min-w-0 w-full lg:h-[682px] flex flex-col">
+                        <span className="block shrink-0 text-[10px] font-mono text-muted-foreground uppercase mb-4 tracking-widest opacity-50">Select Device</span>
+                        <div className="flex flex-wrap lg:flex-nowrap lg:flex-col gap-2 max-h-[60vh] sm:max-h-[520px] lg:max-h-none lg:flex-1 lg:min-h-0 overflow-y-auto overscroll-contain pr-2 [scrollbar-width:thin] [scrollbar-color:hsl(var(--border))_transparent]">
                             {rackDevices.map(item => (
                                 <button
                                     key={item.id}
                                     onClick={() => handleSelect(item.id)}
-                                    className={`text-left px-3 py-2 text-[10px] font-mono uppercase transition-all border min-w-0 w-[calc(50%_-_0.25rem)] sm:w-auto xl:w-full break-words
+                                    className={`text-left px-3 py-2 text-[10px] font-mono uppercase transition-all border min-w-0 w-[calc(50%_-_0.25rem)] sm:w-auto lg:w-full lg:shrink-0 break-words
                                         ${selectedId === item.id
                                             ? 'bg-foreground text-background border-foreground'
                                             : 'bg-muted/5 text-muted-foreground border-border/50 hover:border-border hover:text-foreground'
@@ -664,7 +664,7 @@ export default function RackModel() {
                     </div>
 
                     {/* The Rack Schematic */}
-                    <div className="order-1 xl:order-2 relative group [perspective:1200px] min-w-0 w-full max-w-[320px] justify-self-center">
+                    <div className="order-1 lg:order-2 relative group [perspective:1200px] min-w-0 w-full max-w-[320px] justify-self-center">
                         <div className="absolute -inset-8 bg-gradient-to-b from-foreground/5 to-transparent rounded-3xl blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
                         <div className="relative z-10 p-3 sm:p-4 transition-all duration-700 xl:[transform:rotateY(-10deg)] xl:hover:[transform:rotateY(-3deg)] [transform-style:preserve-3d]">
@@ -705,14 +705,14 @@ export default function RackModel() {
                     </div>
 
                     {/* HUD Detail Panel */}
-                    <div className="order-2 xl:order-3 relative flex flex-col h-full min-h-[400px] min-w-0 w-full">
+                    <div className="order-2 lg:order-3 relative flex flex-col min-h-[400px] lg:h-[682px] min-w-0 w-full">
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={activeItem.id}
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
-                                className="flex-1 flex flex-col p-4 sm:p-6 xl:p-8 border border-border bg-muted/5 backdrop-blur-sm relative overflow-hidden min-w-0"
+                                className="flex-none lg:flex-1 lg:min-h-0 flex flex-col p-4 sm:p-6 xl:p-8 border border-border bg-muted/5 backdrop-blur-sm relative overflow-x-hidden overflow-y-visible lg:overflow-y-auto lg:overscroll-contain min-w-0 [scrollbar-width:thin] [scrollbar-color:hsl(var(--border))_transparent]"
                             >
                                 {/* Decorative elements */}
                                 <div className="absolute top-0 right-0 w-24 h-24 border-t border-r border-border/50" />
