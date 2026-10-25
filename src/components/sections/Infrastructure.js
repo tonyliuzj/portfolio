@@ -114,7 +114,7 @@ export default function Infrastructure() {
                             <div className="relative pl-8">
                                 <div className="absolute left-[-5px] top-1.5 w-2 h-2 rounded-full bg-background border border-foreground" />
                                 <h4 className="text-sm font-bold text-foreground tracking-wide uppercase mb-1">Origin Host</h4>
-                                <p className="text-xs text-muted-foreground font-mono truncate">hostname.ee</p>
+                                <p className="text-xs text-muted-foreground font-mono truncate">hostname.im</p>
                             </div>
                         </div>
                     </FadeIn>

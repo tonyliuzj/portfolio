@@ -48,7 +48,7 @@ const websitesData = [
     {
       "id": 5,
       "title": "Host Name",
-      "url": "https://hostname.ee",
+      "url": "https://hostname.im",
       "description": "For host names",
       "badges": [
         { "text": "Hostnames", "color": "purple" },
